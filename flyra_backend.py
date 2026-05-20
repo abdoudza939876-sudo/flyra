@@ -23,8 +23,10 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 # ================================================================
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(DB_PATH, check_same_thread=False)
+        g.db = sqlite3.connect(DB_PATH, timeout=20, check_same_thread=False)
         g.db.row_factory = sqlite3.Row
+        g.db.execute('PRAGMA journal_mode=WAL')
+        g.db.execute('PRAGMA busy_timeout=5000')
     return g.db
 
 @app.teardown_appcontext
@@ -34,8 +36,10 @@ def close_db(e=None):
         db.close()
 
 def init_db():
-    db = sqlite3.connect(DB_PATH)
+    db = sqlite3.connect(DB_PATH, timeout=20)
     db.row_factory = sqlite3.Row
+    db.execute('PRAGMA journal_mode=WAL')
+    db.execute('PRAGMA busy_timeout=5000')
     
     db.executescript('''
     CREATE TABLE IF NOT EXISTS users (
