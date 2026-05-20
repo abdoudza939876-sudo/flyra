@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: flyra
+    runtime: python
+    buildCommand: ""
+    startCommand: gunicorn -w 4 -b 0.0.0.0:$PORT flyra_backend:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
