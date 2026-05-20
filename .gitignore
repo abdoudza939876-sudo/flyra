@@ -1,0 +1,8 @@
+*.pyc
+__pycache__/
+*.log
+*.db
+.DS_Store
+.vscode/
+uploads/*
+!uploads/.gitkeep
