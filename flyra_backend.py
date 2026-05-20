@@ -11,7 +11,7 @@ from functools import wraps
 from flask import Flask, request, jsonify, g, send_from_directory, send_file
 from flask_cors import CORS
 
-app = Flask(__name__, static_folder='.')
+app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'flyra.db')
@@ -112,6 +112,14 @@ def init_db():
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
     
+    CREATE TABLE IF NOT EXISTS sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        token TEXT UNIQUE NOT NULL,
+        expires TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+
     CREATE TABLE IF NOT EXISTS settings (
         key TEXT PRIMARY KEY,
         value TEXT
