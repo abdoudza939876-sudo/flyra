@@ -2204,7 +2204,7 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
   // ================================================================
   // INIT
   // ================================================================
-  const API_BASE = 'http://localhost:5555/api';
+  const API_BASE = '/api';
 
   async function loadFromAPI() {
     try {

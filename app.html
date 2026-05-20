@@ -584,7 +584,7 @@ function init() {
 
 async function fetchFromAPI() {
   try {
-    const res = await fetch('http://localhost:5555/api/products', {signal: AbortSignal.timeout(3000)});
+    const res = await fetch('/api/products', {signal: AbortSignal.timeout(3000)});
     if (res.ok) {
       const data = await res.json();
       if (data.length > 0) {
@@ -898,7 +898,7 @@ async function sendAI() {
   document.getElementById('aiTyping').style.display = 'block';
   
   try {
-    const res = await fetch('http://localhost:5555/api/chat', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({message:text, lang, history:aiHistory.slice(-10)}),

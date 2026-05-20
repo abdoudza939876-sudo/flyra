@@ -729,7 +729,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
           <div class="chart-header"><div class="chart-title">🤖 AI Config</div></div>
           <div style="padding:8px 0;">
             <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">Provider</span><span style="color:var(--sky);font-weight:600;">Ollama (llama3.2)</span></div>
-            <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">API</span><span style="color:var(--sky);font-weight:600;">localhost:5555</span></div>
+            <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">API</span><span style="color:var(--sky);font-weight:600;"><span id="apiHostDisplay">localhost:5555</span></span></div>
             <div style="padding:12px 0;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">Server</span><span style="color:var(--green);font-weight:600;">● Online</span></div>
           </div>
         </div>
@@ -845,7 +845,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 </div>
 
 <script>
-const API='http://'+location.hostname+':5555/api';
+const API='/api';
+const el=document.getElementById('apiHostDisplay');
+if(el)el.textContent=location.host;
 let isOwner=false,allOrders=[],allProducts=[],allCustomers=[],allDrops=[],allReviews=[],allLoyalty=[];
 let currentOrderFilter='all',currentProductFilter='all';
 let ordersPage=1,allOrdersPage=1,productsPage=1;

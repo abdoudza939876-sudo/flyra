@@ -858,6 +858,13 @@ def serve_mobile():
     if os.path.exists(fp): return send_file(fp)
     return '<h1>FLYRA Mobile</h1>'
 
+@app.route('/admin')
+@app.route('/admin.html')
+def serve_admin():
+    fp = os.path.join(os.path.dirname(__file__), 'admin.html')
+    if os.path.exists(fp): return send_file(fp)
+    return '<h1>FLYRA Admin</h1>'
+
 @app.route('/about')
 @app.route('/about.html')
 def serve_about():
