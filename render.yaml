@@ -1,3 +1,9 @@
+databases:
+  - name: flyra-db
+    plan: free
+    databaseName: flyra
+    user: flyra
+
 services:
   - type: web
     name: flyra
@@ -7,6 +13,10 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: flyra-db
+          property: connectionString
 
   - type: web
     name: flyra-ai
@@ -16,3 +26,7 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: flyra-db
+          property: connectionString

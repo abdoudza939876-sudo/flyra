@@ -18,15 +18,148 @@ DB_PATH = os.path.join(os.path.dirname(__file__), 'flyra.db')
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), 'uploads')
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+IS_PG = 'DATABASE_URL' in os.environ
+
 # ================================================================
-# DATABASE SETUP
+# DATABASE ABSTRACTION (SQLite local / PostgreSQL on Render)
 # ================================================================
+class Row(dict):
+    """Dict-like row that also supports integer indexing (for compatibility)."""
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            vals = list(self.values())
+            return vals[key] if key < len(vals) else None
+        return super().__getitem__(key)
+
+
+class Result:
+    def __init__(self, cursor, is_pg=False):
+        self._cursor = cursor
+        self._is_pg = is_pg
+
+    def fetchone(self):
+        row = self._cursor.fetchone()
+        if row is None:
+            return None
+        if self._is_pg:
+            return Row(row)
+        return row
+
+    def fetchall(self):
+        rows = self._cursor.fetchall()
+        if self._is_pg:
+            return [Row(r) for r in rows]
+        return rows
+
+    @property
+    def lastrowid(self):
+        return self._cursor.lastrowid if hasattr(self._cursor, 'lastrowid') else None
+
+
+class Db:
+    def __init__(self, conn):
+        self.conn = conn
+        self.is_pg = IS_PG
+
+    def sql(self, q):
+        if not self.is_pg:
+            return q
+        q = q.replace('?', '%s')
+        q = q.replace('date("now", ?)', "CURRENT_DATE - CAST(%s AS INTERVAL)")
+        q = q.replace("date('now', ?)", "CURRENT_DATE - CAST(%s AS INTERVAL)")
+        q = q.replace("date('now')", 'CURRENT_DATE')
+        q = q.replace('date("now")', 'CURRENT_DATE')
+        q = q.replace('datetime("now")', 'CURRENT_TIMESTAMP')
+        q = q.replace("datetime('now')", 'CURRENT_TIMESTAMP')
+        q = q.replace('"', "'")
+        q = q.replace("LIKE '%'||p.name||'%'", "LIKE '%' || p.name || '%'")
+        q = q.replace("LIKE '%'||p.name||'%'", "LIKE '%' || p.name || '%'")
+        # INSERT OR REPLACE → INSERT ... ON CONFLICT DO UPDATE
+        q = re.sub(
+            r"INSERT OR REPLACE INTO (\w+) \((.*?)\) VALUES \((.*?)\)",
+            r"INSERT INTO \1 (\2) VALUES (\3) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value",
+            q
+        )
+        return q
+
+    def _cursor(self):
+        if self.is_pg:
+            from psycopg2.extras import RealDictCursor
+            return self.conn.cursor(cursor_factory=RealDictCursor)
+        return self.conn.cursor()
+
+    def execute(self, sql, params=None):
+        if self.is_pg:
+            sql = self.sql(sql)
+        cur = self._cursor()
+        if params:
+            cur.execute(sql, params if isinstance(params, (tuple, list)) else (params,))
+        else:
+            cur.execute(sql)
+        return Result(cur, self.is_pg)
+
+    def executemany(self, sql, seq):
+        if self.is_pg:
+            sql = self.sql(sql)
+            for params in seq:
+                cur = self._cursor()
+                cur.execute(sql, params)
+        else:
+            self.conn.executemany(sql, seq)
+
+    def executescript(self, script):
+        if self.is_pg:
+            cur = self.conn.cursor()
+            for stmt in script.split(';'):
+                s = stmt.strip()
+                if not s:
+                    continue
+                s = s.replace('AUTOINCREMENT', 'GENERATED ALWAYS AS IDENTITY')
+                s = self.sql(s)
+                s = s.replace("''", "'")
+                s = s.replace("'s", "''s")
+                try:
+                    cur.execute(s)
+                except Exception:
+                    pass
+        else:
+            self.conn.executescript(script)
+
+    def commit(self):
+        if not self.is_pg:
+            self.conn.commit()
+
+    def last_insert_id(self):
+        """Get last inserted row ID (works for both SQLite and PostgreSQL)."""
+        if self.is_pg:
+            cur = self._cursor()
+            cur.execute('SELECT LASTVAL()')
+            return cur.fetchone()[0]
+        cur = self._cursor()
+        cur.execute('SELECT last_insert_rowid()')
+        return cur.fetchone()[0]
+
+    def close(self):
+        self.conn.close()
+
+
+def make_db():
+    if IS_PG:
+        import psycopg2
+        from psycopg2.extras import RealDictCursor
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        conn.autocommit = True
+        return Db(conn)
+    conn = sqlite3.connect(DB_PATH, timeout=20, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
+    conn.execute('PRAGMA journal_mode=WAL')
+    conn.execute('PRAGMA busy_timeout=5000')
+    return Db(conn)
+
+
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(DB_PATH, timeout=20, check_same_thread=False)
-        g.db.row_factory = sqlite3.Row
-        g.db.execute('PRAGMA journal_mode=WAL')
-        g.db.execute('PRAGMA busy_timeout=5000')
+        g.db = make_db()
     return g.db
 
 @app.teardown_appcontext
@@ -36,108 +169,180 @@ def close_db(e=None):
         db.close()
 
 def init_db():
-    db = sqlite3.connect(DB_PATH, timeout=20)
-    db.row_factory = sqlite3.Row
-    db.execute('PRAGMA journal_mode=WAL')
-    db.execute('PRAGMA busy_timeout=5000')
+    db = make_db()
     
-    db.executescript('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        first_name TEXT, last_name TEXT,
-        phone TEXT, wilaya TEXT,
-        address TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
+    if IS_PG:
+        db.executescript('''
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                first_name TEXT, last_name TEXT,
+                phone TEXT, wilaya TEXT,
+                address TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS products (
+                id SERIAL PRIMARY KEY,
+                name TEXT NOT NULL, collection TEXT,
+                price INTEGER, old_price INTEGER,
+                owner TEXT, tag TEXT, sizes TEXT,
+                stock INTEGER DEFAULT 0, status TEXT DEFAULT 'active',
+                desc TEXT, image TEXT, featured INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS orders (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER, first_name TEXT, last_name TEXT,
+                phone TEXT, wilaya TEXT, address TEXT,
+                items TEXT, total INTEGER, subtotal INTEGER,
+                shipping INTEGER DEFAULT 0, payment_method TEXT DEFAULT 'cod',
+                status TEXT DEFAULT 'pending',
+                tracking_code TEXT, notes TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS cart_items (
+                id SERIAL PRIMARY KEY,
+                session_id TEXT, product_id INTEGER,
+                quantity INTEGER DEFAULT 1, size TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS wishlist (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER, session_id TEXT, product_id INTEGER,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS drops (
+                id SERIAL PRIMARY KEY,
+                product_id INTEGER, launch_date TEXT,
+                status TEXT DEFAULT 'scheduled',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS notifications (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER, session_id TEXT,
+                title TEXT, message TEXT, read INTEGER DEFAULT 0,
+                type TEXT DEFAULT 'info',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS loyalty (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER, session_id TEXT,
+                points INTEGER DEFAULT 0, tier TEXT DEFAULT 'Bronze',
+                total_spent INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS reviews (
+                id SERIAL PRIMARY KEY,
+                product_id INTEGER, user_id INTEGER,
+                rating INTEGER, comment TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS sessions (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER,
+                token TEXT UNIQUE NOT NULL,
+                expires TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS settings (
+                key TEXT PRIMARY KEY,
+                value TEXT
+            );
+            CREATE TABLE IF NOT EXISTS stats (
+                id SERIAL PRIMARY KEY,
+                date TEXT, views INTEGER DEFAULT 0,
+                orders INTEGER DEFAULT 0, revenue INTEGER DEFAULT 0
+            );
+        ''')
+    else:
+        db.executescript('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                first_name TEXT, last_name TEXT,
+                phone TEXT, wilaya TEXT,
+                address TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS products (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL, collection TEXT,
+                price INTEGER, old_price INTEGER,
+                owner TEXT, tag TEXT, sizes TEXT,
+                stock INTEGER DEFAULT 0, status TEXT DEFAULT 'active',
+                desc TEXT, image TEXT, featured INTEGER DEFAULT 0,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS orders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER, first_name TEXT, last_name TEXT,
+                phone TEXT, wilaya TEXT, address TEXT,
+                items TEXT, total INTEGER, subtotal INTEGER,
+                shipping INTEGER DEFAULT 0, payment_method TEXT DEFAULT 'cod',
+                status TEXT DEFAULT 'pending',
+                tracking_code TEXT, notes TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS cart_items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT, product_id INTEGER,
+                quantity INTEGER DEFAULT 1, size TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS wishlist (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER, session_id TEXT, product_id INTEGER,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS drops (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                product_id INTEGER, launch_date TEXT,
+                status TEXT DEFAULT 'scheduled',
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS notifications (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER, session_id TEXT,
+                title TEXT, message TEXT, read INTEGER DEFAULT 0,
+                type TEXT DEFAULT 'info',
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS loyalty (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER, session_id TEXT,
+                points INTEGER DEFAULT 0, tier TEXT DEFAULT 'Bronze',
+                total_spent INTEGER DEFAULT 0,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS reviews (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                product_id INTEGER, user_id INTEGER,
+                rating INTEGER, comment TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS sessions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                token TEXT UNIQUE NOT NULL,
+                expires TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS settings (
+                key TEXT PRIMARY KEY,
+                value TEXT
+            );
+            CREATE TABLE IF NOT EXISTS stats (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT, views INTEGER DEFAULT 0,
+                orders INTEGER DEFAULT 0, revenue INTEGER DEFAULT 0
+            );
+        ''')
     
-    CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL, collection TEXT,
-        price INTEGER, old_price INTEGER,
-        owner TEXT, tag TEXT, sizes TEXT,
-        stock INTEGER DEFAULT 0, status TEXT DEFAULT 'active',
-        desc TEXT, image TEXT, featured INTEGER DEFAULT 0,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS orders (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER, first_name TEXT, last_name TEXT,
-        phone TEXT, wilaya TEXT, address TEXT,
-        items TEXT, total INTEGER, subtotal INTEGER,
-        shipping INTEGER DEFAULT 0, payment_method TEXT DEFAULT 'cod',
-        status TEXT DEFAULT 'pending',
-        tracking_code TEXT, notes TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS cart_items (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        session_id TEXT, product_id INTEGER,
-        quantity INTEGER DEFAULT 1, size TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS wishlist (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER, session_id TEXT, product_id INTEGER,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS drops (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        product_id INTEGER, launch_date TEXT,
-        status TEXT DEFAULT 'scheduled',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS notifications (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER, session_id TEXT,
-        title TEXT, message TEXT, read INTEGER DEFAULT 0,
-        type TEXT DEFAULT 'info',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS loyalty (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER, session_id TEXT,
-        points INTEGER DEFAULT 0, tier TEXT DEFAULT 'Bronze',
-        total_spent INTEGER DEFAULT 0,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS reviews (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        product_id INTEGER, user_id INTEGER,
-        rating INTEGER, comment TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-    
-    CREATE TABLE IF NOT EXISTS sessions (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        token TEXT UNIQUE NOT NULL,
-        expires TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS settings (
-        key TEXT PRIMARY KEY,
-        value TEXT
-    );
-    
-    CREATE TABLE IF NOT EXISTS stats (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT, views INTEGER DEFAULT 0,
-        orders INTEGER DEFAULT 0, revenue INTEGER DEFAULT 0
-    );
-    ''')
-    
-    cur = db.execute('SELECT COUNT(*) FROM products')
-    if cur.fetchone()[0] == 0:
+    row = db.execute('SELECT COUNT(*) FROM products').fetchone()
+    count = row[0]
+    if count == 0:
         seed_data(db)
     
     db.commit()
@@ -247,7 +452,7 @@ def api_products():
            data.get('stock',0), data.get('status','active'), data.get('desc',''),
            data.get('image',''), data.get('featured',0)))
     db.commit()
-    return jsonify({'id': db.execute('SELECT last_insert_rowid()').fetchone()[0]})
+    return jsonify({'id': db.last_insert_id()})
 
 @app.route('/api/products/<int:pid>', methods=['GET', 'PUT', 'DELETE'])
 def api_product(pid):
@@ -299,7 +504,7 @@ def api_orders():
            data.get('wilaya'), data.get('address',''), items, subtotal, shipping, total,
            data.get('payment_method','cod'), tracking))
     db.commit()
-    oid = db.execute('SELECT last_insert_rowid()').fetchone()[0]
+    oid = db.last_insert_id()
     
     user_id = get_user_id(request)
     if user_id:
@@ -421,7 +626,7 @@ def api_register():
            data.get('phone'), data.get('wilaya'), data.get('address')))
     db.commit()
     
-    uid = db.execute('SELECT last_insert_rowid()').fetchone()[0]
+    uid = db.last_insert_id()
     token = make_token()
     db.execute('INSERT INTO sessions (user_id, token, expires) VALUES (?, ?, ?)',
                (uid, token, (datetime.now() + timedelta(days=30)).isoformat()))
