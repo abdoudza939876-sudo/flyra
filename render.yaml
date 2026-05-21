@@ -7,12 +7,3 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
-
-  - type: web
-    name: flyra-ai
-    runtime: python
-    buildCommand: ""
-    startCommand: gunicorn -w 1 -b 0.0.0.0:$PORT ai:app
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0

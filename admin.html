@@ -960,9 +960,34 @@ if(uploadZone){
 }
 
 function initLocalData(){
-  ['flyra_customers','flyra_drops','flyra_reviews','flyra_loyalty'].forEach(k=>{
-    if(!localStorage.getItem(k))localStorage.setItem(k,'[]');
-  });
+  if(!localStorage.getItem('flyra_customers')){
+    localStorage.setItem('flyra_customers',JSON.stringify([
+      {id:1,email:'aicha@example.com',first_name:'Aïcha',last_name:'Benali',phone:'+213 555 111 222',wilaya:'Oran',orders:3,total_spent:85000,created_at:'2026-01-15'},
+      {id:2,email:'mohammed@example.com',first_name:'Mohammed',last_name:'D.',phone:'+213 555 333 444',wilaya:'Algiers',orders:5,total_spent:142000,created_at:'2026-02-01'},
+      {id:3,email:'fatima@example.com',first_name:'Fatima',last_name:'Z.',phone:'+213 555 555 666',wilaya:'Constantine',orders:2,total_spent:65000,created_at:'2026-03-10'},
+    ]));
+  }
+  if(!localStorage.getItem('flyra_drops')){
+    localStorage.setItem('flyra_drops',JSON.stringify([
+      {id:1,name:'Summer Heritage Drop',date:'2026-06-15',time:'10:00',products:'1,5,10',status:'upcoming'},
+      {id:2,name:'Streetwear Vol.2',date:'2026-07-01',time:'12:00',products:'2,7,9',status:'upcoming'},
+    ]));
+  }
+  if(!localStorage.getItem('flyra_reviews')){
+    localStorage.setItem('flyra_reviews',JSON.stringify([
+      {id:1,author:'Karim M.',avatar:'👨',rating:5,text:'Absolutely love the quality!',product:'HERITAGE GANDOURA',date:'2026-05-10',status:'approved'},
+      {id:2,author:'Yasmine H.',avatar:'👩',rating:4,text:'Great hoodie but runs a bit large.',product:'PHANTOM HOODIE',date:'2026-05-12',status:'pending'},
+      {id:3,author:'Sofiane K.',avatar:'👨',rating:5,text:'Best blazer I own.',product:'OLD MONEY BLAZER',date:'2026-05-14',status:'approved'},
+      {id:4,author:'Nadia B.',avatar:'👩🏾',rating:3,text:'Nice sneakers but shipping was slow.',product:'SKY RUNNER',date:'2026-05-16',status:'pending'},
+    ]));
+  }
+  if(!localStorage.getItem('flyra_loyalty')){
+    localStorage.setItem('flyra_loyalty',JSON.stringify([
+      {id:1,email:'mohammed@example.com',name:'Mohammed D.',points:450,total_spent:142000,tier:'Gold'},
+      {id:2,email:'aicha@example.com',name:'Aïcha Benali',points:280,total_spent:85000,tier:'Silver'},
+      {id:3,email:'fatima@example.com',name:'Fatima Z.',points:120,total_spent:65000,tier:'Bronze'},
+    ]));
+  }
   allCustomers=JSON.parse(localStorage.getItem('flyra_customers')||'[]');
   allDrops=JSON.parse(localStorage.getItem('flyra_drops')||'[]');
   allReviews=JSON.parse(localStorage.getItem('flyra_reviews')||'[]');
