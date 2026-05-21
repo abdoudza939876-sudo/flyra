@@ -1,5 +1,5 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{--midnight:#0A0F1E;--sky:#7BA3C9;--amber:#C49B3D;--cream:#F5F0E8;--cloud:#E8EDF2;--raven:#1A2235;--sunset:#D4956A;--text:#E8EDF2;--subtext:rgba(232,237,242,0.5);--border:rgba(255,255,255,0.06);}
+:root{--midnight:#0A0F1E;--sky:#7BA3C9;--amber:#C49B3D;--cream:#F5F0E8;--cloud:#E8EDF2;--raven:#1A2235;--sunset:#D4956A;--text:#E8EDF2;--subtext:rgba(232,237,242,0.5);--border:rgba(255,255,255,0.06);--cyan:#00D4FF;--purple:#A855F7;--pink:#F472B6;--yellow:#FBBF24;}
 html{scroll-behavior:smooth;}
 body{background:var(--midnight);color:var(--text);font-family:'Inter',-apple-system,sans-serif;overflow-x:hidden;cursor:default;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html[dir="rtl"] body{font-family:'Noto Sans Arabic',sans-serif;}

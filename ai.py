@@ -15,7 +15,6 @@ from flask import Flask, request, jsonify, send_from_directory, render_template_
 from functools import wraps
 
 app = Flask(__name__, static_folder='.')
-app.config['JSON_SAFE'] = False
 
 # ================================================================
 # CONFIGURATION
@@ -125,7 +124,7 @@ FALLBACK_RESPONSES = {
 def detect_language(text):
     """Detect if the user is writing in Arabic, French, or English"""
     arabic_chars = len(re.findall(r'[\u0600-\u06FF]', text))
-    french_words = ['bonjour', 'merci', 'je', 'vous', 'comment', 'pour', 'que', 'est', 'suis', 'une', 'des', 'les', 'dans', 'avec', 'sur', 'cette', 'cette', 'mon', 'ma', 'mes', 'nous', 'votre', 'alors', 'mais', 'ou', 'si', 'plus', 'tout', 'ces', 'ses', 'qui', 'quoi', 'quel', 'quelle']
+    french_words = ['bonjour', 'merci', 'je', 'vous', 'comment', 'pour', 'que', 'est', 'suis', 'une', 'des', 'les', 'dans', 'avec', 'sur', 'cette', 'mon', 'ma', 'mes', 'nous', 'votre', 'alors', 'mais', 'ou', 'si', 'plus', 'tout', 'ces', 'ses', 'qui', 'quoi', 'quel', 'quelle']
     french_count = sum(1 for w in french_words if w.lower() in text.lower())
     if arabic_chars > 3:
         return 'ar'

@@ -208,7 +208,7 @@
           <button onclick="dsAddShape('triangle')">△ Triangle</button>
         </div>
         <div class="ds-name-row">
-          <input type="text" id="ds-design-name" placeholder="Design name..." style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--white);font-size:11px;width:100%;">
+          <input type="text" id="ds-design-name" placeholder="Design name..." style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-size:11px;width:100%;">
         </div>
         <div class="ds-fabric-selector">
           <div class="widget-label">SELECT FABRIC</div>
@@ -250,16 +250,16 @@
       <div id="ds-ai-area" class="ds-section" style="display:none;">
         <div class="ds-ai-prompt">
           <div class="widget-label">DESCRIBE YOUR DESIGN</div>
-          <textarea id="ds-ai-input" placeholder="e.g., A flowing linen dress with traditional Algerian geometric patterns in deep blue and gold, suitable for summer..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--white);font-size:11px;min-height:80px;resize:vertical;font-family:inherit;"></textarea>
+          <textarea id="ds-ai-input" placeholder="e.g., A flowing linen dress with traditional Algerian geometric patterns in deep blue and gold, suitable for summer..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:11px;min-height:80px;resize:vertical;font-family:inherit;"></textarea>
           <div class="ds-ai-options">
-            <select id="ds-ai-category" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--white);font-size:10px;">
+            <select id="ds-ai-category" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text);font-size:10px;">
               <option value="">Category...</option>
               <option value="tops">Tops</option>
               <option value="bottoms">Bottoms</option>
               <option value="dresses">Dresses</option>
               <option value="accessories">Accessories</option>
             </select>
-            <select id="ds-ai-fabric" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--white);font-size:10px;">
+            <select id="ds-ai-fabric" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text);font-size:10px;">
               <option value="">Fabric...</option>
               ${FABRICS.map(f=>`<option value="${f.id}">${f.name} (+${f.price} DZD)</option>`).join('')}
             </select>
@@ -902,7 +902,7 @@
     if (idx === -1) return;
     const isLiked = likedLooks.includes(id);
     if (isLiked) {
-      likes[idx]--;
+      looks[idx].likes--;
       likedLooks = likedLooks.filter(x => x !== id);
       document.getElementById('sf-like-icon-' + id).textContent = '🤍';
     } else {
@@ -948,11 +948,11 @@
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99998;display:flex;align-items:center;justify-content:center;';
     modal.innerHTML = `<div style="width:380px;background:rgba(15,15,20,0.98);border:1px solid var(--border);border-radius:14px;padding:24px;">
       <h3 style="font-size:14px;font-weight:800;margin-bottom:16px;">✨ Create Your Look</h3>
-      <input type="text" id="cl-title" placeholder="Look title..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--white);font-size:11px;margin-bottom:8px;">
-      <textarea id="cl-desc" placeholder="Describe your look..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--white);font-size:11px;min-height:60px;resize:vertical;margin-bottom:8px;"></textarea>
-      <input type="text" id="cl-tags" placeholder="Tags (comma separated)..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--white);font-size:11px;margin-bottom:12px;">
+      <input type="text" id="cl-title" placeholder="Look title..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-size:11px;margin-bottom:8px;">
+      <textarea id="cl-desc" placeholder="Describe your look..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-size:11px;min-height:60px;resize:vertical;margin-bottom:8px;"></textarea>
+      <input type="text" id="cl-tags" placeholder="Tags (comma separated)..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-size:11px;margin-bottom:12px;">
       <div style="display:flex;gap:8px;">
-        <button onclick="this.closest('[style]').remove()" style="flex:1;padding:10px;border-radius:8px;background:rgba(255,255,255,0.1);border:1px solid var(--border);color:var(--white);font-size:11px;font-weight:700;cursor:pointer;">CANCEL</button>
+        <button onclick="this.closest('[style]').remove()" style="flex:1;padding:10px;border-radius:8px;background:rgba(255,255,255,0.1);border:1px solid var(--border);color:var(--text);font-size:11px;font-weight:700;cursor:pointer;">CANCEL</button>
         <button onclick="sfSubmitLook()" style="flex:1;padding:10px;border-radius:8px;background:var(--green);border:none;color:#000;font-size:11px;font-weight:700;cursor:pointer;">PUBLISH</button>
       </div>
     </div>`;

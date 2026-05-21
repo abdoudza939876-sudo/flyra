@@ -228,13 +228,14 @@ def api_products():
         status = request.args.get('status', '')
         limit = int(request.args.get('limit', 100))
         
+        params = []
         q = 'SELECT * FROM products WHERE 1=1'
-        if collection != 'all': q += f" AND collection='{collection}'"
-        if search: q += f" AND (name LIKE '%{search}%' OR desc LIKE '%{search}%')"
-        if status: q += f" AND status='{status}'"
-        q += f' ORDER BY featured DESC, id LIMIT {limit}'
+        if collection != 'all': q += ' AND collection=?'; params.append(collection)
+        if search: q += ' AND (name LIKE ? OR desc LIKE ?)'; params.append(f'%{search}%'); params.append(f'%{search}%')
+        if status: q += ' AND status=?'; params.append(status)
+        q += f' ORDER BY featured DESC, id LIMIT ?'; params.append(limit)
         
-        rows = db.execute(q).fetchall()
+        rows = db.execute(q, params).fetchall()
         return jsonify([dict(r) for r in rows])
     
     data = request.get_json()
@@ -256,8 +257,11 @@ def api_product(pid):
         return jsonify(dict(row)) if row else ('', 404)
     if request.method == 'PUT':
         data = request.get_json()
-        sets = ' '.join([f"{k}='{v}'" for k,v in data.items() if k not in ('id','created_at')])
-        db.execute(f'UPDATE products SET {sets} WHERE id=?', (pid,))
+        allowed = ['name','collection','price','old_price','tag','sizes','stock','status','desc','image','featured','owner']
+        sets = ', '.join([f"{k}=?" for k in data if k in allowed])
+        if not sets: return jsonify({'error': 'No valid fields'}), 400
+        vals = [data[k] for k in data if k in allowed]
+        db.execute(f'UPDATE products SET {sets} WHERE id=?', (*vals, pid))
         db.commit()
         return jsonify({'ok': True})
     db.execute('DELETE FROM products WHERE id=?', (pid,))
@@ -508,7 +512,7 @@ def api_stats():
 def api_revenue():
     db = get_db()
     days = int(request.args.get('days', 30))
-    rows = db.execute(f'SELECT date, SUM(total) as revenue, COUNT(*) as orders FROM orders WHERE date(created_at) >= date("now", "-{days} days") GROUP BY date(created_at) ORDER BY date').fetchall()
+    rows = db.execute('SELECT date, SUM(total) as revenue, COUNT(*) as orders FROM orders WHERE date(created_at) >= date("now", ?) GROUP BY date(created_at) ORDER BY date', (f'-{days} days',)).fetchall()
     return jsonify([dict(r) for r in rows])
 
 # ================================================================
@@ -773,9 +777,9 @@ def api_export_orders():
         items = json.loads(r['items'] or '[]')
         csv += f"{r['id']},{r['first_name']},{r['last_name']},{r['phone']},{r['wilaya']},{r['address']},\"{items}\",{r['subtotal']},{r['shipping']},{r['total']},{r['payment_method']},{r['status']},{r['tracking_code']},{r['created_at']}\n"
     
-    from io import StringIO
+    from io import BytesIO
     return send_file(
-        StringIO(csv),
+        BytesIO(csv.encode('utf-8-sig')),
         mimetype='text/csv',
         as_attachment=True,
         download_name='flyra_orders.csv'
@@ -790,9 +794,9 @@ def api_export_products():
     for r in rows:
         csv += f"{r['id']},{r['name']},{r['collection']},{r['price']},{r['old_price'] or ''},{r['icon']},{r['tag'] or ''},{r['sizes']},{r['stock']},{r['status']},{r['desc']}\n"
     
-    from io import StringIO
+    from io import BytesIO
     return send_file(
-        StringIO(csv),
+        BytesIO(csv.encode('utf-8-sig')),
         mimetype='text/csv',
         as_attachment=True,
         download_name='flyra_products.csv'
@@ -807,8 +811,8 @@ def api_wilayas():
                'Tamanrasset','Tébessa','Tlemcen','Tiaret','Tizi Ouzou','Alger','Djelfa','Jijel','Sétif','Saïda',
                'Skikda','Sidi Bel Abbès','Annaba','Guelma','Constantine','Médéa','Mostaganem','Mila','Mascara',
                'Ouargla','Oran','El Bayadh','Illizi','Bordj Bou Arreridj','El Tarf','Tindouf','Tissemsilt',
-               'El Oued','Khenchela','Souk Ahras','Tipaza','Mila','Ksar El Boukhari','El Meghaier',
-               'Sidi Khelil','In Salah','In Guezzam','Touggourt','Djanet','Algiers','Bab El Oued','Hydra',
+               'El Oued','Khenchela','Souk Ahras','Tipaza','Ksar El Boukhari','El Meghaier',
+                'Sidi Khelil','In Salah','In Guezzam','Touggourt','Djanet','Algiers','Bab El Oued','Hydra',
                'Babeross','Ben Aknoun','Dely Ibrahim','Cheraga','Rouiba','Annaba']
     return jsonify({'wilayas': list(set(wilayas))})
 

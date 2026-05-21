@@ -551,6 +551,32 @@ html[dir="rtl"] body{font-family:'Noto Sans Arabic',sans-serif;}
 <button class="ai-fab" onclick="toggleAI()">🤖</button>
 
 <script>
+const APP_VERSION = '2.0';
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const installingWorker = reg.installing;
+      installingWorker.addEventListener('statechange', () => {
+        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          if (confirm('🔄 FLYRA update available! Reload to get the latest version?')) {
+            location.reload();
+          }
+        }
+      });
+    });
+  }).catch(() => {});
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+  });
+}
+
+const savedVer = localStorage.getItem('flyra_ver');
+if (savedVer !== APP_VERSION) {
+  ['flyra_products','flyra_cached_products','flyra_col_img_heritage','flyra_col_img_street','flyra_col_img_oldmoney','flyra_col_img_sport'].forEach(k => localStorage.removeItem(k));
+  localStorage.setItem('flyra_ver', APP_VERSION);
+}
+
 const PRODS = [
   {id:1,name:'HERITAGE GANDOURA',owner:'FLYRA Atelier',col:'heritage',price:28000,old:35000,image:null,tag:'HERITAGE',sizes:['S','M','L','XL','XXL'],stock:8,desc:'Hand-embroidered traditional Algerian Gandoura. Pure linen from Tlemcen workshops.'},
   {id:2,name:'PHANTOM STREET HOODIE',owner:'FLYRA Studio',col:'street',price:18000,old:24000,image:null,tag:'NEW',sizes:['S','M','L','XL'],stock:15,desc:'Oversized silhouette. Heavy-weight 420gsm French terry. Phantom collection.'},

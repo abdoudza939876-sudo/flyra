@@ -583,7 +583,7 @@
         headers: { 'Content-Type': 'application/json', 'X-Session': localStorage.getItem('flyra_session') || 'web' },
         body: JSON.stringify({
           first_name: fname, last_name: lname, phone, wilaya, address,
-          items: cart.map(i => ({id: i.id, name: i.name, price: i.price, size: i.size, qty: i.quantity})),
+          items: cart.map(i => ({id: i.id, name: i.name, price: i.price, size: i.size, qty: 1})),
           subtotal, payment_method: selectedPaymentMethod
         }),
         signal: AbortSignal.timeout(5000)
@@ -946,7 +946,7 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
     div.className = 'msg ' + (isUser ? 'msg-user' : 'msg-ai');
     div.innerHTML = isUser
       ? `<div class="msg-text">${escapeHtml(text)}</div>`
-      : `<div class="msg-text"><span class="stylist-label">AI_STYLIST v3</span>${text}</div>`;
+      : `<div class="msg-text"><span class="ai-label">AI_STYLIST v3</span>${text}</div>`;
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
   }
@@ -2324,8 +2324,9 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
     setTimeout(applyMobileLayout, 200);
   }
 
-  // Expose public API
+  // Expose public API (including data for other modules)
   window.MorpheusApp = {
+    products,
     // Products
     addToCart,
     addToOutfit,
