@@ -27,6 +27,7 @@ def get_db():
         g.db.row_factory = sqlite3.Row
         g.db.execute('PRAGMA journal_mode=WAL')
         g.db.execute('PRAGMA busy_timeout=5000')
+        g.db.execute('PRAGMA foreign_keys=ON')
     return g.db
 
 @app.teardown_appcontext
@@ -64,11 +65,13 @@ def init_db():
     CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER, first_name TEXT, last_name TEXT,
-        phone TEXT, wilaya TEXT, address TEXT,
+        phone TEXT, email TEXT, wilaya TEXT, address TEXT,
         items TEXT, total INTEGER, subtotal INTEGER,
+        discount INTEGER DEFAULT 0,
         shipping INTEGER DEFAULT 0, payment_method TEXT DEFAULT 'cod',
         status TEXT DEFAULT 'pending',
-        tracking_code TEXT, notes TEXT,
+        tracking_code TEXT, coupon_code TEXT,
+        notes TEXT,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
@@ -133,6 +136,19 @@ def init_db():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT, views INTEGER DEFAULT 0,
         orders INTEGER DEFAULT 0, revenue INTEGER DEFAULT 0
+    );
+
+    CREATE TABLE IF NOT EXISTS coupons (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT UNIQUE NOT NULL,
+        discount INTEGER NOT NULL,
+        type TEXT DEFAULT 'percent',
+        min_order INTEGER DEFAULT 0,
+        max_uses INTEGER DEFAULT 0,
+        used INTEGER DEFAULT 0,
+        expires TEXT,
+        active INTEGER DEFAULT 1,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
     ''')
     
@@ -217,34 +233,101 @@ def detect_lang(text):
     return 'en'
 
 # ================================================================
+# HELPERS
+# ================================================================
+def migrate_schema():
+    """Add missing columns if they don't exist (safe migration)."""
+    db = sqlite3.connect(DB_PATH, timeout=20)
+    try:
+        cols = [r[1] for r in db.execute('PRAGMA table_info(orders)').fetchall()]
+        if 'email' not in cols:
+            db.execute('ALTER TABLE orders ADD COLUMN email TEXT DEFAULT ""')
+        if 'discount' not in cols:
+            db.execute('ALTER TABLE orders ADD COLUMN discount INTEGER DEFAULT 0')
+        if 'coupon_code' not in cols:
+            db.execute('ALTER TABLE orders ADD COLUMN coupon_code TEXT DEFAULT ""')
+        db.commit()
+    except Exception as e:
+        print(f"[migrate] {e}")
+    finally:
+        db.close()
+
+ALLOWED_PRODUCT_FIELDS = {'name','owner','collection','price','old_price','tag','sizes','stock','status','desc','image','featured','colors','icon'}
+
+# ================================================================
+# RATE LIMITER (simple in-memory)
+# ================================================================
+RATE_LIMIT = {}
+def rate_limit(limit=60, window=60):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            ip = request.remote_addr or '127.0.0.1'
+            key = f"{ip}:{request.path}"
+            now = time.time()
+            window_start = now - window
+            RATE_LIMIT[key] = [t for t in RATE_LIMIT.get(key, []) if t > window_start]
+            if len(RATE_LIMIT[key]) >= limit:
+                return jsonify({'error': 'Too many requests'}), 429
+            RATE_LIMIT[key].append(now)
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
+
+# ================================================================
 # API: PRODUCTS
 # ================================================================
 @app.route('/api/products', methods=['GET', 'POST'])
+@rate_limit(120, 60)
 def api_products():
     db = get_db()
     if request.method == 'GET':
         collection = request.args.get('collection', 'all')
         search = request.args.get('search', '')
         status = request.args.get('status', '')
-        limit = int(request.args.get('limit', 100))
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 50))
+        offset = (page - 1) * per_page
         
+        params = []
         q = 'SELECT * FROM products WHERE 1=1'
-        if collection != 'all': q += f" AND collection='{collection}'"
-        if search: q += f" AND (name LIKE '%{search}%' OR desc LIKE '%{search}%')"
-        if status: q += f" AND status='{status}'"
-        q += f' ORDER BY featured DESC, id LIMIT {limit}'
+        count_q = 'SELECT COUNT(*) FROM products WHERE 1=1'
         
-        rows = db.execute(q).fetchall()
-        return jsonify([dict(r) for r in rows])
+        if collection != 'all':
+            q += ' AND collection=?'; count_q += ' AND collection=?'
+            params.append(collection)
+        if search:
+            q += ' AND (name LIKE ? OR desc LIKE ?)'; count_q += ' AND (name LIKE ? OR desc LIKE ?)'
+            like = f'%{search}%'; params.extend([like, like])
+        if status:
+            q += ' AND status=?'; count_q += ' AND status=?'
+            params.append(status)
+        
+        total = db.execute(count_q, params).fetchone()[0]
+        
+        q += ' ORDER BY featured DESC, id DESC LIMIT ? OFFSET ?'
+        params.extend([per_page, offset])
+        
+        rows = db.execute(q, params).fetchall()
+        return jsonify({
+            'products': [dict(r) for r in rows],
+            'total': total,
+            'page': page,
+            'per_page': per_page,
+            'pages': max(1, (total + per_page - 1) // per_page)
+        })
     
     data = request.get_json()
+    if not data or not data.get('name'):
+        return jsonify({'error': 'Product name is required'}), 400
+    
     db.execute('''
         INSERT INTO products (name, owner, collection, price, old_price, tag, sizes, stock, status, desc, image, featured)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (data.get('name'), data.get('owner',''), data.get('collection'), data.get('price'), data.get('old_price'),
-           data.get('tag'), json.dumps(data.get('sizes',[])),
-           data.get('stock',0), data.get('status','active'), data.get('desc',''),
-           data.get('image',''), data.get('featured',0)))
+    ''', (data.get('name'), data.get('owner',''), data.get('collection'), data.get('price'),
+           data.get('old_price'), data.get('tag'),
+           data.get('sizes','S,M,L,XL'), data.get('stock',0), data.get('status','active'),
+           data.get('desc',''), data.get('image',''), data.get('featured',0)))
     db.commit()
     return jsonify({'id': db.execute('SELECT last_insert_rowid()').fetchone()[0]})
 
@@ -256,8 +339,12 @@ def api_product(pid):
         return jsonify(dict(row)) if row else ('', 404)
     if request.method == 'PUT':
         data = request.get_json()
-        sets = ' '.join([f"{k}='{v}'" for k,v in data.items() if k not in ('id','created_at')])
-        db.execute(f'UPDATE products SET {sets} WHERE id=?', (pid,))
+        if not data: return jsonify({'error': 'No data'}), 400
+        allowed = {k: v for k, v in data.items() if k in ALLOWED_PRODUCT_FIELDS}
+        if not allowed: return jsonify({'error': 'No valid fields'}), 400
+        sets = ', '.join([f'{k}=?' for k in allowed])
+        vals = list(allowed.values()) + [pid]
+        db.execute(f'UPDATE products SET {sets} WHERE id=?', vals)
         db.commit()
         return jsonify({'ok': True})
     db.execute('DELETE FROM products WHERE id=?', (pid,))
@@ -274,28 +361,73 @@ def api_featured():
 # API: ORDERS
 # ================================================================
 @app.route('/api/orders', methods=['GET', 'POST'])
+@rate_limit(60, 60)
 def api_orders():
     db = get_db()
     if request.method == 'GET':
-        rows = db.execute('SELECT * FROM orders ORDER BY created_at DESC LIMIT 100').fetchall()
-        return jsonify([dict(r) for r in rows])
+        phone = request.args.get('phone', '')
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 50))
+        offset = (page - 1) * per_page
+        
+        params = []
+        q = 'SELECT * FROM orders WHERE 1=1'
+        count_q = 'SELECT COUNT(*) FROM orders WHERE 1=1'
+        if phone:
+            q += ' AND phone LIKE ?'; count_q += ' AND phone LIKE ?'
+            params.append(f'%{phone}%')
+        
+        total = db.execute(count_q, params).fetchone()[0]
+        q += ' ORDER BY created_at DESC LIMIT ? OFFSET ?'
+        params.extend([per_page, offset])
+        rows = db.execute(q, params).fetchall()
+        result = [dict(r) for r in rows]
+        for r in result:
+            try: r['items'] = json.loads(r['items'])
+            except: pass
+        return jsonify({'orders': result, 'total': total, 'page': page, 'pages': max(1, (total + per_page - 1) // per_page)})
     
     data = request.get_json()
-    items = json.dumps(data.get('items', []))
+    if not data or not data.get('first_name') or not data.get('phone'):
+        return jsonify({'error': 'Name and phone are required'}), 400
+    
+    items = data.get('items', [])
     subtotal = data.get('subtotal', 0)
-    shipping = 0 if subtotal >= 25000 else 600
-    total = subtotal + shipping
+    shipping = data.get('shipping', 0)
+    discount = data.get('discount', 0)
+    total = data.get('total', subtotal + shipping - discount)
+    coupon_code = data.get('coupon', '')
+    email = data.get('email', '')
     
     tracking = f"FLY{datetime.now().strftime('%Y%m%d')}{secrets.token_hex(3).upper()[:6]}"
     
+    # Check for duplicate tracking to avoid collisions
+    existing = db.execute('SELECT id FROM orders WHERE tracking_code=?', (tracking,)).fetchone()
+    if existing:
+        tracking = f"FLY{datetime.now().strftime('%Y%m%d')}{secrets.token_hex(4).upper()[:8]}"
+    
     db.execute('''
-        INSERT INTO orders (first_name, last_name, phone, wilaya, address, items, subtotal, shipping, total, payment_method, tracking_code, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
-    ''', (data.get('first_name'), data.get('last_name'), data.get('phone'),
-           data.get('wilaya'), data.get('address',''), items, subtotal, shipping, total,
-           data.get('payment_method','cod'), tracking))
+        INSERT INTO orders (first_name, last_name, phone, email, wilaya, address, items, subtotal, shipping, discount, total, payment_method, tracking_code, coupon_code, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+    ''', (data.get('first_name'), data.get('last_name'), data.get('phone'), email,
+           data.get('wilaya'), data.get('address',''), json.dumps(items),
+           subtotal, shipping, discount, total,
+           data.get('payment_method','cod'), tracking, coupon_code))
     db.commit()
     oid = db.execute('SELECT last_insert_rowid()').fetchone()[0]
+    
+    # Update coupon usage
+    if coupon_code:
+        db.execute('UPDATE coupons SET used=used+1 WHERE code=?', (coupon_code,))
+        db.commit()
+    
+    # Update stock
+    for item in items:
+        pid = item.get('product_id') or item.get('id')
+        qty = item.get('qty') or item.get('quantity', 1)
+        if pid:
+            db.execute('UPDATE products SET stock = MAX(0, stock - ?) WHERE id=?', (qty, pid))
+    db.commit()
     
     user_id = get_user_id(request)
     if user_id:
@@ -318,12 +450,17 @@ def api_order(oid):
     
     if request.method == 'PUT':
         data = request.get_json()
-        if 'status' in data: db.execute('UPDATE orders SET status=?, updated_at=? WHERE id=?', (data['status'], datetime.now().isoformat(), oid))
-        if 'tracking_code' in data: db.execute('UPDATE orders SET tracking_code=? WHERE id=?', (data['tracking_code'], oid))
+        allowed = ['status', 'tracking_code', 'notes', 'phone', 'wilaya', 'address']
+        for k in allowed:
+            if k in data:
+                db.execute(f'UPDATE orders SET {k}=?, updated_at=? WHERE id=?', (data[k], datetime.now().isoformat(), oid))
         db.commit()
         return jsonify({'ok': True})
     
-    return jsonify(dict(row))
+    d = dict(row)
+    try: d['items'] = json.loads(d['items'])
+    except: pass
+    return jsonify(d)
 
 @app.route('/api/orders/track/<code>', methods=['GET'])
 def api_track(code):
@@ -331,8 +468,20 @@ def api_track(code):
     row = db.execute('SELECT * FROM orders WHERE tracking_code=?', (code,)).fetchone()
     if not row: return jsonify({'error': 'Not found'}), 404
     d = dict(row)
-    d['items'] = json.loads(d['items'])
+    try: d['items'] = json.loads(d['items'])
+    except: pass
     return jsonify(d)
+
+@app.route('/api/orders/bulk-delete', methods=['POST'])
+def api_orders_bulk_delete():
+    data = request.get_json() or {}
+    ids = data.get('ids', [])
+    if not ids: return jsonify({'error': 'No IDs'}), 400
+    db = get_db()
+    placeholders = ','.join('?' * len(ids))
+    db.execute(f'DELETE FROM orders WHERE id IN ({placeholders})', ids)
+    db.commit()
+    return jsonify({'deleted': len(ids)})
 
 # ================================================================
 # API: CART
@@ -471,9 +620,15 @@ def api_stats():
     total_revenue = db.execute("SELECT SUM(total) FROM orders WHERE status!='cancelled'").fetchone()[0] or 0
     total_products = db.execute("SELECT COUNT(*) FROM products").fetchone()[0]
     total_users = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+    total_coupons = db.execute("SELECT COUNT(*) FROM coupons").fetchone()[0]
+    
+    status_breakdown = db.execute('''
+        SELECT status, COUNT(*) as count, SUM(total) as revenue
+        FROM orders GROUP BY status
+    ''').fetchall()
     
     top_products = db.execute('''
-        SELECT p.name, COUNT(o.id) as order_count 
+        SELECT p.name, p.id, COUNT(o.id) as order_count, SUM(json_extract(o.items, '$[0].price')) as revenue
         FROM orders o, products p 
         WHERE o.items LIKE '%'||p.name||'%'
         GROUP BY p.id ORDER BY order_count DESC LIMIT 5
@@ -491,14 +646,28 @@ def api_stats():
     
     recent_orders = db.execute('SELECT * FROM orders ORDER BY created_at DESC LIMIT 10').fetchall()
     
+    today_orders = db.execute("SELECT COUNT(*) FROM orders WHERE date(created_at)=date('now')").fetchone()[0]
+    today_revenue = db.execute("SELECT COALESCE(SUM(total),0) FROM orders WHERE date(created_at)=date('now') AND status!='cancelled'").fetchone()[0]
+    
+    orders_by_date = db.execute('''
+        SELECT date(created_at) as day, COUNT(*) as orders, SUM(total) as revenue
+        FROM orders WHERE created_at >= date('now', '-30 days')
+        GROUP BY day ORDER BY day
+    ''').fetchall()
+    
     return jsonify({
         'total_orders': total_orders,
         'total_revenue': total_revenue,
         'total_products': total_products,
         'total_users': total_users,
+        'total_coupons': total_coupons,
+        'today_orders': today_orders,
+        'today_revenue': today_revenue,
+        'status_breakdown': [dict(r) for r in status_breakdown],
         'top_products': [dict(r) for r in top_products],
         'wilaya_breakdown': [dict(r) for r in wilaya_breakdown],
         'daily_stats': [dict(r) for r in daily_stats],
+        'orders_by_date': [dict(r) for r in orders_by_date],
         'low_stock': [dict(r) for r in low_stock],
         'out_of_stock': [dict(r) for r in out_of_stock],
         'recent_orders': [dict(r) for r in recent_orders],
@@ -508,8 +677,44 @@ def api_stats():
 def api_revenue():
     db = get_db()
     days = int(request.args.get('days', 30))
-    rows = db.execute(f'SELECT date, SUM(total) as revenue, COUNT(*) as orders FROM orders WHERE date(created_at) >= date("now", "-{days} days") GROUP BY date(created_at) ORDER BY date').fetchall()
+    rows = db.execute('''
+        SELECT date(created_at) as day, SUM(total) as revenue, COUNT(*) as orders
+        FROM orders WHERE created_at >= datetime("now", ?)
+        GROUP BY day ORDER BY day
+    ''', (f'-{days} days',)).fetchall()
     return jsonify([dict(r) for r in rows])
+
+@app.route('/api/stats/dashboard', methods=['GET'])
+def api_dashboard():
+    db = get_db()
+    period = request.args.get('period', '7d')
+    days = {'1d':1,'7d':7,'30d':30,'90d':90}.get(period, 7)
+    
+    revenue = db.execute('''
+        SELECT COALESCE(SUM(total),0) FROM orders
+        WHERE created_at >= datetime("now",?) AND status!='cancelled'
+    ''', (f'-{days} days',)).fetchone()[0]
+    
+    orders_count = db.execute('''
+        SELECT COUNT(*) FROM orders
+        WHERE created_at >= datetime("now",?)
+    ''', (f'-{days} days',)).fetchone()[0]
+    
+    avg_order = int(revenue / orders_count) if orders_count else 0
+    
+    conversion = db.execute('''
+        SELECT ROUND(100.0 * COUNT(DISTINCT o.id) / MAX(1, COUNT(DISTINCT s.id)), 1)
+        FROM (SELECT id FROM orders WHERE created_at >= datetime("now",?)) o
+        RIGHT JOIN (SELECT id FROM sessions WHERE created_at >= datetime("now",?)) s
+    ''', (f'-{days} days', f'-{days} days')).fetchone()[0]
+    
+    return jsonify({
+        'revenue': revenue,
+        'orders': orders_count,
+        'avg_order': avg_order,
+        'conversion': conversion,
+        'period': period
+    })
 
 # ================================================================
 # API: LOYALTY
@@ -551,6 +756,86 @@ def api_drops():
                (data.get('product_id'), data.get('launch_date')))
     db.commit()
     return jsonify({'ok': True})
+
+# ================================================================
+# API: COUPONS
+# ================================================================
+@app.route('/api/coupons', methods=['GET', 'POST'])
+def api_coupons():
+    db = get_db()
+    if request.method == 'GET':
+        rows = db.execute('SELECT * FROM coupons ORDER BY created_at DESC').fetchall()
+        return jsonify([dict(r) for r in rows])
+    
+    data = request.get_json()
+    if not data or not data.get('code') or not data.get('discount'):
+        return jsonify({'error': 'Code and discount are required'}), 400
+    
+    code = data['code'].upper().strip()
+    existing = db.execute('SELECT id FROM coupons WHERE code=?', (code,)).fetchone()
+    if existing:
+        return jsonify({'error': 'Coupon code already exists'}), 400
+    
+    db.execute('''
+        INSERT INTO coupons (code, discount, type, min_order, max_uses, expires, active)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (code, int(data['discount']), data.get('type', 'percent'),
+           int(data.get('min_order', 0)), int(data.get('max_uses', 0)),
+           data.get('expires'), data.get('active', 1)))
+    db.commit()
+    return jsonify({'id': db.execute('SELECT last_insert_rowid()').fetchone()[0]})
+
+@app.route('/api/coupons/<int:cid>', methods=['PUT', 'DELETE'])
+def api_coupon(cid):
+    db = get_db()
+    row = db.execute('SELECT * FROM coupons WHERE id=?', (cid,)).fetchone()
+    if not row: return jsonify({'error': 'Not found'}), 404
+    
+    if request.method == 'PUT':
+        data = request.get_json()
+        allowed = ['code', 'discount', 'type', 'min_order', 'max_uses', 'expires', 'active']
+        for k in allowed:
+            if k in data:
+                val = data[k].upper().strip() if k == 'code' else data[k]
+                db.execute(f'UPDATE coupons SET {k}=? WHERE id=?', (val, cid))
+        db.commit()
+        return jsonify({'ok': True})
+    
+    db.execute('DELETE FROM coupons WHERE id=?', (cid,))
+    db.commit()
+    return jsonify({'ok': True})
+
+@app.route('/api/coupons/validate', methods=['POST'])
+def api_coupon_validate():
+    db = get_db()
+    data = request.get_json() or {}
+    code = data.get('code', '').upper().strip()
+    subtotal = data.get('subtotal', 0)
+    
+    if not code: return jsonify({'valid': False, 'error': 'No code'})
+    
+    row = db.execute('SELECT * FROM coupons WHERE code=?', (code,)).fetchone()
+    if not row: return jsonify({'valid': False, 'error': 'Invalid code'})
+    
+    if not row['active']: return jsonify({'valid': False, 'error': 'Coupon is deactivated'})
+    
+    if row['max_uses'] > 0 and row['used'] >= row['max_uses']:
+        return jsonify({'valid': False, 'error': 'Usage limit reached'})
+    
+    if row['expires']:
+        try:
+            if datetime.now() > datetime.fromisoformat(row['expires']):
+                return jsonify({'valid': False, 'error': 'Coupon has expired'})
+        except: pass
+    
+    if subtotal < row['min_order']:
+        return jsonify({'valid': False, 'error': f'Minimum order: {row["min_order"]:,} DZD'})
+    
+    discount = row['discount']
+    if row['type'] == 'percent':
+        discount = int(subtotal * discount / 100)
+    
+    return jsonify({'valid': True, 'discount': discount, 'type': row['type'], 'raw': row['discount'], 'code': code})
 
 # ================================================================
 # API: NOTIFICATIONS
@@ -816,18 +1101,33 @@ def api_wilayas():
 # HEALTH CHECK
 # ================================================================
 @app.route('/api/health', methods=['GET'])
+@rate_limit(30, 60)
 def api_health():
     db = get_db()
+    try:
+        db_count = db.execute('SELECT COUNT(*) FROM products').fetchone()[0]
+        health = 'ok'
+    except:
+        health = 'degraded'
+        db_count = 0
+    
     stats = {
         'products': db.execute('SELECT COUNT(*) FROM products').fetchone()[0],
         'orders': db.execute('SELECT COUNT(*) FROM orders').fetchone()[0],
         'users': db.execute('SELECT COUNT(*) FROM users').fetchone()[0],
+        'coupons': db.execute('SELECT COUNT(*) FROM coupons').fetchone()[0],
         'revenue': db.execute("SELECT SUM(total) FROM orders WHERE status!='cancelled'").fetchone()[0] or 0,
     }
-    return jsonify({'status': 'ok', 'version': '1.0', 'platform': 'FLYRA', 'stats': stats})
+    return jsonify({
+        'status': health,
+        'version': '2.0',
+        'platform': 'FLYRA',
+        'uptime': time.time() - START_TIME,
+        'stats': stats
+    })
 
 # ================================================================
-# API: SETTINGS (WhatsApp number, collection images)
+# API: SETTINGS (WhatsApp number, collection images, etc.)
 # ================================================================
 @app.route('/api/settings', methods=['GET', 'POST'])
 def api_settings():
@@ -887,24 +1187,30 @@ def serve_about():
 # ================================================================
 # MAIN
 # ================================================================
+START_TIME = time.time()
 init_db()
+migrate_schema()
 
 if __name__ == '__main__':
+    try: db_size = os.path.getsize(DB_PATH)/1024
+    except: db_size = 0
     print(f"""
-╔═══════════════════════════════════════════════════╗
-║          FLYRA BACKEND SERVER v1.0                ║
-╠═══════════════════════════════════════════════════╣
-║  Local:     http://localhost:5555                 ║
-║  Network:   http://{{YOUR_IP}}:5555                ║
-║  Health:    http://localhost:5555/api/health     ║
-║  Products:  http://localhost:5555/api/products    ║
-║  Orders:    http://localhost:5555/api/orders      ║
-║  Chat:      http://localhost:5555/api/chat        ║
-║  Stats:     http://localhost:5555/api/stats       ║
-╠═══════════════════════════════════════════════════╣
-║  SQLite:    flyra.db ({os.path.getsize(DB_PATH)/1024:.1f}KB)                      ║
-║  Platform: FLYRA — Algerian Fashion Platform      ║
-║  Version:  1.0 (Ascend Without Limits)            ║
-╚═══════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════╗
+║              FLYRA BACKEND SERVER v2.0                ║
+╠════════════════════════════════════════════════════════╣
+║  Local:     http://localhost:5555                      ║
+║  Network:   http://{{YOUR_IP}}:5555                     ║
+║  Health:    http://localhost:5555/api/health          ║
+║  Products:  http://localhost:5555/api/products         ║
+║  Orders:    http://localhost:5555/api/orders           ║
+║  Coupons:   http://localhost:5555/api/coupons          ║
+║  Chat:      http://localhost:5555/api/chat             ║
+║  Stats:     http://localhost:5555/api/stats            ║
+╠════════════════════════════════════════════════════════╣
+║  SQLite:    flyra.db ({db_size:.1f}KB)                    ║
+║  Uptime:    {datetime.fromtimestamp(START_TIME).strftime('%Y-%m-%d %H:%M:%S')}           ║
+║  Platform:  FLYRA — Algerian Fashion Platform v2       ║
+║  Features:  Sécurisé • Coupons • Pagination • RateLimit║
+╚════════════════════════════════════════════════════════╝
 """)
-    app.run(host='0.0.0.0', port=5555, debug=True)
+    app.run(host='0.0.0.0', port=5555, debug=False)
