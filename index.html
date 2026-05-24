@@ -961,18 +961,32 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
 .mobile-ai-send{width:44px;height:44px;background:var(--amber);border:none;border-radius:14px;color:var(--midnight);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;transition:all 0.15s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .mobile-ai-send:hover{transform:scale(1.05);box-shadow:0 4px 16px rgba(196,155,61,0.4);}
 .mobile-ai-send:disabled{opacity:0.3;cursor:not-allowed;transform:none;box-shadow:none;}
-.social-proof-container{position:fixed;bottom:100px;left:30px;z-index:1000;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:300px;}
-.social-proof-popup{background:var(--raven);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:0.78rem;color:var(--text);box-shadow:0 10px 30px rgba(0,0,0,0.4);opacity:0;transform:translateY(20px);transition:all 0.4s ease;pointer-events:auto;}
-.social-proof-popup.show{opacity:1;transform:translateY(0);}
-.social-proof-popup.removing{opacity:0;transform:translateY(-10px);}
-.social-proof-icon{width:32px;height:32px;background:rgba(196,155,61,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
-.social-proof-text{line-height:1.4;}
-.social-proof-name{font-weight:700;color:var(--amber);}
 .voice-btn{background:none;border:none;color:var(--subtext);cursor:pointer;font-size:1.1rem;padding:4px;display:flex;align-items:center;transition:color 0.2s;flex-shrink:0;}
 .voice-btn:hover{color:var(--amber);}
 .voice-btn.recording{color:#F85149;animation:voice-pulse 1s ease infinite;}
 @keyframes voice-pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 .countdown-badge{font-size:0.7rem;color:var(--sunset);font-weight:600;margin-top:4px;display:flex;align-items:center;gap:4px;}
+.auth-modal{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);padding:20px;}
+.auth-modal.show{display:flex;}
+.auth-box{background:var(--raven);border:1px solid var(--border);border-radius:20px;padding:36px;max-width:420px;width:100%;position:relative;animation:modal-in 0.3s ease;}
+.auth-close{position:absolute;top:14px;right:14px;width:32px;height:32px;background:rgba(255,255,255,0.05);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--subtext);font-size:0.9rem;transition:all 0.15s;}
+.auth-close:hover{background:rgba(248,81,73,0.15);color:#F85149;}
+.auth-tabs{display:flex;gap:4px;margin-bottom:24px;padding:4px;background:rgba(255,255,255,0.04);border-radius:12px;}
+.auth-tab{flex:1;padding:10px;text-align:center;border-radius:10px;font-size:0.78rem;font-weight:700;color:var(--subtext);cursor:pointer;transition:all 0.15s;border:none;background:none;font-family:inherit;letter-spacing:0.05em;}
+.auth-tab.active{background:var(--amber);color:var(--midnight);}
+.auth-form{display:none;flex-direction:column;gap:14px;}
+.auth-form.show{display:flex;}
+.auth-form h2{font-size:1.1rem;font-weight:800;color:var(--cream);margin-bottom:4px;}
+.auth-form p{font-size:0.72rem;color:var(--subtext);margin-bottom:8px;}
+.auth-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--cream);font-size:0.85rem;font-family:inherit;outline:none;transition:border-color 0.2s;}
+.auth-input:focus{border-color:var(--amber);}
+.auth-input::placeholder{color:var(--subtext);}
+.auth-submit{width:100%;padding:14px;background:var(--amber);color:var(--midnight);border:none;border-radius:12px;font-size:0.85rem;font-weight:800;letter-spacing:0.08em;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.auth-submit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,155,61,0.4);}
+.auth-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.auth-error{font-size:0.72rem;color:#FF4D4D;display:none;text-align:center;}
+.auth-success{font-size:0.72rem;color:#4ABA82;display:none;text-align:center;}
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .size-guide-modal{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);padding:20px;}
 .size-guide-modal.show{display:flex;}
 .size-guide-content{background:var(--raven);border:1px solid var(--border);border-radius:20px;padding:32px;max-width:420px;width:100%;position:relative;animation:modal-in 0.3s ease;}
@@ -1096,6 +1110,9 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-actions">
+    <button class="nav-btn" id="authBtn" onclick="openAuthModal()" title="Sign In">
+      <span id="authIcon" style="font-size:1.1rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+    </button>
     <button class="nav-btn" onclick="toggleWishlist()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 2.5-3.5 2.5-5.5A5.5 5.5 0 0012 5.5 5.5 5.5 0 002.5 8.5C2.5 10.5 3.5 12.5 5 14l7 7 7-7z"/></svg>
     </button>
@@ -1112,8 +1129,8 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
       <button onclick="setLang('fr',this)">FR</button>
       <button onclick="setLang('ar',this)">عربي</button>
     </div>
-    <button class="nav-btn" onclick="openTrack()" title="Track Order">📍</button>
-    <button class="nav-btn" onclick="openOrderHistory()" title="My Orders">📋</button>
+    <button class="nav-btn" onclick="openTrack()" title="Track Order"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></button>
+    <button class="nav-btn" onclick="openOrderHistory()" title="My Orders"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></button>
     <button class="nav-btn fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
     <button class="hamburger" id="hamburger" onclick="toggleMobile()">
       <span></span><span></span><span></span>
@@ -1273,7 +1290,7 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
     <div class="product-search">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" id="productSearch" placeholder="Search products..." oninput="searchProducts(this.value)">
-      <button class="voice-btn" id="voiceBtn" onclick="startVoiceSearch()" title="Search by voice">🎤</button>
+      <button class="voice-btn" id="voiceBtn" onclick="startVoiceSearch()" title="Search by voice"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
     </div>
   </div>
 
@@ -1461,7 +1478,6 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
   </div>
 </footer>
 
-<div class="social-proof-container" id="socialProof"></div>
 <div class="toast" id="toast">
   <span class="toast-icon" id="toastIcon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
   <div class="toast-content">
@@ -1566,7 +1582,7 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
         </div>
         <div class="checkout-field">
           <label>Wilaya *</label>
-          <select id="coWilaya"></select>
+          <select id="coWilaya" class="wilaya-select"></select>
         </div>
         <div class="checkout-field">
           <label>Municipality / Address *</label>
@@ -1615,7 +1631,7 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
 <div class="track-modal" id="trackModal">
   <div class="track-content">
     <button class="track-close" onclick="closeTrack()">✕</button>
-    <div class="track-icon">📍</div>
+    <div class="track-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
     <div class="track-title">Track Your Order</div>
     <div class="track-sub">Enter your FLYRA tracking code (e.g. FLYRA-XXXXXX)</div>
     <input type="text" class="track-input" id="trackInput" placeholder="FLYRA-" autocomplete="off">
@@ -1627,7 +1643,7 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
 <div class="track-modal" id="orderHistoryModal">
   <div class="track-content" style="max-width:600px;">
     <button class="track-close" onclick="closeOrderHistory()">✕</button>
-    <div class="track-icon">📋</div>
+    <div class="track-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
     <div class="track-title">My Orders</div>
     <div class="track-sub">Enter your phone number to view your orders</div>
     <input type="tel" class="track-input" id="ohPhone" placeholder="05XX XX XX XX" autocomplete="tel">
@@ -1779,14 +1795,14 @@ a,button,.product-card,.collection-card,.feature-card,.nav-btn,.checkout-pay-opt
     <button class="ai-close" onclick="closeAI()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <div class="ai-suggestions" id="aiSuggestions">
-    <button onclick="aiQuickAsk('Show me streetwear')">👟 Streetwear</button>
-    <button onclick="aiQuickAsk('Something under 10,000 DZD')">💰 Under 10k</button>
-    <button onclick="aiQuickAsk('What size should I get?')">📏 Sizing</button>
-    <button onclick="aiQuickAsk('What is your return policy?')">🔄 Returns</button>
-    <button onclick="aiQuickAsk('Do you ship to my wilaya?')">🚚 Shipping</button>
+    <button onclick="aiQuickAsk('Show me streetwear')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h18l-2-8H5l-2 8z"/><path d="M3 16v3h18v-3"/><path d="M5 11V8"/><path d="M9 11V8"/><path d="M13 11V8"/><path d="M17 11V8"/></svg> Streetwear</button>
+    <button onclick="aiQuickAsk('Something under 10,000 DZD')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8"/><path d="M12 18V6"/></svg> Under 10k</button>
+    <button onclick="aiQuickAsk('What size should I get?')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M7 12V5h10v7"/><path d="M7 19v-3"/><path d="M12 19v-3"/><path d="M17 19v-3"/></svg> Sizing</button>
+    <button onclick="aiQuickAsk('What is your return policy?')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg> Returns</button>
+    <button onclick="aiQuickAsk('Do you ship to my wilaya?')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><rect x="16" y="8" width="5" height="8"/><path d="M16 16v2a2 2 0 01-2 2H8"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Shipping</button>
   </div>
   <div class="ai-messages" id="aiMessages">
-    <div class="ai-msg ai">✨ <strong>Welcome to FLYRA!</strong> I'm your AI fashion assistant.<br><br>I can help you:<br>• Find the perfect product by style or budget<br>• Check sizing and availability<br>• Answer shipping and return questions<br>• Suggest outfits and complete looks<br><br><em>Try asking: "Show me Heritage pieces under 15,000 DZD"</em></div>
+    <div class="ai-msg ai"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 6.5L20 9l-5 4.5L16 21l-4-4.5L8 21l1-7.5L4 9l6.5-.5L12 2z"/></svg> <strong>Welcome to FLYRA!</strong> I'm your AI fashion assistant.<br><br>I can help you:<br>• Find the perfect product by style or budget<br>• Check sizing and availability<br>• Answer shipping and return questions<br>• Suggest outfits and complete looks<br><br><em>Try asking: "Show me Heritage pieces under 15,000 DZD"</em></div>
   </div>
   <div class="ai-typing" id="aiTyping">Thinking</div>
   <div class="ai-input-row">
@@ -1916,15 +1932,27 @@ a,button,.product-card,.collection-card,.feature-card,.nav-btn,.checkout-pay-opt
 </div>
 
 <script>
-const API_URL = 'http://' + location.hostname + ':5555/api';
+const API = window.location.origin + '/api';
+const API_URL = window.location.origin + '/api';
 let products = [];
 let filteredProducts = [];
-let cart = JSON.parse(localStorage.getItem('flyra_cart') || '[]');
+let cart = [];
+async function loadCart() {
+  try {
+    const res = await fetch(API+'/cart', {headers:{'X-Session':SESSION_ID}});
+    if (res.ok) cart = await res.json();
+    else cart = [];
+  } catch(e) { cart = []; }
+  renderCart();
+  updateCartBadge();
+}
 let currentFilter = 'all';
 let currentSearch = '';
 let selectedSize = null;
 let modalProduct = null;
 let LANG = localStorage.getItem('flyra_lang') || 'en';
+let SESSION_ID = localStorage.getItem('flyra_session');
+if(!SESSION_ID){SESSION_ID = 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);localStorage.setItem('flyra_session',SESSION_ID);}
 
 const T = {
   en: {nav:{collections:'Collections',products:'Products',story:'Our Story',contact:'Contact',app:'Full App'},hero:{eyebrow:'Algerian Fashion, Reimagined',subtitle:'ALGERIAN FASHION REIMAGINED'},cta:{shop:'SHOP COLLECTION',explore:'EXPLORE APP'},col:{heritage:'Traditional meets modern',street:'Bold, urban, fresh',oldmoney:'Quiet luxury, timeless',sport:'Performance meets style'},features:{ai:'AI Stylist',shipping:'58 Wilayas Delivery',cod:'Cash on Delivery',heritage:'Heritage Craft',returns:'Easy Returns',quality:'Premium Quality'},shipping:{order:'Order',ship:'We Ship',receive:'You Receive'}},
@@ -1965,15 +1993,12 @@ async function init() {
   await loadSettings();
   setTimeout(() => { document.getElementById('loader').classList.add('hidden'); }, 2200);
   await loadProducts();
+  await loadCart();
   renderProducts();
-  updateCartBadge();
   setupParticles();
   setupScrollAnimations();
-  showSocialProof();
-  startCountdowns();
   setTimeout(initTilt,100);
   registerSW();
-  checkAbandonedCart();
   restoreSavedCheckout();
   const el=document.getElementById('coWilaya');if(el){el.addEventListener('change',function(){renderCheckoutSummary();});}
   setTimeout(initCursor,100);
@@ -2064,7 +2089,7 @@ function renderProducts() {
           ${discount ? `<span class="product-discount pulse">-${discount}%</span>` : ''}
           ${savings>0?`<span class="savings-badge">Save ${savings.toLocaleString()} DZD</span>`:''}
         </div>
-        ${p.tag === 'LIMITED' || p.status === 'limited' ? `<div class="countdown-badge" data-pid="${p.id}">🔥 Ends in: --d --h --m</div>` : ''}
+        ${p.tag === 'LIMITED' || p.status === 'limited' ? `<div class="countdown-badge" data-pid="${p.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4 0-6-3-6-7 0-4 3-9 6-11 3 2 6 7 6 11 0 4-2 7-6 7z"/><path d="M9 15c1 1 2 1 3 0s2-1 3 0"/></svg> Ends in: --d --h --m</div>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -2139,30 +2164,33 @@ function closeProductModal() {
   if (alertEl) alertEl.remove();
 }
 
-function quickAdd(id) {
+async function quickAdd(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
   const sizes = (p.sizes || 'S,M,L,XL').split(',').map(s => s.trim()).filter(Boolean);
-  addToCart(p, sizes[0] || 'M');
+  await addToCart(p, sizes[0] || 'M');
 }
 
-function addModalToCart() {
+async function addModalToCart() {
   if (!modalProduct) return;
   const sizes = (modalProduct.sizes || 'S,M,L,XL').split(',').map(s => s.trim()).filter(Boolean);
   const size = selectedSize || sizes[0] || 'M';
-  addToCart(modalProduct, size);
+  await addToCart(modalProduct, size);
   closeProductModal();
 }
 
-function addToCart(p, size) {
-  const key = p.id + '-' + size;
-  const existing = cart.find(c => c.key === key);
-  if (existing) existing.qty++;
-  else cart.push({key, id: p.id, name: p.name, price: p.price, icon: p.icon || 'FY', image: p.image, qty: 1, size});
-  localStorage.setItem('flyra_cart', JSON.stringify(cart));
-  localStorage.setItem('flyra_cart_ts',Date.now());
-  updateCartBadge();
-  showToast('', p.name + ' (' + size + ') added to cart');
+async function addToCart(p, size, qty = 1) {
+  try {
+    await fetch(API+'/cart', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Session':SESSION_ID},
+      body:JSON.stringify({product_id: p.id, quantity: qty, size: size})
+    });
+    await loadCart();
+    showToast('', p.name + ' (' + size + ') added to cart');
+  } catch(e) {
+    showToast('', 'Failed to add to cart');
+  }
 }
 
 function updateCartBadge() {
@@ -2172,8 +2200,8 @@ function updateCartBadge() {
   renderCartPreview();
 }
 
-function openCart() {
-  renderCart();
+async function openCart() {
+  await loadCart();
   document.getElementById('cartOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
@@ -2191,7 +2219,7 @@ function renderCart() {
     return;
   }
   document.getElementById('cartFooter').style.display = 'block';
-  container.innerHTML = cart.map((item, i) => {
+  container.innerHTML = cart.map((item) => {
     const icon = item.image && item.image.startsWith('data:') 
       ? `<img src="${item.image}" alt="${item.name}">` : `<div class="product-icon-init" style="font-size:1.2rem;">${item.icon||'FY'}</div>`;
     return `<div class="cart-item">
@@ -2201,10 +2229,10 @@ function renderCart() {
         <div class="cart-item-meta">Size: ${item.size}</div>
         <div class="cart-item-price">${(item.price * item.qty).toLocaleString()} DZD</div>
         <div class="cart-item-actions">
-          <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+          <button class="qty-btn" onclick="changeQty(${item.id},${item.qty},-1)">−</button>
           <span class="qty-val">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-          <span class="cart-remove" onclick="removeItem(${i})">Remove</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},${item.qty},1)">+</button>
+          <span class="cart-remove" onclick="removeItem(${item.id})">Remove</span>
         </div>
       </div>
     </div>`;
@@ -2212,18 +2240,30 @@ function renderCart() {
   updateCartTotals();
 }
 
-function changeQty(i, delta) {
-  cart[i].qty = Math.max(1, cart[i].qty + delta);
-  localStorage.setItem('flyra_cart', JSON.stringify(cart));
-  renderCart();
-  updateCartBadge();
+async function changeQty(itemId, currentQty, delta) {
+  const newQty = Math.max(1, currentQty + delta);
+  try {
+    await fetch(API+'/cart/'+itemId, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Session':SESSION_ID},
+      body:JSON.stringify({quantity: newQty})
+    });
+    await loadCart();
+  } catch(e) {
+    showToast('', 'Failed to update cart');
+  }
 }
 
-function removeItem(i) {
-  cart.splice(i, 1);
-  localStorage.setItem('flyra_cart', JSON.stringify(cart));
-  renderCart();
-  updateCartBadge();
+async function removeItem(itemId) {
+  try {
+    await fetch(API+'/cart/'+itemId, {
+      method:'DELETE',
+      headers:{'X-Session':SESSION_ID}
+    });
+    await loadCart();
+  } catch(e) {
+    showToast('', 'Failed to remove item');
+  }
 }
 
 function updateCartTotals() {
@@ -2233,31 +2273,39 @@ function updateCartTotals() {
   document.getElementById('cartSubtotal').textContent = subtotal.toLocaleString() + ' DZD';
   document.getElementById('cartShipping').textContent = shipping === 0 ? 'Free' : shipping.toLocaleString() + ' DZD';
   document.getElementById('cartTotal').textContent = total.toLocaleString() + ' DZD';
-  localStorage.setItem('flyra_cart_ts',Date.now());
 }
 
 function checkout() {
   if (!cart.length) { showToast('','Cart is empty'); return; }
   const total = cart.reduce((s,i) => s + i.price * i.qty, 0) + (cart.reduce((s,i) => s + i.price * i.qty, 0) >= 25000 ? 0 : 1500);
   const items = cart.map(i => `${i.name} (${i.size}) x${i.qty}`).join(', ');
-  const msg = `🛒 *New Order - FLYRA*\n\nItems: ${items}\n\nTotal: ${total.toLocaleString()} DZD\n\nPlease contact me to confirm.`;
+  const msg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.8a2 2 0 001.9-1.4L23 6H6"/></svg> *New Order - FLYRA*\n\nItems: ${items}\n\nTotal: ${total.toLocaleString()} DZD\n\nPlease contact me to confirm.`;
     window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
   showToast('', 'Redirecting to WhatsApp...');
 }
 
-function toggleWish(id) {
-  let w = JSON.parse(localStorage.getItem('flyra_wish') || '[]');
-  if (w.includes(id)) w = w.filter(x => x !== id);
-  else w.push(id);
-  localStorage.setItem('flyra_wish', JSON.stringify(w));
-  showToast('<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', w.includes(id) ? 'Added to wishlist' : 'Removed from wishlist');
+async function toggleWish(id) {
+  try{
+    const r=await fetch(API_URL+'/wishlist',{method:'POST',headers:{'Content-Type':'application/json','X-Session':SESSION_ID},body:JSON.stringify({product_id:id})});
+    if(r.ok){
+      showToast('<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>','Added to wishlist');
+    }else{
+      await fetch(API_URL+'/wishlist?product_id='+id,{method:'DELETE',headers:{'X-Session':SESSION_ID}});
+      showToast('<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>','Removed from wishlist');
+    }
+  }catch(e){showToast('','Wishlist update failed');}
 }
 
-function toggleWishlist() {
-  const w = JSON.parse(localStorage.getItem('flyra_wish') || '[]');
-  if (!w.length) { showToast('','Wishlist is empty'); return; }
-  const names = products.filter(p => w.includes(p.id)).map(p => p.name).join(', ');
-  showToast('', 'Wishlist: ' + names);
+async function toggleWishlist() {
+  try{
+    const r=await fetch(API_URL+'/wishlist',{headers:{'X-Session':SESSION_ID}});
+    if(r.ok){
+      const w=await r.json();
+      if(!w.length){showToast('','Wishlist is empty');return;}
+      const names=products.filter(p=>w.some(x=>x.product_id===p.id)).map(p=>p.name).join(', ');
+      showToast('', 'Wishlist: '+names);
+    }
+  }catch(e){showToast('','Failed to load wishlist');}
 }
 
 function setupParticles() {
@@ -2574,16 +2622,16 @@ function smartAISearch(text){
   if(intent.action==='sizing'){
     let sizes='S, M, L, XL';let note='Most items run true to size.';
     if(prods.length){const s=prods[0].sizes||'';if(s)sizes=s;if(s.includes('XXL'))note='Our oversized fits run big — consider sizing down.';}
-    return `📏 <strong>Size Guide</strong><br>Available sizes: <strong>${sizes}</strong><br>${note}<br><br>If you're between sizes, we recommend sizing up for a relaxed look or down for a fitted silhouette.<br><br>Want to check sizing for a specific piece? Just ask!`;
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M7 12V5h10v7"/><path d="M7 19v-3"/><path d="M12 19v-3"/><path d="M17 19v-3"/></svg> <strong>Size Guide</strong><br>Available sizes: <strong>${sizes}</strong><br>${note}<br><br>If you're between sizes, we recommend sizing up for a relaxed look or down for a fitted silhouette.<br><br>Want to check sizing for a specific piece? Just ask!`;
   }
   if(intent.action==='shipping'){
-    return `🚚 <strong>Shipping Info</strong><br>• We deliver to <strong>all 58 wilayas</strong> of Algeria<br>• Delivery: <strong>2–5 business days</strong><br>• <strong>Free shipping</strong> on orders over ${FREE_SHIPPING_THRESHOLD.toLocaleString()} DZD<br>• Cash on delivery available<br>• Shipping costs vary by zone:<br>&nbsp;&nbsp;— North: <strong>500 DZD</strong><br>&nbsp;&nbsp;— Highlands: <strong>1,000 DZD</strong><br>&nbsp;&nbsp;— South: <strong>1,500 DZD</strong><br><br>Your wilaya determines the shipping cost — select it at checkout!`;
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><rect x="16" y="8" width="5" height="8"/><path d="M16 16v2a2 2 0 01-2 2H8"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> <strong>Shipping Info</strong><br>• We deliver to <strong>all 58 wilayas</strong> of Algeria<br>• Delivery: <strong>2–5 business days</strong><br>• <strong>Free shipping</strong> on orders over ${FREE_SHIPPING_THRESHOLD.toLocaleString()} DZD<br>• Cash on delivery available<br>• Shipping costs vary by zone:<br>&nbsp;&nbsp;— North: <strong>500 DZD</strong><br>&nbsp;&nbsp;— Highlands: <strong>1,000 DZD</strong><br>&nbsp;&nbsp;— South: <strong>1,500 DZD</strong><br><br>Your wilaya determines the shipping cost — select it at checkout!`;
   }
   if(intent.action==='returns'){
-    return `🔄 <strong>Return Policy</strong><br>• <strong>7 days</strong> return window from delivery<br>• Items must be unworn with tags attached<br>• No questions asked — we believe in quality<br>• Start a return by contacting us on WhatsApp<br>• Refunds processed within 3–5 business days<br><br>Need help with a return? Just let me know!`;
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg> <strong>Return Policy</strong><br>• <strong>7 days</strong> return window from delivery<br>• Items must be unworn with tags attached<br>• No questions asked — we believe in quality<br>• Start a return by contacting us on WhatsApp<br>• Refunds processed within 3–5 business days<br><br>Need help with a return? Just let me know!`;
   }
   if(intent.action==='greeting'){
-    return `✨ <strong>Welcome to FLYRA!</strong><br><br>I'm your AI fashion assistant. I can help you:<br>• <strong>Find products</strong> by style, budget, or collection<br>• <strong>Check sizing</strong> and fit recommendations<br>• <strong>Suggest outfits</strong> and complete looks<br>• Answer shipping and return questions<br><br>Try asking something like:<br>— "Show me Heritage under 15,000 DZD"<br>— "What's popular right now?"<br>— "Find me a streetwear hoodie"<br>— "Something premium for a special occasion"`;
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 6.5L20 9l-5 4.5L16 21l-4-4.5L8 21l1-7.5L4 9l6.5-.5L12 2z"/></svg> <strong>Welcome to FLYRA!</strong><br><br>I'm your AI fashion assistant. I can help you:<br>• <strong>Find products</strong> by style, budget, or collection<br>• <strong>Check sizing</strong> and fit recommendations<br>• <strong>Suggest outfits</strong> and complete looks<br>• Answer shipping and return questions<br><br>Try asking something like:<br>— "Show me Heritage under 15,000 DZD"<br>— "What's popular right now?"<br>— "Find me a streetwear hoodie"<br>— "Something premium for a special occasion"`;
   }
   
   const searchTerms=intent.directProduct?[(intent.directProduct.name||'').toLowerCase()]:[];
@@ -2611,7 +2659,7 @@ function smartAISearch(text){
   
   if(!results.length)return 'I couldn\'t find anything matching that. Try browsing our collections: Heritage, Streetwear, Old Money, or Sport!';
   
-  let reply=`<strong>${intent.directProduct?'Here\'s what I found:':intent.style.includes('popular')?'🔥 Our most popular pieces right now:':'Here are some pieces you might like:'}</strong><br><br>`;
+  let reply=`<strong>${intent.directProduct?'Here\'s what I found:':intent.style.includes('popular')?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4 0-6-3-6-7 0-4 3-9 6-11 3 2 6 7 6 11 0 4-2 7-6 7z"/><path d="M9 15c1 1 2 1 3 0s2-1 3 0"/></svg> Our most popular pieces right now:':'Here are some pieces you might like:'}</strong><br><br>`;
   results.forEach((p,i)=>{
     const discount=p.old_price?Math.round((1-p.price/p.old_price)*100):null;
     const badge=p.tag?`<span style="background:rgba(196,155,61,0.15);padding:2px 8px;border-radius:4px;font-size:0.6rem;font-weight:700;color:var(--amber);margin-left:6px;">${p.tag}</span>`:'';
@@ -2630,11 +2678,11 @@ function smartAISearch(text){
   return reply;
 }
 
-function quickAddFromAI(pid){
+async function quickAddFromAI(pid){
   const p=products.find(x=>x.id===pid);
   if(!p){showToast('','Product not found');return;}
   const sizes=typeof p.sizes==='string'?p.sizes.split(',').map(s=>s.trim()).filter(s=>s):['S','M','L','XL'];
-  if(sizes.length===1){addToCart(p,sizes[0]);return;}
+  if(sizes.length===1){await addToCart(p,sizes[0]);return;}
   const overlay=document.createElement('div');
   overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;';
   const card=document.createElement('div');
@@ -2647,7 +2695,7 @@ function quickAddFromAI(pid){
     </div>`;
   overlay.appendChild(card);
   document.body.appendChild(overlay);
-  card.querySelectorAll('.size-chip').forEach(b=>{b.onclick=()=>{addToCart(p,b.dataset.size);overlay.remove();showToast('',p.name+' ('+b.dataset.size+') added to cart!');document.getElementById('aiInput').focus();};b.onmouseenter=()=>{b.style.background='rgba(196,155,61,0.15)';b.style.borderColor='rgba(196,155,61,0.3)';b.style.color='var(--amber)';};b.onmouseleave=()=>{b.style.background='rgba(255,255,255,0.04)';b.style.borderColor='var(--glass-border,rgba(255,255,255,0.08))';b.style.color='var(--text)';};});
+  card.querySelectorAll('.size-chip').forEach(b=>{b.onclick=async ()=>{await addToCart(p,b.dataset.size);overlay.remove();document.getElementById('aiInput').focus();};b.onmouseenter=()=>{b.style.background='rgba(196,155,61,0.15)';b.style.borderColor='rgba(196,155,61,0.3)';b.style.color='var(--amber)';};b.onmouseleave=()=>{b.style.background='rgba(255,255,255,0.04)';b.style.borderColor='var(--glass-border,rgba(255,255,255,0.08))';b.style.color='var(--text)';};});
   card.querySelector('.cancel-btn').onclick=()=>{overlay.remove();document.getElementById('aiInput').focus();};
   overlay.onclick=e=>{if(e.target===overlay){overlay.remove();document.getElementById('aiInput').focus();}};
 }
@@ -2754,11 +2802,25 @@ function escHtml(s) {
   return d.innerHTML;
 }
 
-const WILAYAS = ['Adrar','Chlef','Laghouat','Oum El Bouaghi','Batna','Béjaïa','Biskra','Béchar','Blida','Bouira','Tamanrasset','Tébessa','Tlemcen','Tiaret','Tizi Ouzou','Algiers','Djelfa','Jijel','Sétif','Saïda','Skikda','Sidi Bel Abbès','Annaba','Guelma','Constantine','Médéa','Mostaganem',"M'Sila",'Mascara','Ouargla','Oran','El Bayadh','Illizi','Bordj Bou Arréridj','Boumerdès','El Tarf','Tindouf','Tissemsilt','El Oued','Khenchela','Souk Ahras','Tipaza','Mila','Aïn Defla','Naâma','Aïn Témouchent','Ghardaïa','Relizane','Timimoun','Bordj Badji Mokhtar','Ouled Djellal','Béni Abbès','In Salah','In Guezzam','Touggourt','Djanet','El Meghaier','El Meniaa'];
+let WILAYAS = [];
+(async () => {
+  try { const r = await (await fetch(API+'/wilayas')).json(); if(r.wilayas) WILAYAS = r.wilayas.sort(); } catch(e) {}
+  document.querySelectorAll('.wilaya-select').forEach(sel => {
+    if(sel.options.length <= 1) { WILAYAS.forEach(w => { const o = document.createElement('option'); o.value = w; o.textContent = w; sel.appendChild(o); }); }
+  });
+})();
 
-const FREE_SHIPPING_THRESHOLD=25000;
-const SHIPPING_ZONES={north:['Algiers','Blida','Boumerdès','Tipaza','Tizi Ouzou','Bouira','Béjaïa','Jijel','Skikda','Annaba','Constantine','Mostaganem','Oran','Chlef','Aïn Defla','Médéa','Tissemsilt','Relizane','Mascara','Sidi Bel Abbès','Aïn Témouchent','Naâma','Saïda','Mila','Guelma','El Tarf','Souk Ahras','Tébessa','Khenchela','Oum El Bouaghi','Batna','Bordj Bou Arréridj','Sétif'],highlands:['Djelfa','Tiaret','Laghouat','El Bayadh',"M'Sila"],south:['Adrar','Tamanrasset','Béchar','Ouargla','Illizi','Tindouf','Biskra','El Oued','Ghardaïa','Timimoun','Bordj Badji Mokhtar','Ouled Djellal','Béni Abbès','In Salah','In Guezzam','Touggourt','Djanet','El Meghaier','El Meniaa']};
-const SHIPPING_COST={north:500,highlands:1000,south:1500};
+let FREE_SHIPPING_THRESHOLD = 25000;
+let SHIPPING_ZONES = {};
+let SHIPPING_COST = {};
+(async () => {
+  try {
+    const s = await (await fetch(API+'/settings')).json();
+    if(s.free_shipping_threshold) FREE_SHIPPING_THRESHOLD = parseInt(s.free_shipping_threshold);
+    if(s.shipping_zones) SHIPPING_ZONES = typeof s.shipping_zones === 'string' ? JSON.parse(s.shipping_zones) : s.shipping_zones;
+    if(s.shipping_costs) SHIPPING_COST = typeof s.shipping_costs === 'string' ? JSON.parse(s.shipping_costs) : s.shipping_costs;
+  } catch(e) { console.log('Shipping config load error', e); }
+})();
 function getShippingCost(subtotal,wilaya){if(subtotal>=FREE_SHIPPING_THRESHOLD)return 0;if(!wilaya)return 1500;for(const[zone,wils]of Object.entries(SHIPPING_ZONES)){if(wils.includes(wilaya))return SHIPPING_COST[zone];}return 1500;}
 let appliedCoupon=null;let lastCouponCode='';
 
@@ -2770,7 +2832,7 @@ function openCheckout() {
   
   const wil = document.getElementById('coWilaya');
   wil.innerHTML = '<option value="">Select your wilaya</option>' + WILAYAS.map(w => `<option value="${w}">${w}</option>`).join('');
-  wil.addEventListener('change',function(){renderCheckoutSummary();document.getElementById('shippingNote').textContent=getShippingCost(cart.reduce((s,i)=>s+i.price*i.qty,0),this.value)===0?'🚚 Free shipping!':this.value?'🚚 Shipping: '+getShippingCost(cart.reduce((s,i)=>s+i.price*i.qty,0),this.value).toLocaleString()+' DZD':'';});
+  wil.addEventListener('change',function(){renderCheckoutSummary();document.getElementById('shippingNote').textContent=getShippingCost(cart.reduce((s,i)=>s+i.price*i.qty,0),this.value)===0?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><rect x="16" y="8" width="5" height="8"/><path d="M16 16v2a2 2 0 01-2 2H8"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Free shipping!':this.value?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><rect x="16" y="8" width="5" height="8"/><path d="M16 16v2a2 2 0 01-2 2H8"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Shipping: '+getShippingCost(cart.reduce((s,i)=>s+i.price*i.qty,0),this.value).toLocaleString()+' DZD':'';});
   
   appliedCoupon=null;lastCouponCode='';document.getElementById('couponInput').value='';document.getElementById('couponMsg').textContent='';
   document.getElementById('coFname').value = localStorage.getItem('flyra_co_fname') || '';
@@ -2812,10 +2874,7 @@ function renderCheckoutSummary() {
 }
 
 function genTracking() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = 'FLYRA-';
-  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return code;
+  return '';
 }
 
 async function submitOrder() {
@@ -2894,14 +2953,12 @@ async function submitOrder() {
       ${discount>0?'Coupon <strong>'+escHtml(couponCode)+'</strong> applied: -'+discount.toLocaleString()+' DZD<br>':''}
       We'll contact you at <strong>${escHtml(phone)}</strong> to confirm.<br>
       Delivery to <strong>${escHtml(wilaya)}</strong> in 2–5 business days.`;
-    cart = [];
-    localStorage.setItem('flyra_cart', '[]');
-    localStorage.removeItem('flyra_cart_ts');
-    updateCartBadge();
-    showToast('', 'Order placed! Tracking: ' + trackingCode);
+    try { await fetch(API+'/cart', {method:'DELETE', headers:{'X-Session':SESSION_ID}}); } catch(e){}
+    await loadCart();
+    showToast('', 'Order placed!');
   } else {
     const items = cart.map(i => `${i.name} (${i.size}) x${i.qty}`).join(', ');
-    const msg = `🛒 *NEW ORDER - FLYRA*\n\n*Customer:* ${fname} ${lname}\n*Phone:* ${phone}\n*Email:* ${email || '-'}\n*Wilaya:* ${wilaya}\n*Address:* ${address}\n*Payment:* ${payment.toUpperCase()}\n*Tracking:* ${trackingCode}\n*Coupon:* ${couponCode||'-'}\n*Notes:* ${notes || '-'}\n\n*Items:* ${items}\n\n*Subtotal:* ${subtotal.toLocaleString()} DZD\n*Shipping:* ${shipping === 0 ? 'FREE' : shipping.toLocaleString() + ' DZD'}\n*Discount:* -${discount.toLocaleString()} DZD\n*Total:* ${total.toLocaleString()} DZD`;
+    const msg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.8a2 2 0 001.9-1.4L23 6H6"/></svg> *NEW ORDER - FLYRA*\n\n*Customer:* ${fname} ${lname}\n*Phone:* ${phone}\n*Email:* ${email || '-'}\n*Wilaya:* ${wilaya}\n*Address:* ${address}\n*Payment:* ${payment.toUpperCase()}\n*Tracking:* ${trackingCode}\n*Coupon:* ${couponCode||'-'}\n*Notes:* ${notes || '-'}\n\n*Items:* ${items}\n\n*Subtotal:* ${subtotal.toLocaleString()} DZD\n*Shipping:* ${shipping === 0 ? 'FREE' : shipping.toLocaleString() + ' DZD'}\n*Discount:* -${discount.toLocaleString()} DZD\n*Total:* ${total.toLocaleString()} DZD`;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 
     document.getElementById('checkoutBody').style.display = 'none';
@@ -2912,38 +2969,13 @@ async function submitOrder() {
       Keep your tracking code: <strong>${trackingCode}</strong><br>
       ${discount>0?'Coupon <strong>'+escHtml(couponCode)+'</strong> applied: -'+discount.toLocaleString()+' DZD<br>':''}
       We'll confirm shortly at <strong>${escHtml(phone)}</strong>.`;
-    cart = [];
-    localStorage.setItem('flyra_cart', '[]');
-    localStorage.removeItem('flyra_cart_ts');
-    updateCartBadge();
+    try { await fetch(API+'/cart', {method:'DELETE', headers:{'X-Session':SESSION_ID}}); } catch(e){}
+    await loadCart();
   }
   btn.textContent = 'PLACE ORDER';
 }
 
 init();
-
-const SOCIAL_NAMES = ['Amir', 'Yasmine', 'Mohammed', 'Fatima', 'Sofiane', 'Nadia', 'Karim', 'Aïcha', 'Mehdi', 'Lina'];
-const SOCIAL_WILAYAS = ['Algiers', 'Oran', 'Constantine', 'Tlemcen', 'Annaba', 'Sétif', 'Blida', 'Béjaïa'];
-
-function showSocialProof() {
-  const container = document.getElementById('socialProof');
-  if (!container) return;
-  function addPopup() {
-    const p = products.length ? products[Math.floor(Math.random() * products.length)] : null;
-    const name = SOCIAL_NAMES[Math.floor(Math.random() * SOCIAL_NAMES.length)];
-    const wilaya = SOCIAL_WILAYAS[Math.floor(Math.random() * SOCIAL_WILAYAS.length)];
-    const product = p ? p.name : 'FLYRA Hoodie';
-    const popup = document.createElement('div');
-    popup.className = 'social-proof-popup show';
-    popup.innerHTML = `<div class="social-proof-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C49B3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.8a2 2 0 001.9-1.4L23 6H6"/></svg></div><div class="social-proof-text"><span class="social-proof-name">${name}</span> in ${wilaya} just bought ${product}</div>`;
-    container.appendChild(popup);
-    const items = container.querySelectorAll('.social-proof-popup');
-    if (items.length > 3) items[0].classList.add('removing');
-    setTimeout(() => { if (popup.parentNode) popup.remove(); }, 5000);
-  }
-  addPopup();
-  setInterval(addPopup, 15000 + Math.random() * 10000);
-}
 
 function startVoiceSearch() {
   const btn = document.getElementById('voiceBtn');
@@ -2952,40 +2984,15 @@ function startVoiceSearch() {
   const recognition = new SpeechRecognition();
   recognition.lang = LANG === 'ar' ? 'ar-DZ' : LANG === 'fr' ? 'fr-FR' : 'en-US';
   recognition.interimResults = false;
-  recognition.onstart = () => { btn.classList.add('recording'); btn.textContent = '🔊'; };
-  recognition.onend = () => { btn.classList.remove('recording'); btn.textContent = '🎤'; };
+  recognition.onstart = () => { btn.classList.add('recording'); btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>'; };
+  recognition.onend = () => { btn.classList.remove('recording'); btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>'; };
   recognition.onresult = (e) => {
     const transcript = e.results[0][0].transcript;
     document.getElementById('productSearch').value = transcript;
     searchProducts(transcript);
   };
-  recognition.onerror = () => { btn.classList.remove('recording'); btn.textContent = '🎤'; showToast('', 'Voice search failed, try again'); };
+  recognition.onerror = () => { btn.classList.remove('recording'); btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>'; showToast('', 'Voice search failed, try again'); };
   recognition.start();
-}
-
-const COUNTDOWN_DAYS = {};
-
-function startCountdowns() {
-  document.querySelectorAll('[data-pid]').forEach(el => {
-    const pid = el.dataset.pid;
-    if (!COUNTDOWN_DAYS[pid]) COUNTDOWN_DAYS[pid] = 7 + Math.floor(Math.random() * 7);
-    if (!el.dataset.end) {
-      const end = new Date();
-      end.setDate(end.getDate() + COUNTDOWN_DAYS[pid]);
-      el.dataset.end = end.getTime();
-    }
-  });
-  setInterval(() => {
-    document.querySelectorAll('.countdown-badge').forEach(el => {
-      const end = parseInt(el.dataset.end);
-      if (!end) return;
-      const diff = Math.max(0, end - Date.now());
-      const d = Math.floor(diff / 86400000);
-      const h = Math.floor((diff % 86400000) / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      el.textContent = `🔥 Ends in: ${d}d ${h}h ${m}m`;
-    });
-  }, 1000);
 }
 
 function openSizeGuide() {
@@ -3200,21 +3207,31 @@ async function lookupOrders(){
 }
 
 /* ─── Coupon Application ───── */
-function applyCoupon(){
+async function applyCoupon(){
   const input=document.getElementById('couponInput');const msg=document.getElementById('couponMsg');
   const code=input.value.trim().toUpperCase();
   if(!code){msg.textContent='Enter a coupon code';msg.style.color='var(--subtext)';return;}
   if(code===lastCouponCode&&appliedCoupon){msg.textContent='Coupon already applied ✓';msg.style.color='#4ABA82';return;}
-  const raw=localStorage.getItem('flyra_coupons');let coupons=[];
-  if(raw)try{coupons=JSON.parse(raw);}catch(e){}
-  const coupon=coupons.find(c=>c.code===code&&c.active);
-  if(!coupon){msg.textContent='Invalid or expired coupon code';msg.style.color='#FF4D4D';appliedCoupon=null;lastCouponCode='';renderCheckoutSummary();return;}
-  if(coupon.expires&&new Date(coupon.expires)<new Date()){msg.textContent='This coupon has expired';msg.style.color='#FF4D4D';appliedCoupon=null;lastCouponCode='';renderCheckoutSummary();return;}
-  if(coupon.max_uses&&coupon.used>=coupon.max_uses){msg.textContent='This coupon has reached its usage limit';msg.style.color='#FF4D4D';appliedCoupon=null;lastCouponCode='';renderCheckoutSummary();return;}
   const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  if(coupon.min_order&&subtotal<coupon.min_order){msg.textContent='Minimum order: '+coupon.min_order.toLocaleString()+' DZD';msg.style.color='#FF4D4D';appliedCoupon=null;lastCouponCode='';renderCheckoutSummary();return;}
-  appliedCoupon=coupon;lastCouponCode=code;
-  msg.textContent='Coupon applied! '+coupon.discount+(coupon.type==='percent'?'%':' DZD')+' off ✓';msg.style.color='#4ABA82';
+  try{
+    const r=await fetch(API_URL+'/coupons/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,subtotal})});
+    if(r.ok){
+      const data=await r.json();
+      if(data.valid){
+        appliedCoupon={code:data.code,discount:data.raw,type:data.type,raw:data.raw};lastCouponCode=code;
+        msg.textContent='Coupon applied! '+(data.type==='percent'?data.raw+'%':data.raw.toLocaleString()+' DZD')+' off ✓';msg.style.color='#4ABA82';
+      }else{
+        appliedCoupon=null;lastCouponCode='';
+        msg.textContent=data.error||'Invalid coupon';msg.style.color='#FF4D4D';
+      }
+    }else{
+      appliedCoupon=null;lastCouponCode='';
+      msg.textContent='Failed to validate coupon';msg.style.color='#FF4D4D';
+    }
+  }catch(e){
+    appliedCoupon=null;lastCouponCode='';
+    msg.textContent='Failed to validate coupon';msg.style.color='#FF4D4D';
+  }
   renderCheckoutSummary();
 }
 
@@ -3250,8 +3267,7 @@ ${data.discount>0?'<div style="color:#4ABA82;">Coupon ('+escHtml(data.couponCode
 
 /* ─── Abandoned Cart ───── */
 function checkAbandonedCart(){
-  const ts=localStorage.getItem('flyra_cart_ts');
-  if(ts&&cart.length>0&&Date.now()-parseInt(ts)>60000){const items=cart.reduce((s,i)=>s+i.qty,0);showToast('','You have '+items+' item(s) in your cart — complete your order!');}
+  if(cart.length>0){const items=cart.reduce((s,i)=>s+i.qty,0);showToast('','You have '+items+' item(s) in your cart — complete your order!');}
 }
 
 /* ─── Saved Checkout ───── */
@@ -3261,7 +3277,117 @@ function restoreSavedCheckout(){
     if(el&&localStorage.getItem('flyra_'+id))el.value=localStorage.getItem('flyra_'+id);
   });
 }
+
+/* ─── Auth ───── */
+let AUTH_TOKEN=localStorage.getItem('flyra_token')||'';
+let AUTH_USER=null;
+try{const u=localStorage.getItem('flyra_user');if(u)AUTH_USER=JSON.parse(u);}catch(e){}
+if(AUTH_TOKEN&&AUTH_USER)document.getElementById('authIcon').innerHTML=AUTH_USER.first_name?AUTH_USER.first_name.charAt(0).toUpperCase():'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+
+function openAuthModal(){
+  if(AUTH_TOKEN&&AUTH_USER){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>','Signed in as '+AUTH_USER.email);return;}
+  document.getElementById('authModal').classList.add('show');
+}
+function closeAuthModal(){document.getElementById('authModal').classList.remove('show');}
+function switchAuthTab(tab,btn){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('authLoginForm').classList.toggle('show',tab==='login');
+  document.getElementById('authRegisterForm').classList.toggle('show',tab==='register');
+  document.getElementById('loginError').style.display='none';
+  document.getElementById('registerError').style.display='none';
+}
+async function authLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  const btn=document.getElementById('loginBtn');
+  const err=document.getElementById('loginError');
+  if(!email||!password){err.textContent='Email and password required';err.style.display='block';return;}
+  btn.disabled=true;btn.textContent='SIGNING IN...';
+  try{
+    const r=await fetch(API_URL+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    if(r.ok){
+      const data=await r.json();
+      AUTH_TOKEN=data.token;AUTH_USER=data;
+      localStorage.setItem('flyra_token',AUTH_TOKEN);
+      localStorage.setItem('flyra_user',JSON.stringify(AUTH_USER));
+      document.getElementById('authIcon').textContent=(data.first_name||'U').charAt(0).toUpperCase();
+      closeAuthModal();showToast('✓','Welcome, '+(data.first_name||'')+'!');
+    }else{
+      const d=await r.json().catch(()=>({}));
+      err.textContent=d.error||'Invalid credentials';err.style.display='block';
+    }
+  }catch(e){err.textContent='Connection error';err.style.display='block';}
+  btn.disabled=false;btn.textContent='SIGN IN';
+}
+async function authRegister(){
+  const first=document.getElementById('regFirst').value.trim();
+  const last=document.getElementById('regLast').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const phone=document.getElementById('regPhone').value.trim();
+  const wilaya=document.getElementById('regWilaya').value.trim();
+  const password=document.getElementById('regPassword').value;
+  const btn=document.getElementById('registerBtn');
+  const err=document.getElementById('registerError');
+  if(!email||!password||!first){err.textContent='Email, password, and first name required';err.style.display='block';return;}
+  btn.disabled=true;btn.textContent='CREATING...';
+  try{
+    const r=await fetch(API_URL+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,first_name:first,last_name:last,phone,wilaya})});
+    if(r.ok){
+      const data=await r.json();
+      AUTH_TOKEN=data.token;AUTH_USER={email,first_name:first,last_name:last,phone,wilaya};
+      localStorage.setItem('flyra_token',AUTH_TOKEN);
+      localStorage.setItem('flyra_user',JSON.stringify(AUTH_USER));
+      document.getElementById('authIcon').textContent=first.charAt(0).toUpperCase();
+      closeAuthModal();showToast('✓','Account created! Welcome to FLYRA');
+    }else{
+      const d=await r.json().catch(()=>({}));
+      err.textContent=d.error||'Registration failed';err.style.display='block';
+    }
+  }catch(e){err.textContent='Connection error';err.style.display='block';}
+  btn.disabled=false;btn.textContent='CREATE ACCOUNT';
+}
+function authLogout(){
+  AUTH_TOKEN='';AUTH_USER=null;
+  localStorage.removeItem('flyra_token');localStorage.removeItem('flyra_user');
+  document.getElementById('authIcon').innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+  showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11l4-4 4 4"/><path d="M11 7v10"/><path d="M4 10.5C4 7 7 4 11 4s7 3 7 6.5"/><path d="M18 14.5c0 2.5-2 4.5-4 4.5"/><path d="M14 19c-3 0-6-1-6-4"/></svg>','Signed out');
+}
+if(AUTH_TOKEN){document.getElementById('authBtn').title='Sign Out';document.getElementById('authBtn').onclick=authLogout;}
 </script>
+<div class="auth-modal" id="authModal" onclick="if(event.target===this)closeAuthModal()">
+  <div class="auth-box">
+    <button class="auth-close" onclick="closeAuthModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login',this)">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('register',this)">Register</button>
+    </div>
+    <div class="auth-form show" id="authLoginForm">
+      <h2>Welcome Back</h2>
+      <p>Sign in to your FLYRA account</p>
+      <input type="email" class="auth-input" id="loginEmail" placeholder="Email" autocomplete="email">
+      <input type="password" class="auth-input" id="loginPassword" placeholder="Password" autocomplete="current-password" onkeypress="if(event.key==='Enter')authLogin()">
+      <div class="auth-error" id="loginError"></div>
+      <button class="auth-submit" id="loginBtn" onclick="authLogin()">SIGN IN</button>
+    </div>
+    <div class="auth-form" id="authRegisterForm">
+      <h2>Create Account</h2>
+      <p>Join FLYRA — صعود بلا حدود</p>
+      <div class="auth-row">
+        <input type="text" class="auth-input" id="regFirst" placeholder="First Name">
+        <input type="text" class="auth-input" id="regLast" placeholder="Last Name">
+      </div>
+      <input type="email" class="auth-input" id="regEmail" placeholder="Email" autocomplete="email">
+      <div class="auth-row">
+        <input type="text" class="auth-input" id="regPhone" placeholder="Phone">
+        <input type="text" class="auth-input" id="regWilaya" placeholder="Wilaya">
+      </div>
+      <input type="password" class="auth-input" id="regPassword" placeholder="Password" autocomplete="new-password" onkeypress="if(event.key==='Enter')authRegister()">
+      <div class="auth-error" id="registerError"></div>
+      <button class="auth-submit" id="registerBtn" onclick="authRegister()">CREATE ACCOUNT</button>
+    </div>
+  </div>
+</div>
 <div class="size-guide-modal" id="sizeGuideModal">
   <div class="size-guide-content">
     <button class="size-guide-close" onclick="closeSizeGuide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>

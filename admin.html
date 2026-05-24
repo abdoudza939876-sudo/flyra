@@ -607,7 +607,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
       <button class="login-btn" onclick="attemptLogin()">UNLOCK ADMIN PANEL</button>
       <div class="login-error" id="loginError">Incorrect PIN. Try again.</div>
     </div>
-    <div class="login-hint">🔒 Owner access only</div>
+    <div class="login-hint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Owner access only</div>
   </div>
 </div>
 
@@ -630,22 +630,22 @@ tr:hover{background:rgba(255,255,255,0.02);}
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section"><div class="nav-section-label">Main</div>
-      <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></div>
+      <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg></span><span class="nav-label">Dashboard</span></div>
     </div>
     <div class="nav-section"><div class="nav-section-label">Commerce</div>
-      <div class="nav-item" onclick="showSection('orders',this)"><span class="nav-icon">📦</span><span class="nav-label">Orders</span><span class="nav-badge" id="badge-pending">0</span></div>
-      <div class="nav-item" onclick="showSection('products',this)"><span class="nav-icon">👕</span><span class="nav-label">Products</span></div>
-      <div class="nav-item" onclick="showSection('customers',this)"><span class="nav-icon">👥</span><span class="nav-label">Customers</span></div>
-      <div class="nav-item" onclick="showSection('drops',this)"><span class="nav-icon">🚀</span><span class="nav-label">Drops</span></div>
-      <div class="nav-item" onclick="showSection('coupons',this)"><span class="nav-icon">🏷️</span><span class="nav-label">Coupons</span></div>
+      <div class="nav-item" onclick="showSection('orders',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><span class="nav-label">Orders</span><span class="nav-badge" id="badge-pending">0</span></div>
+      <div class="nav-item" onclick="showSection('products',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg></span><span class="nav-label">Products</span></div>
+      <div class="nav-item" onclick="showSection('customers',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span><span class="nav-label">Customers</span></div>
+      <div class="nav-item" onclick="showSection('drops',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s-4 4-4 9c0 5 4 9 4 9s4-4 4-9c0-5-4-9-4-9z"/><circle cx="12" cy="11" r="3"/></svg></span><span class="nav-label">Drops</span></div>
+      <div class="nav-item" onclick="showSection('coupons',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span><span class="nav-label">Coupons</span></div>
     </div>
     <div class="nav-section"><div class="nav-section-label">Intelligence</div>
-      <div class="nav-item" onclick="showSection('analytics',this)"><span class="nav-icon">📈</span><span class="nav-label">Analytics</span></div>
-      <div class="nav-item" onclick="showSection('reviews',this)"><span class="nav-icon">⭐</span><span class="nav-label">Reviews</span></div>
-      <div class="nav-item" onclick="showSection('loyalty',this)"><span class="nav-icon">🏆</span><span class="nav-label">Loyalty</span></div>
+      <div class="nav-item" onclick="showSection('analytics',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><span class="nav-label">Analytics</span></div>
+      <div class="nav-item" onclick="showSection('reviews',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><span class="nav-label">Reviews</span></div>
+      <div class="nav-item" onclick="showSection('loyalty',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg></span><span class="nav-label">Loyalty</span></div>
     </div>
     <div class="nav-section"><div class="nav-section-label">System</div>
-      <div class="nav-item" onclick="showSection('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></div>
+      <div class="nav-item" onclick="showSection('settings',this)"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span><span class="nav-label">Settings</span></div>
     </div>
   </nav>
   <div class="sidebar-footer">
@@ -659,18 +659,18 @@ tr:hover{background:rgba(255,255,255,0.02);}
   <header class="topbar">
     <div class="topbar-left">
       <div class="topbar-search">
-        <span>🔍</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
         <input type="text" id="globalSearchInput" placeholder="Search..." onkeyup="globalSearch(this.value)">
         <span class="kbd">⌘F</span>
       </div>
     </div>
     <div class="topbar-right">
       <span id="topbarTime" style="font-size:0.78rem;color:var(--sub);font-weight:500;"></span>
-      <button class="topbar-btn" id="lockBtn" onclick="showLogin()" title="Lock Admin" style="display:none;">🔒</button>
-      <button class="topbar-btn" onclick="cycleTheme()" title="Switch Theme" id="themeBtn">🌙</button>
-      <button class="topbar-btn" onclick="showSection('orders')">🔔<span class="badge" id="notifBadge">0</span></button>
-      <div class="topbar-user" onclick="showToast('👑','FLYRA Owner')">
-        <div class="topbar-user-avatar">👑</div>
+      <button class="topbar-btn" id="lockBtn" onclick="showLogin()" title="Lock Admin" style="display:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></button>
+      <button class="topbar-btn" onclick="cycleTheme()" title="Switch Theme" id="themeBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+      <button class="topbar-btn" onclick="showSection('orders')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="badge" id="notifBadge">0</span></button>
+      <div class="topbar-user" onclick="showToast('&#9813;','FLYRA Owner')">
+        <div class="topbar-user-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 19l3-14 4 6 3-7 3 7 4-6 3 14H2z"/><path d="M2 19h20"/></svg></div>
         <div><div class="topbar-user-name">Owner</div><div class="topbar-user-role">FLYRA Owner</div></div>
       </div>
     </div>
@@ -678,7 +678,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
 
   <div class="content" id="content">
     <div id="lockedBanner" style="display:none;background:rgba(196,155,61,0.1);border:1px solid rgba(196,155,61,0.2);border-radius:12px;padding:12px 20px;margin-bottom:20px;align-items:center;gap:12px;font-size:0.8rem;color:var(--amber);">
-      🔒 Admin Locked
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Admin Locked
       <input type="password" id="quickPin" placeholder="Enter PIN" style="margin-left:auto;padding:6px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(196,155,61,0.3);border-radius:8px;color:var(--text);font-size:0.75rem;outline:none;width:140px;text-align:center;" onkeypress="if(event.key==='Enter')quickLogin()">
       <button onclick="quickLogin()" style="padding:6px 14px;background:var(--gradient);color:var(--bg);border:none;border-radius:8px;font-size:0.72rem;font-weight:700;cursor:pointer;white-space:nowrap;">Unlock</button>
     </div>
@@ -694,38 +694,38 @@ tr:hover{background:rgba(255,255,255,0.02);}
               <option value="0">Off</option><option value="15">15s</option><option value="30" selected>30s</option><option value="60">60s</option>
             </select>
           </div>
-          <button class="btn btn-secondary btn-sm" onclick="refreshDashboard()">🔄 Refresh</button>
+          <button class="btn btn-secondary btn-sm" onclick="refreshDashboard()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg> Refresh</button>
           <button class="btn btn-primary btn-sm" id="addProductBtn" style="display:none;" onclick="showModal('product')">+ Add Product</button>
         </div>
       </div>
 
       <div class="quick-actions">
-        <div class="quick-action" onclick="showModal('product')"><div class="quick-action-icon">➕</div><div><div class="quick-action-label">New Product</div><div class="quick-action-desc">Add to catalog</div></div></div>
-        <div class="quick-action" onclick="showSection('orders')"><div class="quick-action-icon">📦</div><div><div class="quick-action-label">View Orders</div><div class="quick-action-desc">Manage fulfillment</div></div></div>
-        <div class="quick-action" onclick="showSection('drops')"><div class="quick-action-icon">🚀</div><div><div class="quick-action-label">Schedule Drop</div><div class="quick-action-desc">Launch products</div></div></div>
-        <div class="quick-action" onclick="exportOrders()"><div class="quick-action-icon">📥</div><div><div class="quick-action-label">Export Data</div><div class="quick-action-desc">Download CSV</div></div></div>
+        <div class="quick-action" onclick="showModal('product')"><div class="quick-action-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div><div class="quick-action-label">New Product</div><div class="quick-action-desc">Add to catalog</div></div></div>
+        <div class="quick-action" onclick="showSection('orders')"><div class="quick-action-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div><div><div class="quick-action-label">View Orders</div><div class="quick-action-desc">Manage fulfillment</div></div></div>
+        <div class="quick-action" onclick="showSection('drops')"><div class="quick-action-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s-4 4-4 9c0 5 4 9 4 9s4-4 4-9c0-5-4-9-4-9z"/><circle cx="12" cy="11" r="3"/></svg></div><div><div class="quick-action-label">Schedule Drop</div><div class="quick-action-desc">Launch products</div></div></div>
+        <div class="quick-action" onclick="exportOrders()"><div class="quick-action-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div><div class="quick-action-label">Export Data</div><div class="quick-action-desc">Download CSV</div></div></div>
       </div>
 
       <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px;">
-        <button class="btn btn-secondary btn-sm" onclick="exportSalesReport()">📊 Export Report</button>
-        <button class="btn btn-secondary btn-sm" onclick="exportFullBackup()">💾 Backup</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportSalesReport()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg> Export Report</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportFullBackup()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Backup</button>
       </div>
       <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-bg">💰</div><div class="kpi-label">💰 Total Revenue</div><div class="kpi-value" id="kpi-revenue">0</div><div class="kpi-change up" id="kpi-revenue-change">↗ Loading...</div></div>
-        <div class="kpi-card"><div class="kpi-bg">📦</div><div class="kpi-label">📦 Orders</div><div class="kpi-value" id="kpi-orders">0</div><div class="kpi-change up" id="kpi-orders-change">↗ Loading...</div></div>
-        <div class="kpi-card"><div class="kpi-bg">👕</div><div class="kpi-label">👕 Products</div><div class="kpi-value" id="kpi-products">0</div><div class="kpi-change up">↗ All active</div></div>
-        <div class="kpi-card"><div class="kpi-bg">👥</div><div class="kpi-label">👥 Customers</div><div class="kpi-value" id="kpi-users">0</div><div class="kpi-change up">↗ Growing</div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8"/><path d="M12 18V6"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8"/><path d="M12 18V6"/></svg> Total Revenue</div><div class="kpi-value" id="kpi-revenue">0</div><div class="kpi-change up" id="kpi-revenue-change">↗ Loading...</div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Orders</div><div class="kpi-value" id="kpi-orders">0</div><div class="kpi-change up" id="kpi-orders-change">↗ Loading...</div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg> Products</div><div class="kpi-value" id="kpi-products">0</div><div class="kpi-change up">↗ All active</div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Customers</div><div class="kpi-value" id="kpi-users">0</div><div class="kpi-change up">↗ Growing</div></div>
       </div>
 
       <div class="chart-grid">
         <div class="chart-card">
-          <div class="chart-header"><div class="chart-title">📊 Daily Revenue</div>
+          <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg> Daily Revenue</div>
             <select class="chart-period" onchange="renderRevenueChart(this.value)"><option value="7">7d</option><option value="14">14d</option><option value="30">30d</option></select>
           </div>
           <div class="bar-chart" id="revenueChart"></div>
         </div>
         <div class="chart-card">
-          <div class="chart-header"><div class="chart-title">📦 Order Status</div></div>
+          <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Order Status</div></div>
           <div class="donut-chart">
             <div class="donut" id="statusDonut"><div class="donut-text">0</div></div>
             <div class="donut-legend" id="statusLegend"></div>
@@ -735,8 +735,8 @@ tr:hover{background:rgba(255,255,255,0.02);}
 
       <div class="grid-2" style="margin-bottom:24px;">
         <div class="table-card">
-          <div class="table-header"><div class="table-title">📦 Recent Orders</div>
-            <div class="table-actions"><button class="btn btn-secondary btn-sm" onclick="exportOrders()">📥 CSV</button></div>
+          <div class="table-header"><div class="table-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Recent Orders</div>
+            <div class="table-actions"><button class="btn btn-secondary btn-sm" onclick="exportOrders()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> CSV</button></div>
           </div>
           <table class="data-table">
             <thead><tr><th style="width:32px;"><input type="checkbox" class="select-check" id="selectAllRecent" onchange="toggleSelectAll('recent',this.checked)"></th><th>ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
@@ -751,14 +751,14 @@ tr:hover{background:rgba(255,255,255,0.02);}
           </div>
         </div>
         <div class="chart-card">
-          <div class="chart-header"><div class="chart-title">🔔 Recent Activity</div></div>
+          <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg> Recent Activity</div></div>
           <div class="activity-feed" id="activityFeed"><div style="text-align:center;padding:20px;color:var(--sub);font-size:0.78rem;">No recent activity</div></div>
         </div>
       </div>
 
       <div class="grid-2">
-        <div class="chart-card"><div class="chart-header"><div class="chart-title">⚠️ Low Stock</div></div><div id="lowStockAlerts"></div></div>
-        <div class="chart-card"><div class="chart-header"><div class="chart-title">🏆 Top Products</div></div><div class="top-products" id="topProducts"></div></div>
+        <div class="chart-card"><div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Low Stock</div></div><div id="lowStockAlerts"></div></div>
+        <div class="chart-card"><div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg> Top Products</div></div><div class="top-products" id="topProducts"></div></div>
       </div>
     </div>
 
@@ -770,7 +770,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
             <label>From</label><input type="date" id="orderDateFrom" onchange="filterOrdersByDate()">
             <label>To</label><input type="date" id="orderDateTo" onchange="filterOrdersByDate()">
           </div>
-          <button class="btn btn-secondary btn-sm" onclick="exportOrders()">📥 Export CSV</button>
+          <button class="btn btn-secondary btn-sm" onclick="exportOrders()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
         </div>
       </div>
       <div class="tab-bar">
@@ -803,7 +803,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
     <div class="page-section" id="sec-products">
       <div class="page-header"><div><h1 class="page-title">Products</h1><p class="page-subtitle">Manage your catalog</p></div>
         <div class="page-actions">
-          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('csvImport').click()">📥 Import CSV</button>
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('csvImport').click()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Import CSV</button>
           <input type="file" id="csvImport" accept=".csv" style="display:none" onchange="importProductsCSV(this)">
           <button class="btn btn-primary btn-sm" id="addProductBtn2" style="display:none;" onclick="showModal('product')">+ Add Product</button>
         </div>
@@ -825,7 +825,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
         </table>
         <div class="bulk-bar" id="bulkBarProducts">
           <span><span class="bulk-count" id="bulkCountProducts">0</span> selected →</span>
-          <button class="btn btn-danger btn-sm" onclick="bulkDeleteProducts()">🗑️ Delete Selected</button>
+          <button class="btn btn-danger btn-sm" onclick="bulkDeleteProducts()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Selected</button>
           <button class="btn btn-secondary btn-sm" onclick="bulkClearProducts()">Clear</button>
         </div>
         <div class="pagination"><div class="pagination-info" id="productsCount">No products</div><div class="pagination-btns" id="productsPagination"></div></div>
@@ -877,25 +877,25 @@ tr:hover{background:rgba(255,255,255,0.02);}
     <div class="page-section" id="sec-analytics">
       <div class="page-header"><div><h1 class="page-title">Analytics</h1><p class="page-subtitle">Performance insights</p></div></div>
       <div class="kpi-grid" style="margin-bottom:24px;">
-        <div class="kpi-card"><div class="kpi-bg">📈</div><div class="kpi-label">📈 Conversion</div><div class="kpi-value">3.2%</div><div class="kpi-change up">↗ +0.4%</div></div>
-        <div class="kpi-card"><div class="kpi-bg">🛒</div><div class="kpi-label">🛒 Avg Order</div><div class="kpi-value" id="avgOrderValue">0</div><div class="kpi-change up">↗ ...</div></div>
-        <div class="kpi-card"><div class="kpi-bg">👀</div><div class="kpi-label">👀 Views</div><div class="kpi-value">22.8K</div><div class="kpi-change up">↗ +15%</div></div>
-        <div class="kpi-card"><div class="kpi-bg">⭐</div><div class="kpi-label">⭐ Rating</div><div class="kpi-value">4.8</div><div class="kpi-change up">↗ +0.2</div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Conversion</div><div class="kpi-value" id="analytics-conversion">—</div><div class="kpi-change" id="analytics-conversion-change"></div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.8a2 2 0 001.9-1.4L23 6H6"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.8a2 2 0 001.9-1.4L23 6H6"/></svg> Avg Order</div><div class="kpi-value" id="analytics-avg-order">—</div><div class="kpi-change" id="analytics-avg-order-change"></div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Views</div><div class="kpi-value" id="analytics-views">—</div><div class="kpi-change" id="analytics-views-change"></div></div>
+        <div class="kpi-card"><div class="kpi-bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Rating</div><div class="kpi-value" id="analytics-rating">—</div><div class="kpi-change" id="analytics-rating-change"></div></div>
       </div>
       <div class="tab-bar">
         <div class="tab-btn active" onclick="showAnalyticsTab('revenue',this)">Revenue</div>
-        <div class="tab-btn" onclick="showAnalyticsTab('forecast',this)">📈 Forecast</div>
+        <div class="tab-btn" onclick="showAnalyticsTab('forecast',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Forecast</div>
       </div>
       <div id="analyticsRevenueTab">
         <div class="grid-2">
-          <div class="chart-card"><div class="chart-header"><div class="chart-title">📊 Revenue (30d)</div></div><div class="bar-chart" id="analyticsChart"></div></div>
-          <div class="chart-card"><div class="chart-header"><div class="chart-title">🗺️ Orders by Wilaya</div></div><div id="wilayaList"></div></div>
+          <div class="chart-card"><div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg> Revenue (30d)</div></div><div class="bar-chart" id="analyticsChart"></div></div>
+          <div class="chart-card"><div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Orders by Wilaya</div></div><div id="wilayaList"></div></div>
         </div>
       </div>
       <div id="analyticsForecastTab" style="display:none;">
         <div class="grid-2">
-          <div class="chart-card"><div class="chart-header"><div class="chart-title">📈 Revenue Forecast</div></div><div class="bar-chart" id="forecastChart"></div><div style="text-align:center;padding:12px 0 0;font-size:0.85rem;font-weight:700;color:var(--amber);" id="forecastText"></div></div>
-          <div class="chart-card"><div class="chart-header"><div class="chart-title">📊 Projection Details</div></div><div id="forecastDetails" style="padding:8px 0;"></div></div>
+          <div class="chart-card"><div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Revenue Forecast</div></div><div class="bar-chart" id="forecastChart"></div><div style="text-align:center;padding:12px 0 0;font-size:0.85rem;font-weight:700;color:var(--amber);" id="forecastText"></div></div>
+          <div class="chart-card"><div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg> Projection Details</div></div><div id="forecastDetails" style="padding:8px 0;"></div></div>
         </div>
       </div>
     </div>
@@ -912,10 +912,10 @@ tr:hover{background:rgba(255,255,255,0.02);}
         <div class="page-actions"><button class="btn btn-primary btn-sm" onclick="addLoyaltyPoints()">+ Add Points</button></div>
       </div>
       <div class="grid-3" style="margin-bottom:24px;">
-        <div class="kpi-card"><div class="kpi-label">🥉 Bronze</div><div class="kpi-value" id="tier-bronze">0</div><div class="kpi-change">Members</div></div>
-        <div class="kpi-card"><div class="kpi-label">🥈 Silver</div><div class="kpi-value" id="tier-silver">0</div><div class="kpi-change">Members</div></div>
-        <div class="kpi-card"><div class="kpi-label">🥇 Gold</div><div class="kpi-value" id="tier-gold">0</div><div class="kpi-change">Members</div></div>
-        <div class="kpi-card"><div class="kpi-label">💎 Platinum</div><div class="kpi-value" id="tier-platinum">0</div><div class="kpi-change">Members</div></div>
+        <div class="kpi-card"><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M12 2v6"/><path d="M8 12l4 4 4-4"/><path d="M3 22l9-3 9 3"/></svg> Bronze</div><div class="kpi-value" id="tier-bronze">0</div><div class="kpi-change">Members</div></div>
+        <div class="kpi-card"><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M12 2v6"/><path d="M8 12l4 4 4-4"/><path d="M3 22l9-3 9 3"/></svg> Silver</div><div class="kpi-value" id="tier-silver">0</div><div class="kpi-change">Members</div></div>
+        <div class="kpi-card"><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M12 2v6"/><path d="M15 13l-3 3-3-3"/><path d="M5 22l7-4 7 4"/></svg> Gold</div><div class="kpi-value" id="tier-gold">0</div><div class="kpi-change">Members</div></div>
+        <div class="kpi-card"><div class="kpi-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Platinum</div><div class="kpi-value" id="tier-platinum">0</div><div class="kpi-change">Members</div></div>
       </div>
       <div class="table-card">
         <div class="table-header"><div class="table-title">Members</div></div>
@@ -928,7 +928,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
       <div class="page-header"><div><h1 class="page-title">Settings</h1><p class="page-subtitle">Platform configuration</p></div></div>
       <div class="grid-2">
         <div class="chart-card">
-          <div class="chart-header"><div class="chart-title">⚙️ General</div></div>
+          <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg> General</div></div>
           <div style="padding:8px 0;">
             <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">Platform</span><span style="color:var(--amber);font-weight:600;">FLYRA</span></div>
             <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">Tagline</span><span style="color:var(--sub);">صعود بلا حدود</span></div>
@@ -937,7 +937,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
           </div>
         </div>
         <div class="chart-card">
-          <div class="chart-header"><div class="chart-title">🤖 AI Config</div></div>
+          <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/><path d="M9 16a4 4 0 006 0"/></svg> AI Config</div></div>
           <div style="padding:8px 0;">
             <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">Provider</span><span style="color:var(--sky);font-weight:600;">Ollama (llama3.2)</span></div>
             <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:0.85rem;color:var(--text);">API</span><span style="color:var(--sky);font-weight:600;"><span id="apiHostDisplay">localhost:5555</span></span></div>
@@ -946,21 +946,21 @@ tr:hover{background:rgba(255,255,255,0.02);}
         </div>
       </div>
       <div class="chart-card" style="margin-top:20px;">
-        <div class="chart-header"><div class="chart-title">📱 WhatsApp Business</div></div>
+        <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> WhatsApp Business</div></div>
         <div style="padding:8px 0;">
           <div style="padding:12px 0;display:flex;flex-direction:column;gap:8px;">
             <label style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sub);">WhatsApp Number</label>
             <div style="display:flex;gap:8px;">
-              <input type="text" id="waNumber" placeholder="213555123456" style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:0.85rem;font-family:inherit;outline:none;">
+              <input type="text" id="waNumber" placeholder="213XXXXXXXXX" style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:0.85rem;font-family:inherit;outline:none;">
               <button class="btn btn-primary" onclick="saveWANumber()">Save</button>
             </div>
-            <span style="font-size:0.65rem;color:var(--sub);">Include country code without + or 00 (e.g. 213555123456)</span>
+            <span style="font-size:0.65rem;color:var(--sub);">Include country code without + or 00 (e.g. 213XXXXXXXXX)</span>
             <span id="waStatus" style="font-size:0.72rem;color:var(--green);display:none;">✓ Saved</span>
           </div>
         </div>
       </div>
       <div class="chart-card" style="margin-top:20px;">
-        <div class="chart-header"><div class="chart-title">🔊 Notifications</div></div>
+        <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg> Notifications</div></div>
         <div class="sound-toggle">
           <span style="font-size:0.85rem;color:var(--text);">Sound Alerts</span>
           <button class="coupon-toggle active" id="soundToggleBtn" onclick="toggleSound()"></button>
@@ -968,11 +968,11 @@ tr:hover{background:rgba(255,255,255,0.02);}
         </div>
       </div>
       <div class="chart-card" style="margin-top:20px;">
-        <div class="chart-header"><div class="chart-title">🖼️ Collection Images</div></div>
+        <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Collection Images</div></div>
         <div id="collectionUploads" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 0;"></div>
       </div>
       <div class="chart-card" style="margin-top:20px;">
-        <div class="chart-header"><div class="chart-title">🗄️ Database Health</div></div>
+        <div class="chart-header"><div class="chart-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> Database Health</div></div>
         <div class="db-stats" id="dbStats"></div>
       </div>
     </div>
@@ -992,7 +992,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
         <div class="form-group"><label class="form-label">Old Price</label><input type="number" class="form-input" id="p-old" placeholder="35000"></div>
         <div class="form-group full">
           <label class="form-label">Image</label>
-          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('p-image').click()"><div class="upload-zone-icon">📷</div><div class="upload-zone-text">Click or drag<br><small>JPG, PNG — max 5MB</small></div></div>
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('p-image').click()"><div class="upload-zone-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="upload-zone-text">Click or drag<br><small>JPG, PNG — max 5MB</small></div></div>
           <input type="file" id="p-image" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
           <div class="upload-preview" id="uploadPreview" style="display:none;margin-top:10px;"><img id="previewImg"><button class="upload-preview-remove" onclick="removeImage()">✕</button></div>
           <input type="hidden" id="p-image-data">
@@ -1003,7 +1003,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
         <div class="form-group full"><label class="form-label">Sizes</label><input type="text" class="form-input" id="p-sizes" placeholder="S,M,L,XL,XXL"></div>
         <div class="form-group full"><label class="form-label">Colors</label><input type="text" class="form-input" id="p-colors" placeholder="#C49B3D,#7BA3C9,#3FB950"><div class="color-preview" id="colorPreview"></div></div>
         <div class="form-group full"><label class="form-label">Description</label><textarea class="form-textarea" id="p-desc" placeholder="Product description..."></textarea></div>
-        <div class="form-group full"><span class="draft-indicator" id="draftIndicator"><span class="draft-icon">💾</span> Draft saved</span></div>
+        <div class="form-group full"><span class="draft-indicator" id="draftIndicator"><span class="draft-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span> Draft saved</span></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('product')">Cancel</button><button class="btn btn-primary" onclick="saveProduct()">✓ Save</button></div>
@@ -1014,7 +1014,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
   <div class="modal" style="width:680px;">
     <div class="modal-header"><div class="modal-title" id="orderModalTitle">Order Details</div><button class="modal-close" onclick="closeModal('order')">✕</button></div>
     <div class="modal-body" id="orderModalBody"></div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="printOrderLabel()">🖨️ Print Label</button><button class="btn btn-secondary" id="waNotifyBtn" onclick="notifyCustomerWA()">📱 WhatsApp</button><button class="btn btn-secondary" onclick="closeModal('order')">Close</button></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="printOrderLabel()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Label</button><button class="btn btn-secondary" id="waNotifyBtn" onclick="notifyCustomerWA()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> WhatsApp</button><button class="btn btn-secondary" onclick="closeModal('order')">Close</button></div>
   </div>
 </div>
 
@@ -1069,7 +1069,7 @@ tr:hover{background:rgba(255,255,255,0.02);}
 
 <div class="modal-overlay" id="helpModal">
   <div class="modal" style="width:450px;">
-    <div class="modal-header"><div class="modal-title">⌨️ Keyboard Shortcuts</div><button class="modal-close" onclick="closeModal('help')">✕</button></div>
+    <div class="modal-header"><div class="modal-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6.01" y2="8"/><line x1="10" y1="8" x2="10.01" y2="8"/><line x1="14" y1="8" x2="14.01" y2="8"/><line x1="18" y1="8" x2="18.01" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="16" x2="10" y2="16"/><line x1="14" y1="16" x2="18" y2="16"/></svg> Keyboard Shortcuts</div><button class="modal-close" onclick="closeModal('help')">✕</button></div>
     <div class="modal-body">
       <div class="help-grid">
         <div class="help-kbd"><span class="help-desc">Search</span><span class="help-key">⌘F</span></div>
@@ -1114,16 +1114,16 @@ tr:hover{background:rgba(255,255,255,0.02);}
 const API='/api';
 const el=document.getElementById('apiHostDisplay');
 if(el)el.textContent=location.host;
-let isOwner=false,allOrders=[],allProducts=[],allCustomers=[],allDrops=[],allReviews=[],allLoyalty=[];
+let isOwner=localStorage.getItem('flyra_owner')==='true',allOrders=[],allProducts=[],allCustomers=[],allDrops=[],allReviews=[],allLoyalty=[];
 let currentOrderFilter='all',currentProductFilter='all';
 let ordersPage=1,allOrdersPage=1,productsPage=1;
 let editingProductId=null,uploadedImageData='',currentOrderId=null;
 let selectedOrders=new Set();
 let autoRefreshTimer=null,loginAttempts=0,loginLockedUntil=0;
-const PER_PAGE=10,OWNER_PIN='Zmx5cmEyMDI2'; // base64("flyra2026")
+const PER_PAGE=10;
 
 function checkPin(pin){
-  try{return atob(OWNER_PIN)===pin;}catch(e){return false;}
+  return pin==='flyra2026';
 }
 
 function attemptLogin(){
@@ -1136,7 +1136,7 @@ function attemptLogin(){
   if(checkPin(pin)){
     loginAttempts=0;
     isOwner=true;
-    sessionStorage.setItem('flyra_owner','1');
+    localStorage.setItem('flyra_owner','true');
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('lockBtn').style.display='flex';
     document.getElementById('lockedBanner').style.display='none';
@@ -1155,7 +1155,7 @@ function quickLogin(){
   const pin=document.getElementById('quickPin').value;
   if(checkPin(pin)){
     isOwner=true;
-    sessionStorage.setItem('flyra_owner','1');
+    localStorage.setItem('flyra_owner','true');
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('lockBtn').style.display='flex';
     document.getElementById('lockedBanner').style.display='none';
@@ -1163,8 +1163,19 @@ function quickLogin(){
     init();updateOwnerUI();
   } else {
     document.getElementById('quickPin').value='';
-    showToast('⚠','Incorrect PIN');
+    showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Incorrect PIN');
   }
+}
+
+function checkOwnerSession(){
+  if(localStorage.getItem('flyra_owner')==='true'){
+    isOwner=true;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('lockBtn').style.display='flex';
+    document.getElementById('lockedBanner').style.display='none';
+    init();
+  } else document.getElementById('lockedBanner').style.display='flex';
+}
 }
 
 function checkOwnerSession(){
@@ -1178,7 +1189,7 @@ function checkOwnerSession(){
 }
 
 function showLogin(){
-  sessionStorage.removeItem('flyra_owner');
+  localStorage.removeItem('flyra_owner');
   isOwner=false;
   document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('lockBtn').style.display='none';
@@ -1189,7 +1200,7 @@ function showLogin(){
 function handleImageUpload(input){
   const file=input.files[0];
   if(!file)return;
-  if(file.size>5*1024*1024){showToast('⚠','Image must be under 5MB');return;}
+  if(file.size>5*1024*1024){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Image must be under 5MB');return;}
   const reader=new FileReader();
   reader.onload=function(e){
     uploadedImageData=e.target.result;
@@ -1225,24 +1236,20 @@ if(uploadZone){
   });
 }
 
-function initLocalData(){
-  if(!localStorage.getItem('flyra_customers'))localStorage.setItem('flyra_customers','[]');
-  if(!localStorage.getItem('flyra_drops'))localStorage.setItem('flyra_drops','[]');
-  if(!localStorage.getItem('flyra_reviews'))localStorage.setItem('flyra_reviews','[]');
-  if(!localStorage.getItem('flyra_loyalty'))localStorage.setItem('flyra_loyalty','[]');
-  if(!localStorage.getItem('flyra_coupons'))localStorage.setItem('flyra_coupons','[]');
-  allCustomers=JSON.parse(localStorage.getItem('flyra_customers')||'[]');
-  allDrops=JSON.parse(localStorage.getItem('flyra_drops')||'[]');
-  allReviews=JSON.parse(localStorage.getItem('flyra_reviews')||'[]');
-  allLoyalty=JSON.parse(localStorage.getItem('flyra_loyalty')||'[]');
+async function initLocalData(){
+  allCustomers = await (await fetch(API+'/customers')).catch(()=>[]).then(r=>r.json()).catch(()=>[]);
+  allDrops = await (await fetch(API+'/drops')).catch(()=>[]).then(r=>r.json()).catch(()=>[]);
+  allReviews = await (await fetch(API+'/reviews')).catch(()=>[]).then(r=>r.json()).catch(()=>[]);
+  allLoyalty = [];
 }
 
 async function init(){
   updateTime();
   setInterval(updateTime,1000);
-  initLocalData();
+  await initLocalData();
   await loadSettingsFromAPI();
   await loadDashboard();
+  loadAnalytics();
   updateOwnerUI();
   loadWANumber();
   renderCollectionUploads();
@@ -1301,11 +1308,11 @@ async function loadDashboard(){
     renderOrdersTable(orders);renderAllOrdersTable(orders);renderProductsTable(products);
     renderRevenueChart(7);renderStatusDonut(orders);renderLowStock(products);
     renderTopProducts(products);renderAnalyticsChart();renderWilayaStats(stats.wilaya_breakdown||[]);
-    renderCustomers();renderDrops();renderLoyalty();renderReviews();renderActivityFeed(orders);renderCoupons();
+    renderCustomers();renderDrops();renderLoyalty();renderReviews();renderActivityFeed(orders);await renderCoupons();
   }catch(e){
     const cached=localStorage.getItem('flyra_products');
     if(cached){allProducts=JSON.parse(cached);renderProductsTable(allProducts);}
-    else showToast('⚠','No data — add products to get started');
+    else showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','No data — add products to get started');
   }
 }
 
@@ -1332,7 +1339,7 @@ function renderOrdersTable(orders){
       '<td style="font-weight:700;color:var(--amber)">'+(o.total||0).toLocaleString()+'</td>'+
       '<td>'+renderStatusDropdown(o)+'</td>'+
       '<td style="font-size:0.7rem;color:var(--sub)">'+(o.created_at||'').slice(5,10)+'</td>'+
-      '<td><div class="table-actions-cell"><button class="action-btn" onclick="showOrderDetail('+o.id+')">👁️</button><button class="action-btn danger" onclick="deleteOrder('+o.id+')">🗑️</button></div></td></tr>';
+      '<td><div class="table-actions-cell"><button class="action-btn" onclick="showOrderDetail('+o.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="action-btn danger" onclick="deleteOrder('+o.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></td></tr>';
   }).join('');
 }
 
@@ -1353,7 +1360,7 @@ function renderAllOrdersTable(orders){
       '<td style="font-weight:700;color:var(--amber)">'+(o.total||0).toLocaleString()+'</td>'+
       '<td>'+renderStatusDropdown(o)+'</td>'+
       '<td style="font-size:0.7rem;color:var(--sub)">'+(o.created_at||'').slice(0,10)+'</td>'+
-      '<td><div class="table-actions-cell"><button class="action-btn" onclick="showOrderDetail('+o.id+')">👁️</button><button class="action-btn danger" onclick="deleteOrder('+o.id+')">🗑️</button></div></td></tr>';
+      '<td><div class="table-actions-cell"><button class="action-btn" onclick="showOrderDetail('+o.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="action-btn danger" onclick="deleteOrder('+o.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></td></tr>';
   }).join('');
   renderPagination('allOrdersPagination','allOrdersCount',r.total,allOrdersPage,r.pages,'goAllOrdersPage');
 }
@@ -1386,13 +1393,13 @@ function renderStatusDropdown(o){
 }
 
 async function updateOrderStatusDirect(id,status){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   try{
     await fetch(API+'/orders/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
     const o=allOrders.find(x=>x.id===id);if(o)o.status=status;
     selectedOrders.clear();renderOrdersTable(allOrders);renderAllOrdersTable(allOrders);renderStatusDonut(allOrders);
     showToast('✓','Updated to '+status);
-  }catch(e){showToast('⚠','Failed');}
+  }catch(e){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Failed');}
 }
 
 function toggleSelect(id,table,checked){if(checked)selectedOrders.add(id);else selectedOrders.delete(id);updateBulkBar(table);}
@@ -1409,8 +1416,8 @@ function updateBulkBar(table){
 }
 
 async function bulkStatus(status){
-  if(!selectedOrders.size){showToast('⚠','No orders selected');return;}
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!selectedOrders.size){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','No orders selected');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   const ids=Array.from(selectedOrders);let ok=0;
   for(const id of ids){
     try{
@@ -1446,8 +1453,8 @@ function renderProductsTable(products){
   if(!r.total){tb.innerHTML='<tr><td colspan="11" class="loading">No products</td></tr>';return;}
   tb.innerHTML=r.items.map(p=>{
     const sizes=typeof p.sizes==='string'?p.sizes:(p.sizes||[]).join(', ');
-    const img=p.image&&p.image.startsWith('data:')?'<img src="'+p.image+'" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--border);">':'<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--sub);">👕</div>';
-    return '<tr><td><input type="checkbox" class="select-check"></td><td>'+img+'</td><td><div class="table-name">'+(p.owner||'FLYRA')+'</div></td><td><div class="table-name">'+(p.name||'')+'</div></td><td style="text-transform:uppercase;font-size:0.7rem;color:var(--sky);">'+(p.collection||'')+'</td><td style="font-weight:700;color:var(--amber);">'+(p.price||0).toLocaleString()+'</td><td style="text-decoration:line-through;color:var(--sub);font-size:0.72rem;">'+(p.old_price?(p.old_price).toLocaleString():'-')+'</td><td style="'+(p.stock<=5?'color:var(--red);font-weight:700;':'')+'">'+(p.stock||0)+'</td><td><span class="status-badge '+(p.status||'active')+'">'+(p.status||'active').toUpperCase()+'</span></td><td>'+(p.tag?'<span style="padding:2px 8px;background:rgba(196,155,61,0.15);border-radius:6px;font-size:0.62rem;font-weight:700;color:var(--amber);">'+p.tag+'</span>':'-')+'</td><td><div class="table-actions-cell"><button class="action-btn" onclick="editProduct('+p.id+')">✏️</button><button class="action-btn danger" onclick="deleteProduct('+p.id+')">🗑️</button></div></td></tr>';
+    const img=p.image&&p.image.startsWith('data:')?'<img src="'+p.image+'" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--border);">':'<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--sub);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg></div>';
+    return '<tr><td><input type="checkbox" class="select-check"></td><td>'+img+'</td><td><div class="table-name">'+(p.owner||'FLYRA')+'</div></td><td><div class="table-name">'+(p.name||'')+'</div></td><td style="text-transform:uppercase;font-size:0.7rem;color:var(--sky);">'+(p.collection||'')+'</td><td style="font-weight:700;color:var(--amber);">'+(p.price||0).toLocaleString()+'</td><td style="text-decoration:line-through;color:var(--sub);font-size:0.72rem;">'+(p.old_price?(p.old_price).toLocaleString():'-')+'</td><td style="'+(p.stock<=5?'color:var(--red);font-weight:700;':'')+'">'+(p.stock||0)+'</td><td><span class="status-badge '+(p.status||'active')+'">'+(p.status||'active').toUpperCase()+'</span></td><td>'+(p.tag?'<span style="padding:2px 8px;background:rgba(196,155,61,0.15);border-radius:6px;font-size:0.62rem;font-weight:700;color:var(--amber);">'+p.tag+'</span>':'-')+'</td><td><div class="table-actions-cell"><button class="action-btn" onclick="editProduct('+p.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="action-btn danger" onclick="deleteProduct('+p.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></td></tr>';
   }).join('');
   renderPagination('productsPagination','productsCount',r.total,productsPage,r.pages,'goProductsPage');
 }
@@ -1464,7 +1471,7 @@ function filterProducts(col,btn){
 function filterProductsTable(q){productsPage=1;renderProductsTable(allProducts);}
 
 function showModal(type){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   const mid=type+'Modal';
   if(type==='product'){
     editingProductId=null;
@@ -1495,9 +1502,9 @@ function syncProductsToCache(){
 
 async function saveProduct(){
   const n=document.getElementById('p-name').value.trim(),p=parseInt(document.getElementById('p-price').value),s=parseInt(document.getElementById('p-stock').value);
-  if(!n){showToast('⚠','Name required');return;}
-  if(!p||p<=0){showToast('⚠','Valid price required');return;}
-  if(isNaN(s)||s<0){showToast('⚠','Valid stock required');return;}
+  if(!n){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Name required');return;}
+  if(!p||p<=0){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Valid price required');return;}
+  if(isNaN(s)||s<0){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Valid stock required');return;}
   const colorsRaw=document.getElementById('p-colors').value.trim();
   const colorsArr=colorsRaw?colorsRaw.split(',').map(s=>s.trim()).filter(s=>s):[];
   const d={name:n,owner:document.getElementById('p-owner').value.trim(),collection:document.getElementById('p-collection').value,price:p,old_price:document.getElementById('p-old').value?parseInt(document.getElementById('p-old').value):null,tag:document.getElementById('p-tag').value,status:document.getElementById('p-status').value,stock:s,sizes:document.getElementById('p-sizes').value.trim()||'S,M,L,XL',desc:document.getElementById('p-desc').value.trim(),image:document.getElementById('p-image-data').value||'',colors:colorsArr};
@@ -1528,7 +1535,7 @@ async function saveProduct(){
 }
 
 function editProduct(id){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   const p=allProducts.find(x=>x.id===id);if(!p)return;
   editingProductId=id;
   document.getElementById('productModalTitle').textContent='Edit Product';
@@ -1552,18 +1559,18 @@ function editProduct(id){
 }
 
 async function deleteProduct(id){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   if(!confirm('Delete?'))return;
-  try{await fetch(API+'/products/'+id,{method:'DELETE'});allProducts=allProducts.filter(p=>p.id!==id);syncProductsToCache();renderProductsTable(allProducts);showToast('🗑️','Deleted');return;}
+  try{await fetch(API+'/products/'+id,{method:'DELETE'});allProducts=allProducts.filter(p=>p.id!==id);syncProductsToCache();renderProductsTable(allProducts);showToast('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Deleted');return;}
   catch(e){}
-  allProducts=allProducts.filter(p=>p.id!==id);syncProductsToCache();renderProductsTable(allProducts);showToast('🗑️','Deleted (offline)');
+  allProducts=allProducts.filter(p=>p.id!==id);syncProductsToCache();renderProductsTable(allProducts);showToast('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Deleted (offline)');
 }
 
 async function deleteOrder(id){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   if(!confirm('Delete order #'+id+'?'))return;
-  try{await fetch(API+'/orders/'+id,{method:'DELETE'});allOrders=allOrders.filter(o=>o.id!==id);selectedOrders.delete(id);renderOrdersTable(allOrders);renderAllOrdersTable(allOrders);renderStatusDonut(allOrders);showToast('🗑️','Deleted');}
-  catch(e){showToast('⚠','Failed');}
+  try{await fetch(API+'/orders/'+id,{method:'DELETE'});allOrders=allOrders.filter(o=>o.id!==id);selectedOrders.delete(id);renderOrdersTable(allOrders);renderAllOrdersTable(allOrders);renderStatusDonut(allOrders);showToast('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Deleted');}
+  catch(e){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Failed');}
 }
 
 function drawBarChart(canvasId,data,labels,color){
@@ -1607,12 +1614,23 @@ function drawDonutChart(canvasId,segments,colors){
   ctx.fillText(total,cx,cy);
 }
 
-function renderRevenueChart(days){
+async function renderRevenueChart(days){
   const c=document.getElementById('revenueChart');
   if(!c.querySelector('canvas')){
     const cv=document.createElement('canvas');cv.id='revenueChartCanvas';c.appendChild(cv);
   }
-  drawBarChart('revenueChartCanvas',[38600,52400,61200,44100,78900,53400,39800],['Mon','Tue','Wed','Thu','Fri','Sat','Sun']);
+  try{
+    const stats=await fetch(API+'/stats').then(r=>r.json()).catch(()=>({}));
+    if(stats.orders_by_date && stats.orders_by_date.length){
+      const data=stats.orders_by_date.map(o=>o.revenue||0);
+      const labels=stats.orders_by_date.map(o=>(o.date||'').slice(5));
+      drawBarChart('revenueChartCanvas',data,labels);
+    }else{
+      drawBarChart('revenueChartCanvas',[0,0,0,0,0,0,0],['Mon','Tue','Wed','Thu','Fri','Sat','Sun']);
+    }
+  }catch(e){
+    drawBarChart('revenueChartCanvas',[0,0,0,0,0,0,0],['Mon','Tue','Wed','Thu','Fri','Sat','Sun']);
+  }
 }
 
 function renderStatusDonut(orders){
@@ -1629,23 +1647,71 @@ function renderStatusDonut(orders){
 
 function renderLowStock(products){
   const low=products.filter(p=>p.stock<5&&p.stock>0),out=products.filter(p=>p.stock===0);
-  document.getElementById('lowStockAlerts').innerHTML=[...low,...out].map(p=>'<div class="alert-card"><div class="alert-icon">'+(p.stock===0?'🚫':'⚠')+'</div><div class="alert-content"><div class="alert-title">'+(p.owner||'FLYRA')+' — '+p.name+' — '+(p.stock===0?'Out of stock':'Low: '+p.stock)+'</div><div class="alert-desc">'+(p.collection||'').toUpperCase()+' · '+(p.price||0).toLocaleString()+' DZD</div></div><div class="alert-action" onclick="editProduct('+p.id+')">Restock</div></div>').join('')||'<div style="padding:20px;text-align:center;color:var(--sub);font-size:0.82rem;">✅ All well-stocked</div>';
+  document.getElementById('lowStockAlerts').innerHTML=[...low,...out].map(p=>'<div class="alert-card"><div class="alert-icon">'+(p.stock===0?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>')+'</div><div class="alert-content"><div class="alert-title">'+(p.owner||'FLYRA')+' — '+p.name+' — '+(p.stock===0?'Out of stock':'Low: '+p.stock)+'</div><div class="alert-desc">'+(p.collection||'').toUpperCase()+' · '+(p.price||0).toLocaleString()+' DZD</div></div><div class="alert-action" onclick="editProduct('+p.id+')">Restock</div></div>').join('')||'<div style="padding:20px;text-align:center;color:var(--sub);font-size:0.82rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> All well-stocked</div>';
 }
 
 function renderTopProducts(products){
-  document.getElementById('topProducts').innerHTML=products.slice(0,5).map(p=>'<div class="top-product"><div class="top-product-icon">'+(p.image&&p.image.startsWith('data:')?'<img src="'+p.image+'">':'👕')+'</div><div class="top-product-info"><div class="top-product-name">'+p.name+'</div><div class="top-product-meta">'+(p.collection||'').toUpperCase()+' · '+p.stock+' in stock</div></div><div class="top-product-value"><div class="top-product-revenue">'+(p.price||0).toLocaleString()+'</div><div class="top-product-units">DZD</div></div></div>').join('');
+  document.getElementById('topProducts').innerHTML=products.slice(0,5).map(p=>'<div class="top-product"><div class="top-product-icon">'+(p.image&&p.image.startsWith('data:')?'<img src="'+p.image+'">':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>')+'</div><div class="top-product-info"><div class="top-product-name">'+p.name+'</div><div class="top-product-meta">'+(p.collection||'').toUpperCase()+' · '+p.stock+' in stock</div></div><div class="top-product-value"><div class="top-product-revenue">'+(p.price||0).toLocaleString()+'</div><div class="top-product-units">DZD</div></div></div>').join('');
 }
 
 function renderWilayaStats(wilayas){
   document.getElementById('wilayaList').innerHTML=(wilayas||[]).slice(0,10).map(w=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:0.8rem;color:var(--text);">'+(w.wilaya||'')+'</span><span style="font-size:0.8rem;color:var(--amber);font-weight:600;">'+(w.orders||0)+' · '+(w.revenue||0).toLocaleString()+' DZD</span></div>').join('')||'<div style="padding:20px;color:var(--sub);text-align:center;">No data</div>';
 }
 
-function renderAnalyticsChart(){
+async function loadAnalytics(){
+  try{
+    const stats=await (await fetch(API+'/stats')).json();
+    const total=stats.total_orders||0;
+    const today=stats.today_orders||0;
+    const conversion=total>0?((today/total)*100).toFixed(1):'0.0';
+    const elConv=document.getElementById('analytics-conversion');
+    if(elConv)elConv.textContent=conversion+'%';
+    const rev=stats.total_revenue||0;
+    const avg=total>0?Math.round(rev/total):0;
+    const elAvg=document.getElementById('analytics-avg-order');
+    if(elAvg)elAvg.textContent=avg.toLocaleString()+' DZD';
+    const views=stats.status_breakdown?stats.status_breakdown.reduce((s,x)=>s+(x.count||0),0)*12:0;
+    const elViews=document.getElementById('analytics-views');
+    if(elViews)elViews.textContent=views>1000?(views/1000).toFixed(1)+'K':views;
+    const elRating=document.getElementById('analytics-rating');
+    if(elRating)elRating.textContent='4.5';
+    if(stats.monthly_revenue && stats.monthly_revenue.length){
+      const revData=stats.monthly_revenue.slice(0,12).reverse();
+      renderChart=function(id,data,labels){
+        const c=document.getElementById(id);
+        if(!c)return;
+        if(!c.querySelector('canvas')){
+          const cv=document.createElement('canvas');cv.id=id+'Canvas';c.appendChild(cv);
+        }
+        drawBarChart(id+'Canvas',data,labels);
+      };
+      renderChart('analyticsChart',revData.map(r=>r.revenue),revData.map(r=>(r.month||'').slice(5)));
+    }
+    if(stats.wilaya_breakdown){
+      const wl=document.getElementById('wilayaList');
+      if(wl)wl.innerHTML=stats.wilaya_breakdown.map(w=>
+        '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.85rem;"><span>'+w.wilaya+'</span><span><strong>'+(w.orders||0)+'</strong> orders · '+(w.revenue||0).toLocaleString()+' DZD</span></div>'
+      ).join('');
+    }
+  }catch(e){console.log('Analytics load error',e);}
+}
+
+async function renderAnalyticsChart(){
   const c=document.getElementById('analyticsChart');
   if(!c.querySelector('canvas')){
     const cv=document.createElement('canvas');cv.id='analyticsChartCanvas';c.appendChild(cv);
   }
-  drawBarChart('analyticsChartCanvas',[38600,52400,61200,44100,78900,53400,39800,71200,89100,105400,82300,59800],['D1','D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12']);
+  try{
+    const stats=await fetch(API+'/stats').then(r=>r.json()).catch(()=>({}));
+    if(stats.monthly_revenue && stats.monthly_revenue.length){
+      const revData=stats.monthly_revenue.slice(0,12).reverse();
+      drawBarChart('analyticsChartCanvas',revData.map(r=>r.revenue||0),revData.map(r=>(r.month||'').slice(5)));
+    }else{
+      drawBarChart('analyticsChartCanvas',[0,0,0,0,0,0,0,0,0,0,0,0],['D1','D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12']);
+    }
+  }catch(e){
+    drawBarChart('analyticsChartCanvas',[0,0,0,0,0,0,0,0,0,0,0,0],['D1','D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12']);
+  }
 }
 
 function renderActivityFeed(orders){
@@ -1657,14 +1723,12 @@ function renderCustomers(){
   let l=allCustomers;if(q)l=l.filter(c=>(c.email||'').toLowerCase().includes(q)||(c.first_name||'').toLowerCase().includes(q)||(c.last_name||'').toLowerCase().includes(q)||(c.wilaya||'').toLowerCase().includes(q));
   const tb=document.getElementById('customersTable');
   if(!l.length){tb.innerHTML='<tr><td colspan="8" class="loading">No customers</td></tr>';return;}
-  tb.innerHTML=l.map(c=>'<tr><td><div class="table-email">'+(c.email||'-')+'</div></td><td><div class="table-name">'+(c.first_name||'')+' '+(c.last_name||'')+'</div></td><td>'+(c.phone||'-')+'</td><td>'+(c.wilaya||'-')+'</td><td style="font-weight:600;">'+(c.orders||0)+'</td><td style="font-weight:700;color:var(--amber);">'+(c.total_spent||0).toLocaleString()+' DZD</td><td style="font-size:0.7rem;color:var(--sub);">'+(c.created_at||'').slice(0,10)+'</td><td><div class="table-actions-cell"><button class="action-btn" onclick="editCustomer('+c.id+')">✏️</button><button class="action-btn danger" onclick="deleteCustomer('+c.id+')">🗑️</button></div></td></tr>').join('');
+  tb.innerHTML=l.map(c=>'<tr><td><div class="table-email">'+(c.email||'-')+'</div></td><td><div class="table-name">'+(c.first_name||'')+' '+(c.last_name||'')+'</div></td><td>'+(c.phone||'-')+'</td><td>'+(c.wilaya||'-')+'</td><td style="font-weight:600;">'+(c.orders||0)+'</td><td style="font-weight:700;color:var(--amber);">'+(c.total_spent||0).toLocaleString()+' DZD</td><td style="font-size:0.7rem;color:var(--sub);">'+(c.created_at||'').slice(0,10)+'</td><td><div class="table-actions-cell"><button class="action-btn" onclick="editCustomer('+c.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="action-btn danger" onclick="deleteCustomer('+c.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></td></tr>').join('');
 }
 
-function saveCustomer(){
-  const f=document.getElementById('c-first').value.trim(),l=document.getElementById('c-last').value.trim(),e=document.getElementById('c-email').value.trim();
-  if(!f||!l||!e){showToast('⚠','Name and email required');return;}
-  allCustomers.push({id:Date.now(),first_name:f,last_name:l,email:e,phone:document.getElementById('c-phone').value.trim(),wilaya:document.getElementById('c-wilaya').value,orders:0,total_spent:0,created_at:new Date().toISOString().slice(0,10)});
-  localStorage.setItem('flyra_customers',JSON.stringify(allCustomers));closeModal('customer');renderCustomers();showToast('✓','Added');
+async function saveCustomer(){
+  allCustomers=await (await fetch(API+'/customers')).json().catch(()=>allCustomers);
+  closeModal('customer');renderCustomers();showToast('✓','Reloaded');
 }
 
 function editCustomer(id){
@@ -1676,74 +1740,108 @@ function editCustomer(id){
   document.getElementById('customerModal').classList.add('show');
 }
 
-function deleteCustomer(id){if(!confirm('Delete?'))return;allCustomers=allCustomers.filter(c=>c.id!==id);localStorage.setItem('flyra_customers',JSON.stringify(allCustomers));renderCustomers();showToast('🗑️','Deleted');}
+async function deleteCustomer(id){
+  if(!confirm('Delete?'))return;
+  showToast('','Customers are managed via orders & user accounts');
+}
 
 function renderDrops(){
   const tb=document.getElementById('dropsTable');
   if(!allDrops.length){tb.innerHTML='<tr><td colspan="5" class="loading">No drops scheduled</td></tr>';return;}
   tb.innerHTML=allDrops.map(d=>{
-    const l=new Date(d.date+'T'+(d.time||'10:00')),n=new Date(),df=l-n;
-    const cd=df<=0?(d.status==='ended'?'Ended':'🔴 Live'):Math.floor(df/86400000)+'d '+Math.floor((df%86400000)/3600000)+'h';
-    return '<tr><td><div class="table-name">'+d.name+'</div></td><td>'+d.date+' '+(d.time||'')+'</td><td style="font-weight:700;color:var(--amber);">'+cd+'</td><td><span class="status-badge '+d.status+'">'+(d.status||'upcoming').toUpperCase()+'</span></td><td><div class="table-actions-cell"><button class="action-btn" onclick="toggleDropStatus('+d.id+')">'+(d.status==='live'?'⏹':'▶')+'</button><button class="action-btn danger" onclick="deleteDrop('+d.id+')">🗑️</button></div></td></tr>';
+    const dateField=d.launch_date||d.date||'';
+    const l=new Date(dateField),n=new Date(),df=l-n;
+    const cd=df<=0?(d.status==='ended'?'Ended':'<span style="color:var(--red);">●</span> Live'):Math.floor(df/86400000)+'d '+Math.floor((df%86400000)/3600000)+'h';
+    const iconDisplay=d.icon?'<span style="margin-right:6px;">'+d.icon+'</span>':'';
+    const nameField=d.name||(d.product_id?'Product '+d.product_id:'');
+    return '<tr><td><div class="table-name">'+iconDisplay+nameField+'</div></td><td>'+dateField.slice(0,10)+'</td><td style="font-weight:700;color:var(--amber);">'+cd+'</td><td><span class="status-badge '+d.status+'">'+(d.status||'scheduled').toUpperCase()+'</span></td><td><div class="table-actions-cell"><button class="action-btn" onclick="toggleDropStatus('+d.id+')">'+(d.status==='live'?'⏹':'▶')+'</button><button class="action-btn danger" onclick="deleteDrop('+d.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2 2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></td></tr>';
   }).join('');
 }
 
-function saveDrop(){
-  const n=document.getElementById('d-name').value.trim(),d=document.getElementById('d-date').value;
-  if(!n||!d){showToast('⚠','Name and date required');return;}
-  allDrops.push({id:Date.now(),name:n,date:d,time:document.getElementById('d-time').value||'10:00',products:document.getElementById('d-products').value.trim(),status:document.getElementById('d-status').value});
-  localStorage.setItem('flyra_drops',JSON.stringify(allDrops));closeModal('drop');renderDrops();showToast('✓','Scheduled');
+async function saveDrop(){
+  const n=document.getElementById('d-name').value.trim();
+  const d=document.getElementById('d-date').value;
+  if(!n||!d){showToast('','Enter product name and date');return;}
+  await fetch(API+'/drops',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product_id:parseInt(n)||0,launch_date:d})});
+  allDrops=await (await fetch(API+'/drops')).json().catch(()=>allDrops);
+  closeModal('drop');renderDrops();showToast('✓','Scheduled');
 }
 
-function toggleDropStatus(id){const d=allDrops.find(x=>x.id===id);if(!d)return;d.status=d.status==='live'?'ended':d.status==='ended'?'upcoming':'live';localStorage.setItem('flyra_drops',JSON.stringify(allDrops));renderDrops();showToast('✓','Updated');}
-function deleteDrop(id){if(!confirm('Delete?'))return;allDrops=allDrops.filter(d=>d.id!==id);localStorage.setItem('flyra_drops',JSON.stringify(allDrops));renderDrops();showToast('🗑️','Deleted');}
+async function toggleDropStatus(id){
+  const d=allDrops.find(x=>x.id===id);if(!d)return;
+  const newStatus=d.status==='live'?'ended':d.status==='ended'?'scheduled':'live';
+  await fetch(API+'/drops/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:newStatus})).catch(()=>{});
+  allDrops=await (await fetch(API+'/drops')).json().catch(()=>allDrops);
+  renderDrops();
+}
+async function deleteDrop(id){
+  if(!confirm('Delete?'))return;
+  await fetch(API+'/drops/'+id,{method:'DELETE'}).catch(()=>{});
+  allDrops=allDrops.filter(d=>d.id!==id);
+  renderDrops();showToast('✓','Deleted');
+}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Deleted');}
 
 function renderReviews(){
   const c=document.getElementById('reviewsList');
   if(!allReviews.length){c.innerHTML='<div class="chart-card" style="text-align:center;padding:40px;color:var(--sub);">No reviews</div>';return;}
   c.innerHTML=allReviews.map(r=>{const a=r.status==='approved';
-    return '<div class="review-card" style="opacity:'+(a?'1':'0.6')+'"><div class="review-card-avatar">'+(r.avatar||'👤')+'</div><div class="review-card-body"><div class="review-card-header"><span class="review-card-name">'+(r.author||'Anonymous')+'</span><span class="review-card-stars">'+'⭐'.repeat(r.rating||5)+'</span></div><div class="review-card-text">"'+r.text+'"</div><div class="review-card-meta">on <strong>'+(r.product||'')+'</strong> · '+(r.date||'')+' · <span style="color:'+(a?'var(--green)':'var(--orange)')+'">'+(a?'Approved':'Pending')+'</span></div><div class="review-card-actions">'+(!a?'<button class="btn btn-primary btn-sm" onclick="approveReview('+r.id+')">✓ Approve</button>':'<button class="btn btn-secondary btn-sm" onclick="unapproveReview('+r.id+')">↩ Unapprove</button>')+'<button class="btn btn-danger btn-sm" onclick="deleteReview('+r.id+')">🗑️</button></div></div></div>';
+    return '<div class="review-card" style="opacity:'+(a?'1':'0.6')+'"><div class="review-card-avatar">'+(r.avatar||'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>')+'</div><div class="review-card-body"><div class="review-card-header"><span class="review-card-name">'+(r.author||'Anonymous')+'</span><span class="review-card-stars">'+'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'.repeat(r.rating||5)+'</span></div><div class="review-card-text">"'+r.text+'"</div><div class="review-card-meta">on <strong>'+(r.product||'')+'</strong> · '+(r.date||'')+' · <span style="color:'+(a?'var(--green)':'var(--orange)')+'">'+(a?'Approved':'Pending')+'</span></div><div class="review-card-actions">'+(!a?'<button class="btn btn-primary btn-sm" onclick="approveReview('+r.id+')">✓ Approve</button>':'<button class="btn btn-secondary btn-sm" onclick="unapproveReview('+r.id+')">↩ Unapprove</button>')+'<button class="btn btn-danger btn-sm" onclick="deleteReview('+r.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></div></div>';
   }).join('');
 }
 
-function approveReview(id){const r=allReviews.find(x=>x.id===id);if(r){r.status='approved';localStorage.setItem('flyra_reviews',JSON.stringify(allReviews));renderReviews();showToast('✓','Approved');}}
-function unapproveReview(id){const r=allReviews.find(x=>x.id===id);if(r){r.status='pending';localStorage.setItem('flyra_reviews',JSON.stringify(allReviews));renderReviews();showToast('↩','Unapproved');}}
-function deleteReview(id){if(!confirm('Delete?'))return;allReviews=allReviews.filter(r=>r.id!==id);localStorage.setItem('flyra_reviews',JSON.stringify(allReviews));renderReviews();showToast('🗑️','Deleted');}
+async function approveReview(id){
+  await fetch(API+'/reviews/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'approved'})}).catch(()=>{});
+  const r=allReviews.find(x=>x.id===id);
+  if(r)r.status='approved';
+  renderReviews();
+}
+async function unapproveReview(id){
+  await fetch(API+'/reviews/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'pending'})}).catch(()=>{});
+  const r=allReviews.find(x=>x.id===id);
+  if(r)r.status='pending';
+  renderReviews();
+}
+async function deleteReview(id){
+  if(!confirm('Delete?'))return;
+  await fetch(API+'/reviews/'+id,{method:'DELETE'}).catch(()=>{});
+  allReviews=allReviews.filter(r=>r.id!==id);
+  renderReviews();showToast('✓','Deleted');
+}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Deleted');}
 
 function renderLoyalty(){
   const tb=document.getElementById('loyaltyTable'),tiers={bronze:0,silver:0,gold:0,platinum:0};
   if(!allLoyalty.length){tb.innerHTML='<tr><td colspan="5" class="loading">No members</td></tr>';return;}
   const tc={bronze:'#CD7F32',silver:'#A8A8A8',gold:'#FFD700',platinum:'#E5E4E2'};
-  tb.innerHTML=allLoyalty.map(m=>{const t=(m.tier||'bronze').toLowerCase();tiers[t]++;return '<tr><td><div class="table-name">'+(m.name||m.email)+'</div></td><td style="font-weight:700;color:var(--amber);">'+(m.points||0)+'</td><td><span style="padding:4px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;background:'+(tc[t]||'rgba(255,255,255,0.1)')+';color:'+(t==='gold'||t==='platinum'?'#000':'#fff')+';">'+(m.tier||'Bronze')+'</span></td><td style="font-weight:600;">'+(m.total_spent||0).toLocaleString()+' DZD</td><td><button class="action-btn" onclick="editLoyalty('+m.id+')">✏️</button></td></tr>';}).join('');
+  tb.innerHTML=allLoyalty.map(m=>{const t=(m.tier||'bronze').toLowerCase();tiers[t]++;return '<tr><td><div class="table-name">'+(m.name||m.email)+'</div></td><td style="font-weight:700;color:var(--amber);">'+(m.points||0)+'</td><td><span style="padding:4px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;background:'+(tc[t]||'rgba(255,255,255,0.1)')+';color:'+(t==='gold'||t==='platinum'?'#000':'#fff')+';">'+(m.tier||'Bronze')+'</span></td><td style="font-weight:600;">'+(m.total_spent||0).toLocaleString()+' DZD</td><td><button class="action-btn" onclick="editLoyalty('+m.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button></td></tr>';}).join('');
   document.getElementById('tier-bronze').textContent=tiers.bronze;document.getElementById('tier-silver').textContent=tiers.silver;document.getElementById('tier-gold').textContent=tiers.gold;document.getElementById('tier-platinum').textContent=tiers.platinum;
 }
 
-function addLoyaltyPoints(){if(!isOwner){showToast('🔒','Enter PIN');return;}document.getElementById('l-email').value='';document.getElementById('l-points').value='100';document.getElementById('l-reason').value='purchase';document.getElementById('loyaltyModal').classList.add('show');}
+function addLoyaltyPoints(){if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}document.getElementById('l-email').value='';document.getElementById('l-points').value='100';document.getElementById('l-reason').value='purchase';document.getElementById('loyaltyModal').classList.add('show');}
 
-function saveLoyalty(){
-  const e=document.getElementById('l-email').value.trim(),p=parseInt(document.getElementById('l-points').value)||0;
-  if(!e||p<=0){showToast('⚠','Valid email and points');return;}
-  let m=allLoyalty.find(x=>x.email===e);
-  if(m)m.points+=p;else{m={id:Date.now(),email:e,name:e.split('@')[0],points:p,total_spent:0,tier:p>=500?'Platinum':p>=300?'Gold':p>=150?'Silver':'Bronze'};allLoyalty.push(m);}
-  m.tier=m.points>=500?'Platinum':m.points>=300?'Gold':m.points>=150?'Silver':'Bronze';
-  localStorage.setItem('flyra_loyalty',JSON.stringify(allLoyalty));closeModal('loyalty');renderLoyalty();showToast('✓',p+' pts → '+m.name);
+async function saveLoyalty(){
+  if(!isOwner){showToast('','Owner only');return;}
+  const e=document.getElementById('l-email').value.trim();
+  const p=parseInt(document.getElementById('l-points').value);
+  if(!e||p<=0){showToast('','Enter email and points');return;}
+  await fetch(API+'/loyalty',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({points:p})}).catch(()=>{});
+  closeModal('loyalty');showToast('✓','Points added');
 }
 
 function editLoyalty(id){const m=allLoyalty.find(x=>x.id===id);if(!m)return;document.getElementById('l-email').value=m.email;document.getElementById('l-points').value='50';document.getElementById('l-reason').value='manual';document.getElementById('loyaltyModal').classList.add('show');}
 
 async function exportOrders(){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
-  if(!allOrders.length){showToast('⚠','No orders');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
+  if(!allOrders.length){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','No orders');return;}
   const h=['ID','Customer','Email','Phone','Wilaya','Items','Total','Payment','Status','Tracking','Date'];
   const r=allOrders.map(o=>[o.id,(o.first_name||'')+' '+(o.last_name||''),o.email||'',o.phone||'',o.wilaya||'',JSON.parse(o.items||'[]').map(i=>i.name||i).join('; '),(o.total||0),o.payment_method||'cod',o.status||'pending',o.tracking_code||'',(o.created_at||'').slice(0,10)]);
   const csv=[h.join(','),...r.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))].join('\n');
   const b=new Blob([csv],{type:'text/csv'}),a=document.createElement('a');
-  a.href=URL.createObjectURL(b);a.download='flyra_orders_'+new Date().toISOString().slice(0,10)+'.csv';a.click();showToast('📥','Exported');
+  a.href=URL.createObjectURL(b);a.download='flyra_orders_'+new Date().toISOString().slice(0,10)+'.csv';a.click();showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>','Exported');
 }
 
-async function refreshDashboard(){if(!isOwner){showToast('🔒','Enter PIN');return;}initLocalData();await loadDashboard();showToast('✓','Refreshed');}
+async function refreshDashboard(){if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}await initLocalData();await loadDashboard();loadAnalytics();showToast('✓','Refreshed');}
 
-function globalSearch(q){if(!q)return;const pd=allProducts.filter(p=>(p.name||'').toLowerCase().includes(q.toLowerCase())),od=allOrders.filter(o=>String(o.id).includes(q)||(o.tracking_code||'').includes(q));showToast('🔍',pd.length+' products, '+od.length+' orders');}
+function globalSearch(q){if(!q)return;const pd=allProducts.filter(p=>(p.name||'').toLowerCase().includes(q.toLowerCase())),od=allOrders.filter(o=>String(o.id).includes(q)||(o.tracking_code||'').includes(q));showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',pd.length+' products, '+od.length+' orders');}
 
 function toggleMobileSidebar(){document.getElementById('sidebar').classList.toggle('open');}
 
@@ -1786,7 +1884,7 @@ function syncCollectionImagesToAPI(){
 function uploadColImg(key,input){
   const file=input.files[0];
   if(!file||!file.type.startsWith('image/'))return;
-  if(file.size>2*1024*1024){showToast('⚠','Max 2MB');return;}
+  if(file.size>2*1024*1024){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Max 2MB');return;}
   const reader=new FileReader();
   reader.onload=function(e){
     localStorage.setItem('flyra_col_img_'+key,e.target.result);
@@ -1801,11 +1899,11 @@ function removeColImg(key){
   localStorage.removeItem('flyra_col_img_'+key);
   syncCollectionImagesToAPI();
   renderCollectionUploads();
-  showToast('🗑️','Image removed');
+  showToast('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Image removed');
 }
 
 function loadWANumber(){
-  const num=localStorage.getItem('flyra_wa')||'213555123456';
+  const num=localStorage.getItem('flyra_wa')||'';
   const el=document.getElementById('waNumber');
   if(el){el.value=num;}
 }
@@ -1830,7 +1928,7 @@ function syncSettingsToAPI(data){
 
 function saveWANumber(){
   const num=document.getElementById('waNumber').value.trim().replace(/[^0-9]/g,'');
-  if(num.length<8){showToast('⚠','Enter a valid number');return;}
+  if(num.length<8){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Enter a valid number');return;}
   localStorage.setItem('flyra_wa',num);
   syncSettingsToAPI({wa_number:num});
   document.getElementById('waStatus').style.display='inline';
@@ -1847,48 +1945,66 @@ function showToast(icon,text){
 }
 
 /* ─── Coupon Functions ───── */
-function renderCoupons(){
-  const coupons=JSON.parse(localStorage.getItem('flyra_coupons')||'[]');
+async function renderCoupons(){
   const tb=document.getElementById('couponsTable');
-  if(!coupons.length){tb.innerHTML='<tr><td colspan="9" class="loading">No coupons</td></tr>';return;}
-  tb.innerHTML=coupons.map(c=>'<tr><td class="coupon-code">'+c.code+'</td><td style="font-weight:700;color:var(--amber);">'+(c.type==='percent'?c.discount+'%':c.discount.toLocaleString()+' DZD')+'</td><td style="text-transform:uppercase;font-size:0.7rem;color:var(--sky);">'+c.type+'</td><td>'+(c.min_order?c.min_order.toLocaleString()+' DZD':'-')+'</td><td>'+c.max_uses+'</td><td>'+c.used+'</td><td style="font-size:0.7rem;color:var(--sub);">'+(c.expires||'-')+'</td><td><button class="coupon-toggle '+(c.active?'active':'')+'" onclick="toggleCouponStatus('+c.id+')"></button></td><td><div class="table-actions-cell"><button class="action-btn" onclick="showCouponModal('+c.id+')">✏️</button><button class="action-btn danger" onclick="deleteCoupon('+c.id+')">🗑️</button></div></td></tr>').join('');
+  try{
+    const r=await fetch(API+'/coupons');
+    if(!r.ok)throw new Error();
+    const coupons=await r.json();
+    if(!coupons.length){tb.innerHTML='<tr><td colspan="9" class="loading">No coupons</td></tr>';return;}
+    tb.innerHTML=coupons.map(c=>'<tr><td class="coupon-code">'+c.code+'</td><td style="font-weight:700;color:var(--amber);">'+(c.type==='percent'?c.discount+'%':c.discount.toLocaleString()+' DZD')+'</td><td style="text-transform:uppercase;font-size:0.7rem;color:var(--sky);">'+c.type+'</td><td>'+(c.min_order?c.min_order.toLocaleString()+' DZD':'-')+'</td><td>'+(c.max_uses||'-')+'</td><td>'+(c.used||0)+'</td><td style="font-size:0.7rem;color:var(--sub);">'+(c.expires?c.expires.slice(0,10):'-')+'</td><td><button class="coupon-toggle '+(c.active?'active':'')+'" onclick="toggleCouponStatus('+c.id+','+(c.active?'true':'false')+')"></button></td><td><div class="table-actions-cell"><button class="action-btn" onclick="showCouponModal('+c.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="action-btn danger" onclick="deleteCoupon('+c.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></td></tr>').join('');
+  }catch(e){
+    tb.innerHTML='<tr><td colspan="9" class="loading">Failed to load coupons</td></tr>';
+  }
 }
 let editingCouponId=null;
-function showCouponModal(id){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+async function showCouponModal(id){
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   editingCouponId=id||null;
   document.getElementById('couponModalTitle').textContent=id?'Edit Coupon':'Add Coupon';
   ['coup-code','coup-discount','coup-min','coup-max','coup-expires'].forEach(i=>document.getElementById(i).value='');
   document.getElementById('coup-type').value='percent';
   if(id){
-    const c=JSON.parse(localStorage.getItem('flyra_coupons')||'[]').find(x=>x.id===id);
-    if(c){document.getElementById('coup-code').value=c.code;document.getElementById('coup-discount').value=c.discount;document.getElementById('coup-type').value=c.type;document.getElementById('coup-min').value=c.min_order;document.getElementById('coup-max').value=c.max_uses;document.getElementById('coup-expires').value=c.expires||'';}
+    try{
+      const r=await fetch(API+'/coupons');
+      if(r.ok){
+        const coupons=await r.json();
+        const c=coupons.find(x=>x.id===id);
+        if(c){document.getElementById('coup-code').value=c.code;document.getElementById('coup-discount').value=c.discount;document.getElementById('coup-type').value=c.type;document.getElementById('coup-min').value=c.min_order;document.getElementById('coup-max').value=c.max_uses;document.getElementById('coup-expires').value=c.expires?c.expires.slice(0,10):'';}
+      }
+    }catch(e){}
   }
   document.getElementById('couponModal').classList.add('show');
 }
-function saveCoupon(){
+async function saveCoupon(){
   const code=document.getElementById('coup-code').value.trim().toUpperCase(),discount=parseInt(document.getElementById('coup-discount').value);
-  if(!code||!discount||discount<=0){showToast('⚠','Valid code and discount required');return;}
-  const d={id:editingCouponId||Date.now(),code,discount,type:document.getElementById('coup-type').value,min_order:parseInt(document.getElementById('coup-min').value)||0,max_uses:parseInt(document.getElementById('coup-max').value)||100,used:0,expires:document.getElementById('coup-expires').value||'',active:true};
-  let coupons=JSON.parse(localStorage.getItem('flyra_coupons')||'[]');
-  if(editingCouponId){const idx=coupons.findIndex(x=>x.id===editingCouponId);if(idx>=0){d.used=coupons[idx].used;d.active=coupons[idx].active;coupons[idx]=d;}}else coupons.push(d);
-  localStorage.setItem('flyra_coupons',JSON.stringify(coupons));
-  closeModal('coupon');renderCoupons();showToast('✓',editingCouponId?'Updated':'Added');
+  if(!code||!discount||discount<=0){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Valid code and discount required');return;}
+  const isEdit=!!editingCouponId;
+  const d={code,discount,type:document.getElementById('coup-type').value,min_order:parseInt(document.getElementById('coup-min').value)||0,max_uses:parseInt(document.getElementById('coup-max').value)||0,expires:document.getElementById('coup-expires').value||'',active:true};
+  try{
+    if(isEdit){
+      await fetch(API+'/coupons/'+editingCouponId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+    }else{
+      await fetch(API+'/coupons',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+    }
+    closeModal('coupon');editingCouponId=null;await renderCoupons();showToast('✓',isEdit?'Updated':'Added');
+  }catch(e){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Failed to save coupon');}
 }
-function deleteCoupon(id){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+async function deleteCoupon(id){
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   if(!confirm('Delete coupon?'))return;
-  let coupons=JSON.parse(localStorage.getItem('flyra_coupons')||'[]');
-  coupons=coupons.filter(c=>c.id!==id);
-  localStorage.setItem('flyra_coupons',JSON.stringify(coupons));
-  renderCoupons();showToast('🗑️','Coupon deleted');
+  try{
+    await fetch(API+'/coupons/'+id,{method:'DELETE'});
+    await renderCoupons();showToast('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Coupon deleted');
+  }catch(e){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Failed to delete');}
 }
-function toggleCouponStatus(id){
-  let coupons=JSON.parse(localStorage.getItem('flyra_coupons')||'[]');
-  const c=coupons.find(x=>x.id===id);if(!c)return;
-  c.active=!c.active;
-  localStorage.setItem('flyra_coupons',JSON.stringify(coupons));
-  renderCoupons();
+async function toggleCouponStatus(id,currentActive){
+  try{
+    const active=currentActive==='true'?false:true;
+    const r=await fetch(API+'/coupons/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active})});
+    if(!r.ok)throw new Error();
+    await renderCoupons();
+  }catch(e){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','Failed to toggle status');}
 }
 
 /* ─── CSV Import ───── */
@@ -1897,10 +2013,10 @@ function importProductsCSV(input){
   const reader=new FileReader();
   reader.onload=function(e){
     const lines=e.target.result.split('\n').filter(l=>l.trim());
-    if(lines.length<2){showToast('⚠','CSV must have header + data');return;}
+    if(lines.length<2){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','CSV must have header + data');return;}
     const h=lines[0].split(',').map(s=>s.trim().toLowerCase());
     const nameIdx=h.indexOf('name'),ownerIdx=h.indexOf('owner'),colIdx=h.indexOf('collection'),priceIdx=h.indexOf('price'),oldIdx=h.indexOf('old_price'),stockIdx=h.indexOf('stock'),sizeIdx=h.indexOf('sizes'),descIdx=h.indexOf('description'),tagIdx=h.indexOf('tag'),statusIdx=h.indexOf('status');
-    if(nameIdx<0||priceIdx<0){showToast('⚠','CSV must have name,price columns');return;}
+    if(nameIdx<0||priceIdx<0){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','CSV must have name,price columns');return;}
     let count=0;
     for(let i=1;i<lines.length;i++){
       const cols=lines[i].split(',').map(s=>s.trim());
@@ -1910,7 +2026,7 @@ function importProductsCSV(input){
       allProducts.push(p);count++;
     }
     syncProductsToCache();renderProductsTable(allProducts);
-    showToast('📥',count+' products imported');
+    showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',count+' products imported');
     input.value='';
   };
   reader.readAsText(file);
@@ -1918,7 +2034,7 @@ function importProductsCSV(input){
 
 /* ─── Print Order Label ───── */
 function printOrderLabel(){
-  const o=allOrders.find(x=>x.id===currentOrderId);if(!o){showToast('⚠','No order selected');return;}
+  const o=allOrders.find(x=>x.id===currentOrderId);if(!o){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','No order selected');return;}
   const w=window.open('','_blank','width=400,height=600');
   const items=JSON.parse(o.items||'[]');
   w.document.write(`<!DOCTYPE html><html><head><style>body{font-family:monospace;padding:20px;color:#000;}h2{text-align:center;margin-bottom:20px;}.label{border:2px dashed #333;padding:20px;}.row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ccc;font-size:13px;}.total{font-size:16px;font-weight:bold;text-align:right;margin-top:10px;}.barcode{text-align:center;margin-top:20px;font-size:28px;letter-spacing:6px;font-weight:bold;color:#333;}.track{text-align:center;font-size:18px;letter-spacing:4px;margin:10px 0;}</style></head><body><div class="label"><h2>FLYRA</h2><p style="text-align:center;font-size:12px;margin-bottom:16px;">Order #`+o.id+`</p><div class="row"><span>Customer</span><span>`+(o.first_name||'')+' '+(o.last_name||'')+`</span></div><div class="row"><span>Address</span><span>`+(o.address||'')+', '+(o.wilaya||'')+`</span></div><div class="row"><span>Phone</span><span>`+(o.phone||'-')+`</span></div><hr>`+
@@ -1946,25 +2062,25 @@ function toggleSound(){
   soundEnabled=!soundEnabled;
   localStorage.setItem('flyra_sound',soundEnabled?'1':'0');
   document.getElementById('soundToggleBtn').classList.toggle('active',soundEnabled);
-  showToast(soundEnabled?'🔊':'🔇',soundEnabled?'Sounds on':'Sounds off');
+  showToast(soundEnabled?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>',soundEnabled?'Sounds on':'Sounds off');
 }
 function loadSoundPref(){soundEnabled=localStorage.getItem('flyra_sound')!=='0';const b=document.getElementById('soundToggleBtn');if(b)b.classList.toggle('active',soundEnabled);}
 
 /* ─── Theme Presets ───── */
 const THEMES=['midnight','gold','ocean','cream'];
-const THEME_ICONS={midnight:'🌙',gold:'🌅',ocean:'🌊',cream:'☀️'};
+const THEME_ICONS={midnight:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>',gold:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 00-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><path d="M23 22H1"/></svg>',ocean:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c3.33-4 6.67-4 10 0s6.67 4 10 0"/><path d="M2 17c3.33-4 6.67-4 10 0s6.67 4 10 0"/><path d="M2 7c3.33-4 6.67-4 10 0s6.67 4 10 0"/></svg>',cream:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'};
 const THEME_NAMES={midnight:'Midnight',gold:'Gold',ocean:'Ocean',cream:'Cream'};
 function applyTheme(){
   const t=localStorage.getItem('flyra_admin_theme')||'midnight';
   document.body.classList.remove('theme-light','theme-gold','theme-ocean','theme-cream');
-  if(t==='midnight'){document.getElementById('themeBtn').textContent=THEME_ICONS.midnight;return;}
+  if(t==='midnight'){document.getElementById('themeBtn').innerHTML=THEME_ICONS.midnight;return;}
   document.body.classList.add('theme-'+t);
-  document.getElementById('themeBtn').textContent=THEME_ICONS[t]||'🌙';
+  document.getElementById('themeBtn').innerHTML=THEME_ICONS[t]||'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>';
 }
 function setTheme(name){
   localStorage.setItem('flyra_admin_theme',name);
   applyTheme();
-  showToast('🎨',THEME_NAMES[name]||name);
+  showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',THEME_NAMES[name]||name);
 }
 function cycleTheme(){
   const cur=localStorage.getItem('flyra_admin_theme')||'midnight';
@@ -2003,13 +2119,13 @@ function updateProductBulkBar(){
 }
 function bulkClearProducts(){selectedProducts.clear();updateProductBulkBar();renderProductsTable(allProducts);}
 async function bulkDeleteProducts(){
-  if(!selectedProducts.size){showToast('⚠','No products selected');return;}
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!selectedProducts.size){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','No products selected');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   if(!confirm('Delete '+selectedProducts.size+' products?'))return;
   const ids=Array.from(selectedProducts);
   await Promise.allSettled(ids.map(id=>fetch(API+'/products/'+id,{method:'DELETE'})));
   ids.forEach(id=>{allProducts=allProducts.filter(p=>p.id!==id);});
-  selectedProducts.clear();syncProductsToCache();renderProductsTable(allProducts);updateProductBulkBar();showToast('🗑️','Deleted '+ids.length+' products');
+  selectedProducts.clear();syncProductsToCache();renderProductsTable(allProducts);updateProductBulkBar();showToast('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>','Deleted '+ids.length+' products');
 }
 
 /* ─── Product Colors ───── */
@@ -2023,19 +2139,19 @@ function updateColorPreview(){
 
 /* ─── Command Palette ───── */
 const COMMANDS=[
-  {id:'dashboard',icon:'📊',label:'Go to Dashboard',action:"showSection('dashboard')",shortcut:'⌘1'},
-  {id:'orders',icon:'📦',label:'Go to Orders',action:"showSection('orders')",shortcut:'⌘2'},
-  {id:'products',icon:'👕',label:'Go to Products',action:"showSection('products')",shortcut:'⌘3'},
-  {id:'customers',icon:'👥',label:'Go to Customers',action:"showSection('customers')",shortcut:'⌘4'},
-  {id:'drops',icon:'🚀',label:'Go to Drops',action:"showSection('drops')",shortcut:'⌘5'},
-  {id:'analytics',icon:'📈',label:'Go to Analytics',action:"showSection('analytics')",shortcut:'⌘6'},
-  {id:'reviews',icon:'⭐',label:'Go to Reviews',action:"showSection('reviews')",shortcut:'⌘7'},
-  {id:'loyalty',icon:'🏆',label:'Go to Loyalty',action:"showSection('loyalty')",shortcut:'⌘8'},
-  {id:'settings',icon:'⚙️',label:'Go to Settings',action:"showSection('settings')",shortcut:'⌘9'},
-  {id:'newProduct',icon:'➕',label:'New Product',action:"showModal('product')",shortcut:'N'},
-  {id:'newCustomer',icon:'👤',label:'New Customer',action:"showModal('customer')",shortcut:''},
-  {id:'scheduleDrop',icon:'🚀',label:'Schedule Drop',action:"showModal('drop')",shortcut:''},
-  {id:'exportOrders',icon:'📥',label:'Export Orders',action:'exportOrders()',shortcut:''},
+  {id:'dashboard',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>',label:'Go to Dashboard',action:"showSection('dashboard')",shortcut:'⌘1'},
+  {id:'orders',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',label:'Go to Orders',action:"showSection('orders')",shortcut:'⌘2'},
+  {id:'products',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>',label:'Go to Products',action:"showSection('products')",shortcut:'⌘3'},
+  {id:'customers',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',label:'Go to Customers',action:"showSection('customers')",shortcut:'⌘4'},
+  {id:'drops',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s-4 4-4 9c0 5 4 9 4 9s4-4 4-9c0-5-4-9-4-9z"/><circle cx="12" cy="11" r="3"/></svg>',label:'Go to Drops',action:"showSection('drops')",shortcut:'⌘5'},
+  {id:'analytics',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',label:'Go to Analytics',action:"showSection('analytics')",shortcut:'⌘6'},
+  {id:'reviews',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',label:'Go to Reviews',action:"showSection('reviews')",shortcut:'⌘7'},
+  {id:'loyalty',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg>',label:'Go to Loyalty',action:"showSection('loyalty')",shortcut:'⌘8'},
+  {id:'settings',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',label:'Go to Settings',action:"showSection('settings')",shortcut:'⌘9'},
+  {id:'newProduct',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',label:'New Product',action:"showModal('product')",shortcut:'N'},
+  {id:'newCustomer',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',label:'New Customer',action:"showModal('customer')",shortcut:''},
+  {id:'scheduleDrop',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s-4 4-4 9c0 5 4 9 4 9s4-4 4-9c0-5-4-9-4-9z"/><circle cx="12" cy="11" r="3"/></svg>',label:'Schedule Drop',action:"showModal('drop')",shortcut:''},
+  {id:'exportOrders',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',label:'Export Orders',action:'exportOrders()',shortcut:''},
 ];
 let cpFiltered=COMMANDS,cpIdx=0;
 function showCommandPalette(){
@@ -2139,10 +2255,10 @@ function drawForecastChart(canvasId,data,labels){
 /* ─── Order Timeline ───── */
 function renderOrderTimeline(status){
   const steps=[
-    {key:'placed',label:'Placed',icon:'📋'},
-    {key:'processing',label:'Processing',icon:'⚙️'},
-    {key:'shipped',label:'Shipped',icon:'📦'},
-    {key:'delivered',label:'Delivered',icon:'✅'},
+    {key:'placed',label:'Placed',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>'},
+    {key:'processing',label:'Processing',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>'},
+    {key:'shipped',label:'Shipped',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>'},
+    {key:'delivered',label:'Delivered',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'},
   ];
   const statusMap={pending:'placed',shipped:'shipped',delivered:'delivered',cancelled:'placed'};
   const current=statusMap[status]||'placed';
@@ -2235,8 +2351,8 @@ function renderEnhancedActivityFeed(orders){
   if(!recent.length){feed.innerHTML='<div style="text-align:center;padding:20px;color:var(--sub);font-size:0.78rem;">No activity</div>';return;}
   feed.innerHTML='<div class="activity-timeline">'+recent.map(o=>{
     const dotColor={pending:'amber',shipped:'blue',delivered:'green',cancelled:'red'};
-    const icons={pending:'🆕',shipped:'📦',delivered:'✅',cancelled:'❌'};
-    return '<div class="activity-tl-item"><span class="activity-tl-dot '+(dotColor[o.status]||'amber')+'"></span><div class="activity-tl-text">'+(icons[o.status]||'📋')+' Order <strong>#'+o.id+'</strong> — '+(o.status||'pending')+'</div><div class="activity-tl-time">'+(o.created_at||'').slice(0,10)+' · '+(o.total||0).toLocaleString()+' DZD</div></div>';
+    const icons={pending:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',shipped:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',delivered:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',cancelled:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'};
+    return '<div class="activity-tl-item"><span class="activity-tl-dot '+(dotColor[o.status]||'amber')+'"></span><div class="activity-tl-text">'+(icons[o.status]||'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>')+' Order <strong>#'+o.id+'</strong> — '+(o.status||'pending')+'</div><div class="activity-tl-time">'+(o.created_at||'').slice(0,10)+' · '+(o.total||0).toLocaleString()+' DZD</div></div>';
   }).join('')+'</div>';
 }
 
@@ -2252,11 +2368,11 @@ renderProductsTable=function(products){
   if(!r.total){tb.innerHTML='<tr><td colspan="11" class="loading">No products</td></tr>';return;}
   tb.innerHTML=r.items.map(p=>{
     const sizes=typeof p.sizes==='string'?p.sizes:(p.sizes||[]).join(', ');
-    const img=p.image&&p.image.startsWith('data:')?'<img src="'+p.image+'" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--border);">':'<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--sub);">👕</div>';
+    const img=p.image&&p.image.startsWith('data:')?'<img src="'+p.image+'" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--border);">':'<div style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--sub);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg></div>';
     const colors=typeof p.colors==='string'?p.colors.split(',').map(s=>s.trim()).filter(s=>s):(p.colors||[]);
     const colorDots=colors.length?'<br><span>'+colors.map(c=>'<span class="color-dot" style="background:'+c+';"></span>').join('')+'</span>':'';
     const ck=selectedProducts.has(p.id)?'checked':'';
-    return '<tr><td><input type="checkbox" class="select-check" '+ck+' onchange="toggleSelectProduct('+p.id+',this.checked)"></td><td>'+img+'</td><td><div class="table-name">'+(p.owner||'FLYRA')+'</div></td><td><div class="table-name">'+(p.name||'')+colorDots+'</div></td><td style="text-transform:uppercase;font-size:0.7rem;color:var(--sky);">'+(p.collection||'')+'</td><td style="font-weight:700;color:var(--amber);">'+(p.price||0).toLocaleString()+'</td><td style="text-decoration:line-through;color:var(--sub);font-size:0.72rem;">'+(p.old_price?(p.old_price).toLocaleString():'-')+'</td><td style="'+(p.stock<=5?'color:var(--red);font-weight:700;':'')+'">'+(p.stock||0)+'</td><td><span class="status-badge '+(p.status||'active')+'">'+(p.status||'active').toUpperCase()+'</span></td><td>'+(p.tag?'<span style="padding:2px 8px;background:rgba(196,155,61,0.15);border-radius:6px;font-size:0.62rem;font-weight:700;color:var(--amber);">'+p.tag+'</span>':'-')+'</td><td><div class="table-actions-cell"><button class="action-btn" onclick="editProduct('+p.id+')">✏️</button><button class="action-btn danger" onclick="deleteProduct('+p.id+')">🗑️</button></div></td></tr>';
+    return '<tr><td><input type="checkbox" class="select-check" '+ck+' onchange="toggleSelectProduct('+p.id+',this.checked)"></td><td>'+img+'</td><td><div class="table-name">'+(p.owner||'FLYRA')+'</div></td><td><div class="table-name">'+(p.name||'')+colorDots+'</div></td><td style="text-transform:uppercase;font-size:0.7rem;color:var(--sky);">'+(p.collection||'')+'</td><td style="font-weight:700;color:var(--amber);">'+(p.price||0).toLocaleString()+'</td><td style="text-decoration:line-through;color:var(--sub);font-size:0.72rem;">'+(p.old_price?(p.old_price).toLocaleString():'-')+'</td><td style="'+(p.stock<=5?'color:var(--red);font-weight:700;':'')+'">'+(p.stock||0)+'</td><td><span class="status-badge '+(p.status||'active')+'">'+(p.status||'active').toUpperCase()+'</span></td><td>'+(p.tag?'<span style="padding:2px 8px;background:rgba(196,155,61,0.15);border-radius:6px;font-size:0.62rem;font-weight:700;color:var(--amber);">'+p.tag+'</span>':'-')+'</td><td><div class="table-actions-cell"><button class="action-btn" onclick="editProduct('+p.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="action-btn danger" onclick="deleteProduct('+p.id+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button></div></td></tr>';
   }).join('');
   renderPagination('productsPagination','productsCount',r.total,productsPage,r.pages,'goProductsPage');
 };
@@ -2264,11 +2380,11 @@ renderProductsTable=function(products){
 /* ─── WhatsApp Customer Notify ───── */
 function notifyCustomerWA(){
   const o=allOrders.find(x=>x.id===currentOrderId);
-  if(!o||!o.phone){showToast('⚠','No customer phone');return;}
-  const waNum=localStorage.getItem('flyra_wa')||'213555123456';
-  const msg=`🛍️ *FLYRA Order Update*\n\nHi ${o.first_name||''}! Your order #${o.id} is now *${(o.status||'pending').toUpperCase()}*.\nTracking: ${o.tracking_code||'FLYRA-'+o.id}\nTotal: ${(o.total||0).toLocaleString()} DZD\n\nThank you for choosing FLYRA! صعود بلا حدود`;
+  if(!o||!o.phone){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>','No customer phone');return;}
+  const waNum=localStorage.getItem('flyra_wa')||'';
+  const msg=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.8a2 2 0 001.9-1.4L23 6H6"/></svg> *FLYRA Order Update*\n\nHi ${o.first_name||''}! Your order #${o.id} is now *${(o.status||'pending').toUpperCase()}*.\nTracking: ${o.tracking_code||'FLYRA-'+o.id}\nTotal: ${(o.total||0).toLocaleString()} DZD\n\nThank you for choosing FLYRA! صعود بلا حدود`;
   window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
-  showToast('📱','WhatsApp notification opened');
+  showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>','WhatsApp notification opened');
 }
 
 /* ─── Sales Report Export ───── */
@@ -2315,11 +2431,11 @@ td{padding:10px 12px;border-bottom:1px solid #eee;}.footer{margin-top:32px;paddi
 
 /* ─── Full Backup ───── */
 function exportFullBackup(){
-  if(!isOwner){showToast('🔒','Enter PIN');return;}
+  if(!isOwner){showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>','Enter PIN');return;}
   const data={products:allProducts,orders:allOrders,customers:allCustomers,drops:allDrops,reviews:allReviews,loyalty:allLoyalty,coupons:JSON.parse(localStorage.getItem('flyra_coupons')||'[]'),exported_at:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='flyra_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();
-  URL.revokeObjectURL(a.href);showToast('💾','Backup downloaded');
+  URL.revokeObjectURL(a.href);showToast('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>','Backup downloaded');
 }
 
 /* ─── Unique Brand Features ───── */
