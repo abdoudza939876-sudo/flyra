@@ -204,6 +204,30 @@ CREATE TABLE IF NOT EXISTS coupons (
     active INTEGER DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS admin_users (
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    salt TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS admin_sessions (
+    id SERIAL PRIMARY KEY,
+    token TEXT UNIQUE NOT NULL,
+    expires TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS subscribers (
+    id SERIAL PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS audit_log (
+    id SERIAL PRIMARY KEY,
+    actor TEXT, action TEXT,
+    entity TEXT, entity_id TEXT, detail TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 """
 
 def migrate_schema():
@@ -212,13 +236,13 @@ def migrate_schema():
         cur = db.cursor()
         cur.execute(SCHEMA_SQL)
         db.commit()
-        # Add missing columns
-        for col, dtype in [('email', 'TEXT DEFAULT ""'), ('discount', 'INTEGER DEFAULT 0'),
-                           ('coupon_code', 'TEXT DEFAULT ""'), ('colors', 'TEXT'),
-                           ('icon', 'TEXT')]:
+        # Add missing columns (fixed table-name detection)
+        for table, col, dtype in [
+            ('orders', 'email', 'TEXT DEFAULT \'\''), ('orders', 'discount', 'INTEGER DEFAULT 0'),
+            ('orders', 'coupon_code', 'TEXT DEFAULT \'\''), ('products', 'colors', 'TEXT'),
+            ('products', 'icon', 'TEXT')]:
             try:
-                cur.execute(f'ALTER TABLE orders ADD COLUMN {col} {dtype}' if 'orders' in col else
-                           f'ALTER TABLE products ADD COLUMN {col} {dtype}')
+                cur.execute(f'ALTER TABLE {table} ADD COLUMN {col} {dtype}')
                 db.commit()
             except:
                 pass
@@ -251,8 +275,11 @@ def migrate_schema():
 
 def init_db_sqlite():
     db = sqlite3.connect(DB_PATH, timeout=20)
-    db.executescript(SCHEMA_SQL.replace('SERIAL', 'INTEGER PRIMARY KEY AUTOINCREMENT')
-                     .replace('TIMESTAMP', 'TEXT').replace('EXTRACT(EPOCH FROM ', ''))
+    db.executescript(SCHEMA_SQL.replace('SERIAL PRIMARY KEY', 'INTEGER PRIMARY KEY AUTOINCREMENT')
+                     .replace('CURRENT_TIMESTAMP', '\x00CT\x00')
+                     .replace('TIMESTAMP', 'TEXT')
+                     .replace('\x00CT\x00', 'CURRENT_TIMESTAMP')
+                     .replace('EXTRACT(EPOCH FROM ', ''))
     if db.execute('SELECT COUNT(*) FROM products').fetchone()[0] == 0:
         seed_data_sqlite(db)
     db.commit()
@@ -288,7 +315,20 @@ def seed_data_sqlite(db):
     db.executemany('INSERT INTO stats (date,views,orders,revenue) VALUES (?,?,?,?)', stats)
 
 # ─── Auth ────────────────────────────────────────────────────────
-def hash_pw(pw): return hashlib.sha256(pw.encode()).hexdigest()
+def hash_pw(pw, salt=None):
+    salt = salt or secrets.token_hex(8)
+    digest = hashlib.pbkdf2_hmac('sha256', pw.encode(), salt.encode(), 100_000).hex()
+    return f'pbkdf2${salt}${digest}'
+
+def verify_pw(pw, stored):
+    if not stored: return False
+    if stored.startswith('pbkdf2$'):
+        try:
+            _, salt, digest = stored.split('$')
+            return secrets.compare_digest(hash_pw(pw, salt).split('$')[2], digest)
+        except: return False
+    return secrets.compare_digest(hashlib.sha256(pw.encode()).hexdigest(), stored)
+
 def make_token(): return secrets.token_hex(32)
 
 def get_user_id(req):
@@ -300,6 +340,41 @@ def get_user_id(req):
 
 def get_session_id(req):
     return req.headers.get('X-Session', request.cookies.get('flyra_session', request.remote_addr or 'anon'))
+
+# ─── Admin Auth ─────────────────────────────────────────────────
+ADMIN_PASSWORD = os.environ.get('FLYRA_ADMIN_PASSWORD', '')
+ADMIN_USERNAME = os.environ.get('FLYRA_ADMIN_USER', 'owner')
+
+def ensure_admin_user():
+    if _one('SELECT id FROM admin_users LIMIT 1'): return
+    if not ADMIN_PASSWORD:
+        admin_pw = secrets.token_urlsafe(10)
+        print(f'\n[admin] FLYRA_ADMIN_PASSWORD not set — generated: {admin_pw}')
+        print(f'[admin] Login at /admin with user "{ADMIN_USERNAME}"\n')
+    else:
+        admin_pw = ADMIN_PASSWORD
+    salt = secrets.token_hex(8)
+    _q('INSERT INTO admin_users (username, password_hash, salt) VALUES (?,?,?)',
+       (ADMIN_USERNAME, hash_pw(admin_pw, salt).split('$')[2], salt))
+
+def log_audit(action, entity='', entity_id='', detail='', actor='admin'):
+    try:
+        _q('INSERT INTO audit_log (actor, action, entity, entity_id, detail) VALUES (?,?,?,?,?)',
+           (actor, action, entity, str(entity_id), str(detail)[:300]))
+    except: pass
+
+def is_admin():
+    token = request.cookies.get('flyra_admin') or request.headers.get('X-Admin-Token', '')
+    return bool(token and _one('SELECT id FROM admin_sessions WHERE token=? AND expires>?',
+                               (token, datetime.now().isoformat())))
+
+def require_admin(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not is_admin():
+            return err('Admin auth required', 401)
+        return f(*args, **kwargs)
+    return wrapper
 
 # ─── Email ───────────────────────────────────────────────────────
 SENDGRID_KEY = os.environ.get('SENDGRID_API_KEY', '')
@@ -424,6 +499,7 @@ def api_products():
             'pages': max(1, (total + per_page - 1) // per_page)
         })
 
+    if not is_admin(): return err('Admin auth required', 401)
     data = request.get_json()
     if not data or not data.get('name'):
         return err('Product name is required')
@@ -432,6 +508,7 @@ def api_products():
         data.get('old_price'), data.get('tag'), data.get('sizes','S,M,L,XL'),
         data.get('stock',0), data.get('status','active'), data.get('desc',''),
         data.get('image',''), data.get('featured',0)))
+    log_audit('create', 'product', _last_id(), data['name'])
     return ok({'id': _last_id()})
 
 @app.route('/api/products/<int:pid>', methods=['GET', 'PUT', 'DELETE'])
@@ -439,6 +516,7 @@ def api_product(pid):
     if request.method == 'GET':
         row = _one('SELECT * FROM products WHERE id=?', (pid,))
         return jsonify(dict(row)) if row else ('', 404)
+    if not is_admin(): return err('Admin auth required', 401)
     if request.method == 'PUT':
         data = request.get_json()
         if not data: return err('No data')
@@ -446,22 +524,26 @@ def api_product(pid):
         if not allowed: return err('No valid fields')
         sets = ', '.join([f'{k}=?' for k in allowed])
         _q(f'UPDATE products SET {sets} WHERE id=?', list(allowed.values()) + [pid])
+        log_audit('update', 'product', pid, ','.join(allowed))
         return ok()
     _q('DELETE FROM products WHERE id=?', (pid,))
+    log_audit('delete', 'product', pid)
     return ok()
 
 @app.route('/api/products/featured', methods=['GET'])
 def api_featured():
-    rows = _q('SELECT * FROM products WHERE featured=1 OR status IN ("NEW","LIMITED","HOT") LIMIT 6')
+    rows = _q('SELECT * FROM products WHERE (featured=1 OR status="limited") AND status!="drop" ORDER BY featured DESC, id DESC LIMIT 6')
     return jsonify([dict(r) for r in rows])
 
 @app.route('/api/products/bulk-delete', methods=['POST'])
+@require_admin
 def api_products_bulk_delete():
     data = request.get_json() or {}
     ids = data.get('ids', [])
     if not ids: return err('No IDs')
     ph = ','.join('?' * len(ids))
     _q(f'DELETE FROM products WHERE id IN ({ph})', ids)
+    log_audit('bulk_delete', 'product', ','.join(map(str, ids)))
     return ok({'deleted': len(ids)})
 
 # ════════════════════════════════════════════════════════════════
@@ -476,6 +558,8 @@ def api_orders():
         page = int(request.args.get('page', 1))
         per_page = int(request.args.get('per_page', 50))
         offset = (page - 1) * per_page
+        if not phone and not is_admin():
+            return err('Admin auth required', 401)
 
         params, where = [], []
         if phone: where.append('phone LIKE ?'); params.append(f'%{phone}%')
@@ -497,11 +581,31 @@ def api_orders():
         return err('Name and phone are required')
 
     items = data.get('items', [])
-    subtotal = data.get('subtotal', 0)
-    shipping = data.get('shipping', 0)
-    discount = data.get('discount', 0)
-    total = data.get('total', subtotal + shipping - discount)
-    coupon_code = data.get('coupon', '') or data.get('coupon_code', '')
+    if not isinstance(items, list) or not items:
+        return err('No items in order')
+    subtotal = 0
+    for item in items:
+        pid = item.get('product_id') or item.get('id')
+        qty = int(item.get('qty') or item.get('quantity', 1))
+        if not pid:
+            return err('Invalid item')
+        prow = _one('SELECT price, stock FROM products WHERE id=?', (pid,))
+        if not prow:
+            return err(f'Product not found: {pid}')
+        if qty < 1:
+            return err('Invalid quantity')
+        subtotal += prow['price'] * qty
+    shipping = max(0, min(int(data.get('shipping', 0) or 0), 5000))
+    coupon_code = (data.get('coupon', '') or data.get('coupon_code', '') or '').upper().strip()
+    discount = 0
+    if coupon_code:
+        crow = _one('SELECT * FROM coupons WHERE code=?', (coupon_code,))
+        if crow and crow['active'] and (not crow['max_uses'] or crow['used'] < crow['max_uses']) and subtotal >= crow['min_order']:
+            d = crow['discount']
+            if crow['type'] == 'percent':
+                d = int(subtotal * d / 100)
+            discount = min(d, subtotal)
+    total = max(0, subtotal + shipping - discount)
     email = data.get('email', '')
 
     tracking = f"FLY{datetime.now().strftime('%Y%m%d')}{secrets.token_hex(3).upper()[:6]}"
@@ -515,7 +619,7 @@ def api_orders():
         data.get('payment_method','cod'), tracking, coupon_code))
     oid = _last_id()
 
-    if coupon_code:
+    if coupon_code and discount > 0:
         _q('UPDATE coupons SET used=used+1 WHERE code=?', (coupon_code,))
 
     for item in items:
@@ -548,12 +652,14 @@ def api_order(oid):
     row = _one('SELECT * FROM orders WHERE id=?', (oid,))
     if not row: return err('Not found', 404)
     if request.method == 'PUT':
+        if not is_admin(): return err('Admin auth required', 401)
         data = request.get_json()
         allowed = ['status','tracking_code','notes','phone','wilaya','address']
         for k in allowed:
             if k in data:
                 _q(f'UPDATE orders SET {k}=?, updated_at=? WHERE id=?',
                    (data[k], datetime.now().isoformat(), oid))
+        log_audit('update', 'order', oid, json.dumps({k: v for k, v in data.items() if k in allowed}))
         return ok()
     d = dict(row)
     try: d['items'] = json.loads(d['items'])
@@ -570,18 +676,21 @@ def api_track(code):
     return jsonify(d)
 
 @app.route('/api/orders/bulk-delete', methods=['POST'])
+@require_admin
 def api_orders_bulk_delete():
     data = request.get_json() or {}
     ids = data.get('ids', [])
     if not ids: return err('No IDs')
     ph = ','.join('?' * len(ids))
     _q(f'DELETE FROM orders WHERE id IN ({ph})', ids)
+    log_audit('bulk_delete', 'order', ','.join(map(str, ids)))
     return ok({'deleted': len(ids)})
 
 # ════════════════════════════════════════════════════════════════
 # COUPONS
 # ════════════════════════════════════════════════════════════════
 @app.route('/api/coupons', methods=['GET', 'POST'])
+@require_admin
 def api_coupons():
     if request.method == 'GET':
         rows = _q('SELECT * FROM coupons ORDER BY created_at DESC')
@@ -597,9 +706,11 @@ def api_coupons():
        (code, int(data['discount']), data.get('type','percent'),
         int(data.get('min_order',0)), int(data.get('max_uses',0)),
         data.get('expires'), data.get('active',1)))
+    log_audit('create', 'coupon', _last_id(), code)
     return ok({'id': _last_id()})
 
 @app.route('/api/coupons/<int:cid>', methods=['PUT', 'DELETE'])
+@require_admin
 def api_coupon(cid):
     row = _one('SELECT * FROM coupons WHERE id=?', (cid,))
     if not row: return err('Not found', 404)
@@ -609,8 +720,10 @@ def api_coupon(cid):
             if k in data:
                 val = data[k].upper().strip() if k == 'code' else data[k]
                 _q(f'UPDATE coupons SET {k}=? WHERE id=?', (val, cid))
+        log_audit('update', 'coupon', cid)
         return ok()
     _q('DELETE FROM coupons WHERE id=?', (cid,))
+    log_audit('delete', 'coupon', cid)
     return ok()
 
 @app.route('/api/coupons/validate', methods=['POST'])
@@ -716,9 +829,11 @@ def api_register():
 @app.route('/api/auth/login', methods=['POST'])
 def api_login():
     data = request.get_json()
-    row = _one('SELECT * FROM users WHERE email=? AND password_hash=?',
-               (data.get('email'), hash_pw(data.get('password',''))))
-    if not row: return err('Invalid credentials', 401)
+    row = _one('SELECT * FROM users WHERE email=?', (data.get('email'),))
+    if not row or not verify_pw(data.get('password',''), row['password_hash']):
+        return err('Invalid credentials', 401)
+    if not row['password_hash'].startswith('pbkdf2$'):
+        _q('UPDATE users SET password_hash=? WHERE id=?', (hash_pw(data.get('password','')), row['id']))
     token = make_token()
     _q('INSERT INTO sessions (user_id, token, expires) VALUES (?,?,?)',
        (row['id'], token, (datetime.now() + timedelta(days=30)).isoformat()))
@@ -736,6 +851,68 @@ def api_profile():
     for k in ['first_name','last_name','phone','wilaya','address']:
         if k in data: _q(f'UPDATE users SET {k}=? WHERE id=?', (data[k], uid))
     return ok()
+
+# ─── Admin Endpoints ────────────────────────────────────────────
+@app.route('/api/admin/login', methods=['POST'])
+def api_admin_login():
+    data = request.get_json() or {}
+    pw = data.get('password') or data.get('pin')
+    username = (data.get('username') or ADMIN_USERNAME or 'owner').strip()
+    if not pw: return err('Password required')
+    row = _one('SELECT * FROM admin_users WHERE username=?', (username,))
+    if not row:
+        log_audit('login_failed', 'admin', username)
+        return err('Invalid credentials', 401)
+    if not secrets.compare_digest(hash_pw(pw, row['salt']).split('$')[2], row['password_hash']):
+        log_audit('login_failed', 'admin', username)
+        return err('Invalid credentials', 401)
+    token = make_token()
+    _q('INSERT INTO admin_sessions (token, expires) VALUES (?,?)',
+       (token, (datetime.now() + timedelta(days=7)).isoformat()))
+    log_audit('login', 'admin', username)
+    resp = ok({'admin': True})
+    resp.set_cookie('flyra_admin', token, httponly=True, samesite='Lax',
+                    secure=request.is_secure, max_age=7 * 86400, path='/')
+    return resp
+
+@app.route('/api/admin/logout', methods=['POST'])
+def api_admin_logout():
+    token = request.cookies.get('flyra_admin') or request.headers.get('X-Admin-Token', '')
+    if token:
+        _q('DELETE FROM admin_sessions WHERE token=?', (token,))
+    resp = ok()
+    resp.delete_cookie('flyra_admin', path='/')
+    return resp
+
+@app.route('/api/admin/check', methods=['GET'])
+def api_admin_check():
+    token = request.cookies.get('flyra_admin') or request.headers.get('X-Admin-Token', '')
+    if token and _one('SELECT id FROM admin_sessions WHERE token=? AND expires>?',
+                      (token, datetime.now().isoformat())):
+        return ok({'admin': True})
+    return ok({'admin': False})
+
+@app.route('/api/admin/password', methods=['POST'])
+@require_admin
+def api_admin_password():
+    data = request.get_json() or {}
+    old, new = data.get('current'), data.get('new')
+    if not old or not new or len(new) < 8:
+        return err('New password must be at least 8 characters')
+    row = _one('SELECT * FROM admin_users WHERE username=?', (ADMIN_USERNAME or 'owner',))
+    if not row or not secrets.compare_digest(hash_pw(old, row['salt']).split('$')[2], row['password_hash']):
+        return err('Current password incorrect', 401)
+    salt = secrets.token_hex(8)
+    _q('UPDATE admin_users SET password_hash=?, salt=? WHERE id=?',
+       (hash_pw(new, salt).split('$')[2], salt, row['id']))
+    log_audit('password_change', 'admin')
+    return ok()
+
+@app.route('/api/audit', methods=['GET'])
+@require_admin
+def api_audit():
+    rows = _q('SELECT * FROM audit_log ORDER BY id DESC LIMIT 100')
+    return jsonify([dict(r) for r in rows])
 
 # ════════════════════════════════════════════════════════════════
 # STATS
@@ -806,12 +983,15 @@ def api_drops():
     if request.method == 'GET':
         rows = _q('SELECT d.*, p.name, p.price, p.icon, p.collection FROM drops d LEFT JOIN products p ON d.product_id=p.id ORDER BY d.launch_date ASC')
         return jsonify([dict(r) for r in rows])
+    if not is_admin(): return err('Admin auth required', 401)
     data = request.get_json()
     _q('INSERT INTO drops (product_id, launch_date) VALUES (?,?)',
        (data.get('product_id'), data.get('launch_date')))
+    log_audit('create', 'drop', _last_id(), data.get('product_id'))
     return ok()
 
 @app.route('/api/drops/<int:did>', methods=['PUT', 'DELETE'])
+@require_admin
 def api_drop(did):
     if request.method == 'PUT':
         data = request.get_json() or {}
@@ -822,8 +1002,10 @@ def api_drop(did):
         if fields:
             vals.append(did)
             _q(f'UPDATE drops SET {",".join(fields)} WHERE id=?', tuple(vals))
+        log_audit('update', 'drop', did)
         return ok()
     _q('DELETE FROM drops WHERE id=?', (did,))
+    log_audit('delete', 'drop', did)
     return ok()
 
 @app.route('/api/notifications', methods=['GET'])
@@ -835,7 +1017,12 @@ def api_notifications():
 
 @app.route('/api/notifications/read', methods=['POST'])
 def api_mark_read():
-    _q("UPDATE notifications SET read=1 WHERE read=0")
+    sid = get_session_id(request)
+    uid = get_user_id(request)
+    if uid:
+        _q('UPDATE notifications SET read=1 WHERE user_id=?', (uid,))
+    else:
+        _q('UPDATE notifications SET read=1 WHERE session_id=?', (sid,))
     return ok()
 
 @app.route('/api/reviews', methods=['GET', 'POST'])
@@ -854,16 +1041,20 @@ def api_reviews():
     return ok()
 
 @app.route('/api/reviews/<int:rid>', methods=['PUT', 'DELETE'])
+@require_admin
 def api_review(rid):
     if request.method == 'PUT':
         data = request.get_json() or {}
         for k in ('rating','comment','status'):
             if k in data: _q(f'UPDATE reviews SET {k}=? WHERE id=?', (data[k], rid))
+        log_audit('update', 'review', rid)
         return ok()
     _q('DELETE FROM reviews WHERE id=?', (rid,))
+    log_audit('delete', 'review', rid)
     return ok()
 
 @app.route('/api/loyalty', methods=['POST'])
+@require_admin
 def api_loyalty_add():
     data = request.get_json() or {}
     uid = get_user_id(request)
@@ -878,6 +1069,7 @@ def api_loyalty_add():
     return ok()
 
 @app.route('/api/customers', methods=['GET'])
+@require_admin
 def api_customers():
     rows = _q('SELECT u.id, u.first_name, u.last_name, u.email, u.phone, u.wilaya, u.address, u.created_at, '
               '(SELECT COUNT(*) FROM orders WHERE user_id=u.id) as order_count, '
@@ -896,6 +1088,33 @@ def api_customers():
 # ════════════════════════════════════════════════════════════════
 # AI CHAT
 # ════════════════════════════════════════════════════════════════
+def _chat_intent(message):
+    low = (message or '').lower()
+    budget = None
+    m = re.search(r'(\d[\d.,]*)\s*(dzd|da|dj|دج|دينار)?', low)
+    if m:
+        try:
+            n = int(float(m.group(1).replace(',', '')))
+            if any(w in low for w in ['under', 'below', 'less than', 'max', 'moins', 'sous', 'أقل', 'تحت', 'بسعر']) or 'دج' in message or 'dzd' in low:
+                budget = n
+        except Exception:
+            pass
+    collections = []
+    for kw, col in [('streetwear', 'street'), ('street', 'street'), ('heritage', 'heritage'),
+                    ('tradition', 'heritage'), ('old money', 'oldmoney'), ('oldmoney', 'oldmoney'),
+                    ('premium', 'oldmoney'), ('luxury', 'oldmoney'), ('gandoura', 'heritage'),
+                    ('blazer', 'oldmoney'), ('sport', 'sport'), ('joggers', 'sport')]:
+        if kw in low and col not in collections:
+            collections.append(col)
+    direct = None
+    for p in _q("SELECT * FROM products WHERE status != 'drop'"):
+        if p['name'] and p['name'].lower() in low:
+            direct = p
+            break
+    occasion = any(w in low for w in ['gift', 'wedding', 'cadeau', 'mariage', 'هدية', 'زواج', 'fiançailles', 'مناسبة'])
+    return budget, collections, direct, occasion
+
+
 @app.route('/api/chat', methods=['POST'])
 @rate_limit(30, 60)
 def api_chat():
@@ -905,34 +1124,60 @@ def api_chat():
     if not message:
         return jsonify({'reply': 'مرحباً! / Bonjour! / Hello! How can I help you?'})
 
-    products = _q("SELECT * FROM products WHERE status != 'drop' ORDER BY featured DESC LIMIT 12")
-    product_list = '\n'.join([f"- {p['name']} | {p['collection']} | {p['price']:,} DZD | Sizes: {p['sizes']} | Stock: {p['stock']} | {p['status']} | {p['tag'] or ''}" for p in products])
+    st = {}
+    for r in _q('SELECT key, value FROM settings'):
+        st[r['key']] = r['value']
+    try:
+        free_threshold = int(float(st.get('free_shipping_threshold', 25000)))
+    except Exception:
+        free_threshold = 25000
+    whatsapp = st.get('whatsapp') or '+213 555 123 456'
+
+    budget, collections, direct, occasion = _chat_intent(message)
+    sql = "SELECT * FROM products WHERE status != 'drop'"
+    args = []
+    if direct:
+        sql += " AND id = ?"
+        args.append(direct['id'])
+    if collections:
+        sql += " AND collection IN (%s)" % ','.join('?' * len(collections))
+        args += collections
+    if budget:
+        sql += " AND price <= ?"
+        args.append(budget)
+    sql += " ORDER BY featured DESC, id DESC LIMIT 12"
+    products = _q(sql, tuple(args))
+    if not products:
+        products = _q("SELECT * FROM products WHERE status != 'drop' ORDER BY featured DESC LIMIT 12")
+
+    product_list = '\n'.join([f"- {p['name']} | {p['collection']} | {p['price']:,} DZD | Sizes: {p['sizes']} | Stock: {p['stock']} | {p['tag'] or ''}" for p in products])
 
     system = f'''You are FLYRA AI Stylist — Algeria's premier fashion AI. FLYRA sells Old Money, Streetwear, Heritage, Sport fashion across 58 wilayas.
 
-Catalog:
+Catalog (only recommend from this list):
 {product_list}
 
 Rules:
 - Speak in the user's language
 - Under 80 words
-- Recommend specific products by name
-- Shipping: 2-5 days, FREE over 25,000 DZD
+- Recommend specific products by name from the catalog above
+- Shipping: 2-5 days, FREE over {free_threshold:,} DZD
 - Payment: COD, CCP, BaridiMob, Edahabia
 - Returns: 7 days, unused with tags
-- Contact: WhatsApp +213 555 123 456'''
+- Contact: WhatsApp {whatsapp}'''
 
     ar_system = f'''أنت المصمم الذكي FLYRA — مساعد الأزياء الأول في الجزائر.
 
-المنتجات:
+المنتجات (لا تقترح غيرها):
 {product_list}
 
 القواعد:
 - أجب بنفس لغة المستخدم
 - أقل من 80 كلمة
-- اذكر أسماء المنتجات
-- الشحن: 2-5 أيام، مجاني فوق 25,000 د.ج
-- الدفع: عند الاستلام، CCP، بريدي موب، الذهبية'''
+- اذكر أسماء المنتجات من القائمة أعلاه فقط
+- الشحن: 2-5 أيام، مجاني فوق {free_threshold:,} د.ج
+- الدفع: عند الاستلام، CCP، بريدي موب، الذهبية
+- التواصل: واتساب {whatsapp}'''
 
     system_prompt = system if lang != 'ar' else ar_system
     reply = None
@@ -942,43 +1187,49 @@ Rules:
         req = urllib.request.Request('http://localhost:11434/api/tags')
         urllib.request.urlopen(req, timeout=2)
         has_ollama = True
-    except: pass
+    except:
+        pass
 
     if has_ollama:
         try:
             import urllib.request
-            payload = {'model': 'llama3.2', 'messages': [{'role':'system','content':system_prompt},
-                       {'role':'user','content':message}], 'stream': False,
+            payload = {'model': 'llama3.2', 'messages': [{'role': 'system', 'content': system_prompt},
+                       {'role': 'user', 'content': message}], 'stream': False,
                        'options': {'temperature': 0.7, 'num_predict': 250}}
             req = urllib.request.Request('http://localhost:11434/api/chat',
                  data=json.dumps(payload).encode(),
-                 headers={'Content-Type':'application/json'}, method='POST')
+                 headers={'Content-Type': 'application/json'}, method='POST')
             with urllib.request.urlopen(req, timeout=30) as resp:
                 reply = json.loads(resp.read())['message']['content']
-        except: pass
+        except:
+            pass
 
+    if not reply and products:
+        picks = [p for p in products if p.get('stock', 0) > 0][:2] or products[:2]
+        names = ', '.join(p['name'] for p in picks)
+        if occasion and lang == 'ar':
+            reply = f'بمناسبة خاصة، أرشّح لك: {names}. التوصيل مجاني فوق {free_threshold:,} دج لجميع الولايات. هل تريد التفاصيل؟'
+        elif occasion:
+            reply = f'For a special occasion, I recommend: {names}. Free shipping over {free_threshold:,} DZD to all 58 wilayas. Want the details?'
+        elif lang == 'ar':
+            reply = f'أرشّح لك من تشكيلتنا: {names}. توصيل 2-5 أيام، ودفع عند الاستلام متوفر. هل تريد التفاصيل أو مقارنة؟'
+        elif lang == 'fr':
+            reply = f'Je vous recommande : {names}. Livraison 2-5 jours, paiement à la livraison possible. Détails ?'
+        else:
+            reply = f'Our top picks for you: {names}. Delivery 2-5 days and cash on delivery available. Want the details?'
     if not reply:
-        fallback = {
-            'en': [
-                "FLYRA's PHANTOM STREET HOODIE is our top pick! Oversized with heavy-weight French terry. Pair with SKY RUNNER SNEAKERS for the ultimate street look.",
-                "For Old Money style, the BLAZER is unmatched — Italian wool, structured shoulders. Add an AMBER TEE underneath for a sophisticated vibe.",
-                "Heritage GANDOURA with hand embroidery from Tlemcen workshops — a true statement piece in sizes S-XXL.",
-                "Sport TECH JOGGERS with reflective taping + SKY RUNNER SNEAKERS = track-to-street perfection.",
-                "Free shipping over 25,000 DZD across all 58 wilayas. Cash on delivery available!",
-                "The BROCADE VEST is limited edition — traditional Algerian brocade with gold thread. Only 4 left!",
-            ],
-            'ar': [
-                "قميص PHANTOM STREET HOODIE هو اختيارنا الأول! قصّة أوفر مع قماش فرنسي ثقيل. أضف SKY RUNNER SNEAKERS.",
-                "لأسلوب Old Money، البليزر لا يُضاهى — صوف إيطالي. أضف AMBER TEE من الداخل.",
-                "الجلبوبة التراثية بالتطريز اليدوي من تلمسان — قطعة مميزة بمقاسات S-XXL.",
-                "بنطلون TECH JOGGERS مع شريط عاكس + SKY RUNNER SNEAKERS = مثالية.",
-                "شحن مجاني فوق 25,000 دج لجميع 58 ولاية. الدفع عند الاستلام متوفر!",
-            ],
-        }
-        import random
-        reply = random.choice(fallback.get(lang, fallback['en']))
+        reply = 'مرحباً! / Bonjour! / Hello! I can recommend pieces by style, budget, or collection — what are you looking for?'
 
-    return jsonify({'reply': reply, 'lang': lang, 'timestamp': datetime.now().isoformat()})
+    recs = []
+    for p in products[:4]:
+        recs.append({'id': p['id'], 'name': p['name'], 'price': p['price'],
+                     'collection': p['collection'], 'tag': p['tag'] or '',
+                     'image': p['image'] or '', 'stock': p['stock'] or 0,
+                     'sizes': p['sizes']})
+
+    return jsonify({'reply': reply, 'lang': lang, 'products': recs,
+                    'timestamp': datetime.now().isoformat()})
+
 
 @app.route('/api/chat/history', methods=['GET', 'POST'])
 def api_chat_history():
@@ -1019,12 +1270,19 @@ def api_search_suggest():
 # UPLOAD
 # ════════════════════════════════════════════════════════════════
 @app.route('/api/upload', methods=['POST'])
+@require_admin
 def api_upload():
     if 'file' in request.files:
         f = request.files['file']
         if f.filename:
-            fn = secure_filename(f'{uuid.uuid4().hex}_{f.filename}')
+            ext = Path(f.filename).suffix.lower()
+            if ext not in ('.png','.jpg','.jpeg','.gif','.webp','.svg'):
+                return err('File type not allowed')
+            if f.content_length and f.content_length > 8 * 1024 * 1024:
+                return err('File too large')
+            fn = secure_filename(f'{uuid.uuid4().hex}{ext}')
             f.save(str(UPLOAD_DIR / fn))
+            log_audit('upload', 'file', fn, f.filename)
             return jsonify({'url': f'/uploads/{fn}', 'filename': fn})
 
     data = request.get_json() or {}
@@ -1033,8 +1291,11 @@ def api_upload():
     try:
         fmt, b64 = img_data.split(',', 1) if ',' in img_data else ('png', img_data)
         fmt = fmt.replace('data:image/', '').replace(';base64', '').split(';')[0] or 'png'
+        if fmt not in ('png','jpg','jpeg','gif','webp','svg'):
+            return err('File type not allowed')
         fn = f"{uuid.uuid4().hex}.{fmt}"
         (UPLOAD_DIR / fn).write_bytes(base64.b64decode(b64))
+        log_audit('upload', 'file', fn, fmt)
         return jsonify({'url': f'/uploads/{fn}', 'filename': fn})
     except Exception as e:
         return err(str(e))
@@ -1047,6 +1308,7 @@ def serve_upload(filename):
 # EXPORT
 # ════════════════════════════════════════════════════════════════
 @app.route('/api/export/orders', methods=['GET'])
+@require_admin
 def api_export_orders():
     rows = _q('SELECT * FROM orders ORDER BY created_at DESC')
     csv = 'ID,First Name,Last Name,Phone,Email,Wilaya,Address,Items,Subtotal,Shipping,Discount,Total,Payment,Status,Tracking,Created\n'
@@ -1057,6 +1319,7 @@ def api_export_orders():
                     headers={'Content-Disposition': 'attachment; filename=flyra_orders.csv'})
 
 @app.route('/api/export/products', methods=['GET'])
+@require_admin
 def api_export_products():
     rows = _q('SELECT * FROM products')
     csv = 'ID,Name,Collection,Price,Old Price,Tag,Sizes,Stock,Status,Description\n'
@@ -1066,14 +1329,39 @@ def api_export_products():
                     headers={'Content-Disposition': 'attachment; filename=flyra_products.csv'})
 
 @app.route('/api/export/backup', methods=['GET'])
+@require_admin
 def api_export_backup():
     backup = {}
-    for table in ['products','orders','users','coupons','settings','drops','reviews']:
+    for table in ['products','orders','users','coupons','settings','drops','reviews','subscribers']:
         try:
             rows = _q(f'SELECT * FROM {table}')
             backup[table] = [dict(r) for r in rows]
         except: backup[table] = []
+    log_audit('backup', 'system', '', 'full JSON backup exported')
     return jsonify(backup)
+
+# ════════════════════════════════════════════════════════════════
+# NEWSLETTER
+# ════════════════════════════════════════════════════════════════
+@app.route('/api/newsletter', methods=['POST'])
+@rate_limit(10, 60)
+def api_newsletter():
+    data = request.get_json() or {}
+    email = (data.get('email') or '').strip().lower()
+    if not email or '@' not in email or '.' not in email.split('@')[-1]:
+        return err('Invalid email address')
+    try:
+        _q('INSERT INTO subscribers (email) VALUES (?)', (email,))
+    except:
+        return ok({'subscribed': True, 'existing': True})
+    log_audit('subscribe', 'subscriber', '', email, actor='public')
+    return ok({'subscribed': True})
+
+@app.route('/api/subscribers', methods=['GET'])
+@require_admin
+def api_subscribers():
+    rows = _q('SELECT * FROM subscribers ORDER BY id DESC LIMIT 500')
+    return jsonify([dict(r) for r in rows])
 
 # ════════════════════════════════════════════════════════════════
 # WILAYAS / SETTINGS / HEALTH
@@ -1090,6 +1378,72 @@ def api_wilayas():
         'Ghardaïa','Relizane','Timimoun','Bordj Badji Mokhtar','Ouled Djellal','Béni Abbès','El Meniaa'
     ]))})
 
+WILAYA_COMMUNES = {
+    'Alger': ['Bab El Oued','Hussein Dey','Kouba','El Harrach','Bir Mourad Raïs','Bologhine','Draria','Chéraga','Dar El Beïda','Baraki','Bordj El Kiffan','Aïn Benian'],
+    'Oran': ['Oran Centre','Bir El Djir','Es Sénia','Aïn El Turck','Mers El Kébir','Arzew','Boutlélis','Gdyel','Oued Tlélat'],
+    'Constantine': ['Constantine Centre','El Khroub','Hamma Bouziane','Didouche Mourad','Aïn Smara','Zighoud Youcef','Ibn Ziad'],
+    'Annaba': ['Annaba Centre','El Bouni','El Hadjar','Seraïdi','Berrahal','Chetaïbi','Aïn El Berda'],
+    'Blida': ['Blida Centre','Boufarik','Bouinan','El Affroun','Mouzaïa','Ouled Yaïch','Chiffa','Meftah','Larbaâ'],
+    'Sétif': ['Sétif Centre','El Eulma','Aïn Oulmène','Bougaâ','Aïn Arnat','El Ouricia','Guidjel','Salah Bey'],
+    'Tlemcen': ['Tlemcen Centre','Mansourah','Chetouane','Hennaya','Maghnia','Remchi','Ghazaouet','Sabra','Nedroma'],
+    'Béjaïa': ['Béjaïa Centre','Amizour','Aokas','Akbou','Kherrata','Sidi Aïch','El Kseur','Tazmalt'],
+    'Batna': ['Batna Centre','Tazoult','Aïn Touta','Barika','N\'Gaous','Arris','Merouana','Ouled Salem'],
+    'Biskra': ['Biskra Centre','Tolga','Sidi Okba','Zeribet El Oued','El Outaya','Ourlal','Lichana'],
+    'Béchar': ['Béchar Centre','Béni Abbès','Taghit','Kenadsa','Abadla','Lahmar'],
+    'Bouira': ['Bouira Centre','Lakhdaria','Sour El Ghozlane','Kadiria','Aïn Bessem','M\'Chedallah'],
+    'Tizi Ouzou': ['Tizi Ouzou Centre','Draâ Ben Khedda','Larbaâ Nath Irathen','Azazga','Aïn El Hammam','Boghni','Tigzirt'],
+    'Djelfa': ['Djelfa Centre','Aïn Oussera','Messaâd','Hassi Bahbah','El Idrissia','Birine','Charef'],
+    'Jijel': ['Jijel Centre','El Milia','Taher','Chekfa','Sidi Maârouf','Ziama Mansouriah'],
+    'Skikda': ['Skikda Centre','El Harrouch','Azzaba','Collo','Tamalous','Beni Bechir','Fil Fila'],
+    'Sidi Bel Abbès': ['Sidi Bel Abbès Centre','Sfisef','Télagh','Aïn El Berd','Ben Badis','Moulay Slissen'],
+    'Guelma': ['Guelma Centre','Bouchegouf','Héliopolis','Aïn Sandel','Oued Zenati','Hammam Debagh'],
+    'Médéa': ['Médéa Centre','Berrouaghia','Ksar El Boukhari','Beni Slimane','El Omaria','Tablat','Aïn Boucif'],
+    'Mostaganem': ['Mostaganem Centre','Aïn Nouïssy','Aïn Tedles','Hassi Mamèche','Sidi Ali','Mesra','Kheir Eddine'],
+    'Mila': ['Mila Centre','Chelghoum Laïd','Ferdjioua','Tadjenanet','Oued Athmania','Grarem Gouga'],
+    'Mascara': ['Mascara Centre','Sig','Tighennif','Mohammadia','Oued El Abtal','Ghriss','Bou Hanifia'],
+    'Ouargla': ['Ouargla Centre','Rouissat','Hassi Messaoud','N\'Goussa','Aïn Beïda','Sidi Khouiled'],
+    'El Bayadh': ['El Bayadh Centre','Brézina','Bougtob','El Abiodh Sidi Cheikh','Rogassa','Chellala'],
+    'Illizi': ['Illizi Centre','Djanet','In Amenas','Bordj Omar Driss'],
+    'Bordj Bou Arreridj': ['Bordj Bou Arreridj Centre','El Achir','Mansoura','Ras El Oued','El Main','Bordj Ghedir'],
+    'El Tarf': ['El Tarf Centre','El Kala','Ben M\'Hidi','Dréan','Besbes','Aïn El Assel'],
+    'Tindouf': ['Tindouf Centre','Oum El Assel'],
+    'Tissemsilt': ['Tissemsilt Centre','Theniet El Had','Bordj Bounaama','Lardjem','Khemisti'],
+    'El Oued': ['El Oued Centre','Guemar','Debila','Robbah','Bayadha','Magrane','Hassi Khelifa'],
+    'Khenchela': ['Khenchela Centre','Kais','El Hamma','Chechar','Aïn Touila','Babar'],
+    'Souk Ahras': ['Souk Ahras Centre','Sedrata','M\'Daourouch','Heddada','Taoura','Oum El Adhaim'],
+    'Tipaza': ['Tipaza Centre','Bou Ismail','Cherchell','Hadjar Ennous','Kolea','Fouka','Gouraya','Aïn Tagourait'],
+    'Boumerdès': ['Boumerdès Centre','Bordj Menaïel','Boudouaou','Khemis El Khechna','Thénia','Dellys','Isser'],
+    'Aïn Defla': ['Aïn Defla Centre','Khemis Miliana','Miliana','El Attaf','Boumedfaâ','Djelida','Hammam Righa'],
+    'Naâma': ['Naâma Centre','Mecheria','Aïn Sefra','Sfissifa','Moghrar'],
+    'Aïn Témouchent': ['Aïn Témouchent Centre','Béni Saf','Hammam Bou Hadjar','El Amria','Aïn El Arbaa','Oulhaça'],
+    'Ghardaïa': ['Ghardaïa Centre','Métlili','Bérianne','Guerrara','Dhayet Bendhahoua','El Atteuf'],
+    'Relizane': ['Relizane Centre','Oued Rhiou','Ammi Moussa','Mazouna','Zemmoura','Yellel','Sidi M\'Hamed Ben Ali'],
+    'Chlef': ['Chlef Centre','Ténès','Oued Fodda','Boukadir','El Karimia','Aïn Merane','Beni Haoua'],
+    'Laghouat': ['Laghouat Centre','Aflou','Aïn Madhi','Ksar El Hirane','Brida','El Assafia'],
+    'Oum El Bouaghi': ['Oum El Bouaghi Centre','Aïn Beïda','Aïn M\'lila','Aïn Fakroun','Meskiana','Fkirina'],
+    'Tamanrasset': ['Tamanrasset Centre','In Salah','Abalessa','Tazrouk','In Guezzam','Idlès'],
+    'Tébessa': ['Tébessa Centre','Bir El Ater','El Aouinet','Cheria','Ouenza','El Ma Labiodh'],
+    'Tiaret': ['Tiaret Centre','Sougueur','Frenda','Mahdia','Ksar Chellala','Rahouia'],
+    'Saïda': ['Saïda Centre','El Hassasna','Aïn El Hadjar','Sidi Boubekeur','Ouled Brahim'],
+    'El Meghaier': ['El Meghaier Centre','Tendla','Sidi Amrane','Djamaa','M\'Rara'],
+    'Ksar El Boukhari': ['Ksar El Boukhari Centre','El Azizia','Saneg','M\'Fatha'],
+    'In Salah': ['In Salah Centre','Foggaret Ezzaouia','Aïn Salah'],
+    'In Guezzam': ['In Guezzam Centre','Tin Zaouatine'],
+    'Touggourt': ['Touggourt Centre','Temacine','El Hadjira','Megarine','Nezla','Zaouia El Abidia'],
+    'Djanet': ['Djanet Centre','Bordj El Haouas'],
+    'Timimoun': ['Timimoun Centre','Charouine','Aïn Kermez','Ouled Saïd'],
+    'Bordj Badji Mokhtar': ['Bordj Badji Mokhtar Centre','Timiaouine'],
+    'Ouled Djellal': ['Ouled Djellal Centre','Sidi Khaled','Besbes','Doucen'],
+    'Béni Abbès': ['Béni Abbès Centre','Igli','Kerzaz','El Ouata','Tamtert'],
+    'El Meniaa': ['El Meniaa Centre','Hassi Gara','El Golea'],
+}
+
+@app.route('/api/communes', methods=['GET'])
+def api_communes():
+    wilaya = request.args.get('wilaya', '')
+    communes = WILAYA_COMMUNES.get(wilaya, [])
+    return jsonify({'wilaya': wilaya, 'communes': communes})
+
 @app.route('/api/settings', methods=['GET', 'POST'])
 def api_settings():
     if request.method == 'GET':
@@ -1100,9 +1454,11 @@ def api_settings():
             except: result[r['key']] = r['value']
         return jsonify(result)
     data = request.get_json() or {}
+    if not is_admin(): return err('Admin auth required', 401)
     for k, v in data.items():
         _q('INSERT OR REPLACE INTO settings (key, value) VALUES (?,?)',
            (k, json.dumps(v) if isinstance(v, (dict, list)) else str(v)))
+    log_audit('update', 'settings', '', ','.join(data.keys()))
     return ok()
 
 @app.route('/api/health', methods=['GET'])
@@ -1151,6 +1507,8 @@ def serve_page(page):
 # INIT
 # ════════════════════════════════════════════════════════════════
 migrate_schema()
+with app.app_context():
+    ensure_admin_user()
 
 if __name__ == '__main__':
     db_type = 'PostgreSQL' if USE_PG else 'SQLite'
