@@ -1503,7 +1503,15 @@ def serve_page(page):
     if fp.exists(): return send_file(str(fp))
     return ('', 404)
 
-# ════════════════════════════════════════════════════════════════
+@app.route('/<path:filename>')
+def serve_static(filename):
+    if filename.startswith('api/'): return ('', 404)
+    fp = BASE / filename
+    if fp.exists() and fp.is_file():
+        return send_file(str(fp))
+    return ('', 404)
+
+# ═════════════════════════════════════════════════════════════════
 # INIT
 # ════════════════════════════════════════════════════════════════
 migrate_schema()
