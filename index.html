@@ -18,6 +18,19 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 192 192%22%3E%3Crect width=%22192%22 height=%22192%22 fill=%22%230A0F1E%22 rx=%2232%22/%3E%3Cpath d=%22M60 60 L132 96 L60 132 Z%22 fill=%22%23C49B3D%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+/* ═══ FLYRA BUSINESS CONFIG — EDIT BEFORE LAUNCH ═══
+   whatsapp: international format, digits only (e.g. 2130555123456 → use your real number)
+   Also settable from Admin Panel → Settings (overrides this value). */
+window.FLYRA_BUSINESS = {
+  whatsapp: '213555123456',
+  whatsappDisplay: '+213 555 123 456',
+  email: 'hello@flyra.dz',
+  instagram: 'https://instagram.com/flyra.dz',
+  tiktok: 'https://tiktok.com/@flyra.dz',
+  hours: 'Sun-Thu: 9AM-6PM'
+};
+</script>
 <link rel="stylesheet" href="index.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -44,7 +57,7 @@ html[dir="rtl"] body{font-family:'Noto Sans Arabic',sans-serif;}
 @keyframes emblem-fade{to{opacity:1;}}
 @keyframes loader-shine{0%{background-position:0% center;}100%{background-position:200% center;}}
 nav{position:fixed;top:0;left:0;right:0;z-index:9999;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s;background:transparent;}
-nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 60px;box-shadow:0 4px 30px rgba(0,0,0,0.4);border-bottom:1px solid rgba(255,255,255,0.04);}
+nav.scrolled{background:rgba(10,15,30,0.98);padding:12px 60px;box-shadow:0 4px 30px rgba(0,0,0,0.4);border-bottom:1px solid rgba(255,255,255,0.04);}
 .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
 .nav-logo svg{width:40px;height:40px;transition:transform 0.3s;}
 .nav-logo:hover svg{transform:rotate(15deg) scale(1.05);}
@@ -76,12 +89,12 @@ nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);-webkit-b
 .mobile-menu a{font-size:1.5rem;font-weight:700;color:var(--cream);text-decoration:none;letter-spacing:0.1em;transition:color 0.2s;}
 .mobile-menu a:hover{color:var(--amber);}
 .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:0 60px;}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 25% 55%,rgba(123,163,201,0.12) 0%,transparent 55%),radial-gradient(ellipse at 80% 15%,rgba(196,155,61,0.08) 0%,transparent 45%),radial-gradient(ellipse at 60% 80%,rgba(26,34,53,0.5) 0%,transparent 50%),var(--midnight);}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 25% 55%,rgba(123,163,201,0.12) 0%,transparent 55%),radial-gradient(ellipse at 80% 15%,rgba(196,155,61,0.08) 0%,transparent 45%),radial-gradient(ellipse at 60% 80%,rgba(26,34,53,0.5) 0%,transparent 50%),var(--midnight);will-change:transform;}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
 .hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
 .particle{position:absolute;border-radius:50%;opacity:0;animation:float-up linear infinite;}
 @keyframes float-up{0%{opacity:0;transform:translateY(0) scale(0.5);}10%{opacity:0.6;}90%{opacity:0.6;}100%{opacity:0;transform:translateY(-100vh) scale(1);}}
-.hero-content{position:relative;z-index:2;max-width:720px;padding-top:80px;}
+.hero-content{position:relative;z-index:2;max-width:720px;padding-top:80px;will-change:transform,opacity;}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;background:rgba(196,155,61,0.08);border:1px solid rgba(196,155,61,0.2);border-radius:30px;font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);margin-bottom:32px;opacity:0;transform:translateY(30px);transition:all 0.8s ease;}
 .hero-eyebrow.visible{opacity:1;transform:translateY(0);}
 .hero-eyebrow svg{width:16px;height:16px;}
@@ -128,7 +141,7 @@ nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);-webkit-b
 .fade-right.visible{opacity:1;transform:translateX(0);}
 .scale-in{opacity:0;transform:scale(0.9);transition:opacity 0.8s ease,transform 0.8s ease;}
 .scale-in.visible{opacity:1;transform:scale(1);}
-.collections-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.collections-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;content-visibility:auto;contain-intrinsic-size:auto 500px;}
 .collection-card{position:relative;border-radius:20px;overflow:hidden;cursor:pointer;aspect-ratio:3/4.5;background:var(--raven);border:1px solid var(--border);transition:all 0.4s;}
 .collection-card:hover{transform:translateY(-8px);border-color:rgba(196,155,61,0.2);box-shadow:0 30px 60px rgba(0,0,0,0.5);}
 .collection-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.08;transition:opacity 0.4s;}
@@ -151,7 +164,7 @@ nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);-webkit-b
 .product-search{display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;}
 .product-search input{background:none;border:none;outline:none;color:var(--text);font-size:0.85rem;font-family:inherit;width:180px;}
 .product-search input::placeholder{color:var(--subtext);}
-.products-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.products-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;content-visibility:auto;contain-intrinsic-size:auto 600px;}
 .product-card{background:var(--raven);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all 0.3s;cursor:pointer;position:relative;}
 .product-card:hover{transform:translateY(-6px);border-color:rgba(123,163,201,0.2);box-shadow:0 20px 50px rgba(0,0,0,0.4);}
 .product-img{height:280px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0.06));}
@@ -190,7 +203,7 @@ nav.scrolled{background:rgba(10,15,30,0.95);backdrop-filter:blur(20px);-webkit-b
 .stat{text-align:center;}
 .stat-num{font-size:2rem;font-weight:900;color:var(--amber);}
 .stat-label{font-size:0.7rem;color:var(--subtext);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;content-visibility:auto;contain-intrinsic-size:auto 400px;}
 .feature-card{padding:32px;background:var(--raven);border:1px solid var(--border);border-radius:20px;transition:all 0.3s;}
 .feature-card:hover{transform:translateY(-6px);border-color:rgba(196,155,61,0.2);box-shadow:0 20px 40px rgba(0,0,0,0.3);}
 .feature-icon{font-size:2.5rem;margin-bottom:16px;}
@@ -1009,7 +1022,7 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
 .size-guide-table td{color:var(--text);}
 .size-guide-link{font-size:0.65rem;color:var(--sky);cursor:pointer;margin-left:8px;text-decoration:underline;font-weight:600;transition:color 0.2s;}
 .size-guide-link:hover{color:var(--amber);}
-.scroll-progress{position:fixed;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--sky));z-index:100000;transition:width 0.1s linear;}
+.scroll-progress{position:fixed;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--amber),var(--sky));z-index:100000;transform:scaleX(0);transform-origin:left;will-change:transform;}
 .back-to-top{position:fixed;bottom:30px;right:30px;width:48px;height:48px;border-radius:50%;background:var(--raven);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;opacity:0;transform:translateY(20px);transition:all 0.3s;box-shadow:0 4px 16px rgba(0,0,0,0.3);color:var(--text);font-size:1.1rem;}
 .back-to-top.show{opacity:1;transform:translateY(0);}
 .back-to-top:hover{background:var(--amber);color:var(--midnight);border-color:var(--amber);transform:translateY(-3px);}
@@ -1553,10 +1566,10 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
       </a>
       <p class="footer-tagline">The first iconic Algerian fashion brand. From Algeria to the World.</p>
       <div class="footer-social">
-        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></a>
-        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></a>
-        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+        <a id="socialIg" href="#" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a id="socialTt" href="#" target="_blank" rel="noopener" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></a>
+        <a id="socialWa" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></a>
+        <a id="socialMail" href="#" aria-label="Email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
       </div>
     </div>
     <div>
@@ -1572,20 +1585,20 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
     <div>
       <div class="footer-title">Help</div>
       <div class="footer-links">
-        <a href="#">Size Guide</a>
-        <a href="#">Shipping Info</a>
-        <a href="#">Returns</a>
-        <a href="#">FAQs</a>
-        <a href="#">Contact Us</a>
+        <a href="#" onclick="openStylist();return false">Size Guide</a>
+        <a href="about.html#shipping">Shipping Info</a>
+        <a href="returns.html">Returns</a>
+        <a href="terms.html#faq">FAQs</a>
+        <a href="about.html#contact">Contact Us</a>
       </div>
     </div>
     <div>
       <div class="footer-title">Contact</div>
       <div class="footer-links">
-        <a href="#"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Algiers, Algeria</a>
-        <a href="#"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> hello@flyra.dz</a>
-        <a href="#"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg> Contact via WhatsApp</a>
-        <a href="#"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sun-Thu: 9AM-6PM</a>
+        <a href="about.html#contact"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Algiers, Algeria</a>
+        <a id="footerEmail" href="#"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> hello@flyra.dz</a>
+        <a id="footerWa" href="#"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg> Contact via WhatsApp</a>
+        <a href="about.html#contact"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sun-Thu: 9AM-6PM</a>
       </div>
       <div class="footer-title" style="margin-top:20px;">Payments</div>
       <div class="footer-payments">
@@ -1598,7 +1611,7 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
   </div>
   <div class="footer-bottom">
     <div class="footer-copy">© 2026 FLYRA. صعود بلا حدود. Made with <svg width="12" height="12" viewBox="0 0 24 24" fill="#C49B3D" stroke="none" style="display:inline;vertical-align:-1px;"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> in Algeria.</div>
-    <div class="footer-copy">Privacy · Terms · Cookies</div>
+    <div class="footer-copy"><a href="privacy.html" style="color:inherit;text-decoration:none;">Privacy</a> · <a href="terms.html" style="color:inherit;text-decoration:none;">Terms</a> · <a href="returns.html" style="color:inherit;text-decoration:none;">Returns</a></div>
   </div>
 </footer>
 
@@ -1815,16 +1828,16 @@ footer{padding:80px 60px 40px;border-top:1px solid var(--border);}
 .flyra-cursor{position:fixed;width:24px;height:24px;pointer-events:none;z-index:999999;transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s,opacity 0.2s;mix-blend-mode:difference;display:none;}
 .flyra-cursor.show{display:block;}
 .flyra-cursor svg{width:100%;height:100%;}
-.flyra-trail{position:fixed;width:4px;height:4px;border-radius:50%;pointer-events:none;z-index:999998;background:var(--amber);opacity:0;transition:all 0.6s ease;}
-.ambient-light{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;transition:background 0.1s;background:radial-gradient(600px circle at 0 0,rgba(196,155,61,0.06),transparent 60%);}
+.flyra-trail{position:fixed;width:4px;height:4px;border-radius:50%;pointer-events:none;z-index:999998;background:var(--amber);opacity:0;transform-origin:center;will-change:transform,opacity;}
+.ambient-light{position:fixed;top:-40vh;left:-40vw;width:180vw;height:180vh;pointer-events:none;z-index:1;background:radial-gradient(600px circle at 50% 50%,rgba(196,155,61,0.06),transparent 60%);will-change:transform;}
 .ambient-light::after{content:'';position:absolute;inset:0;background:radial-gradient(800px circle at 100% 100%,rgba(123,163,201,0.04),transparent 60%);}
 .blob-bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
-.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;animation:blob-morph 20s ease-in-out infinite;}
-.blob:nth-child(1){width:500px;height:500px;background:var(--amber);top:-100px;left:-100px;animation-delay:0s;}
-.blob:nth-child(2){width:400px;height:400px;background:var(--sky);bottom:-80px;right:-80px;animation-delay:-7s;}
-.blob:nth-child(3){width:300px;height:300px;background:linear-gradient(135deg,var(--amber),var(--sky));top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:-14s;opacity:0.08;}
-@keyframes blob-morph{0%,100%{border-radius:50% 50% 60% 40% / 50% 60% 40% 50%;transform:translate(0,0) scale(1) rotate(0deg);}25%{border-radius:40% 60% 50% 50% / 60% 40% 60% 40%;transform:translate(30px,-40px) scale(1.1) rotate(5deg);}50%{border-radius:60% 40% 40% 60% / 40% 50% 50% 60%;transform:translate(-20px,20px) scale(0.95) rotate(-3deg);}75%{border-radius:50% 60% 40% 50% / 50% 40% 60% 50%;transform:translate(20px,30px) scale(1.05) rotate(4deg);}}
-.brand-watermark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;opacity:0.02;font-size:clamp(8rem,20vw,20rem);font-weight:900;color:var(--amber);letter-spacing:0.1em;transform-origin:center;user-select:none;}
+.blob{position:absolute;border-radius:50%;opacity:0.15;animation:blob-morph 20s ease-in-out infinite;will-change:transform;background:radial-gradient(circle closest-side,rgba(196,155,61,0.9),transparent 70%);}
+.blob:nth-child(1){width:500px;height:500px;background:radial-gradient(circle closest-side,rgba(196,155,61,0.9),transparent 70%);top:-100px;left:-100px;animation-delay:0s;}
+.blob:nth-child(2){width:400px;height:400px;background:radial-gradient(circle closest-side,rgba(123,163,201,0.9),transparent 70%);bottom:-80px;right:-80px;animation-delay:-7s;}
+.blob:nth-child(3){width:300px;height:300px;background:radial-gradient(circle closest-side,var(--amber),var(--sky) 50%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:-14s;opacity:0.08;}
+@keyframes blob-morph{0%,100%{transform:translate(0,0) scale(1) rotate(0deg);}25%{transform:translate(30px,-40px) scale(1.1) rotate(5deg);}50%{transform:translate(-20px,20px) scale(0.95) rotate(-3deg);}75%{transform:translate(20px,30px) scale(1.05) rotate(4deg);}}
+.brand-watermark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;opacity:0.02;font-size:clamp(8rem,20vw,20rem);font-weight:900;color:var(--amber);letter-spacing:0.1em;transform-origin:center;user-select:none;will-change:transform;}
 .brand-watermark span{animation:watermark-float 20s ease-in-out infinite;}
 @keyframes watermark-float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(2deg);}}
 .btn-ripple{position:relative;overflow:hidden;}
@@ -2265,10 +2278,22 @@ async function loadSettings(){
       }
     }
   }catch(e){}
-  const waNum=localStorage.getItem('flyra_wa')||'213555123456';
+  const waNum=localStorage.getItem('flyra_wa')||(window.FLYRA_BUSINESS?window.FLYRA_BUSINESS.whatsapp:'213555123456');
   const waLink=document.getElementById('whatsappLink');
   if(waLink)waLink.href='https://wa.me/'+waNum+'?text=Hello%20FLYRA!%20I%20have%20a%20question.';
+  applyBusinessInfo(waNum);
   loadCollectionImages();
+}
+
+function applyBusinessInfo(waNum){
+  const B=window.FLYRA_BUSINESS||{};
+  const wa=waNum||B.whatsapp;
+  const set=(id,attr,val)=>{const el=document.getElementById(id);if(el)el.setAttribute(attr,val);};
+  set('socialIg','href',B.instagram||'#');
+  set('socialTt','href',B.tiktok||'#');
+  set('socialWa','href','https://wa.me/'+wa);
+  if(B.email){set('socialMail','href','mailto:'+B.email);set('footerEmail','href','mailto:'+B.email);}
+  set('footerWa','href','https://wa.me/'+wa);
 }
 
 async function init() {
@@ -2761,22 +2786,29 @@ function setupScrollAnimations() {
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up,.fade-left,.fade-right,.scale-in').forEach(el => observer.observe(el));
   document.querySelectorAll('.feature-card').forEach(el => el.classList.add('floating'));
-  window.addEventListener('scroll', () => {
-    const nav = document.getElementById('nav');
-    nav.classList.toggle('scrolled', window.scrollY > 50);
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-      heroContent.style.transform = `translateY(${window.scrollY * 0.25}px)`;
-      heroContent.style.opacity = 1 - (window.scrollY / window.innerHeight);
-    }
-    const heroBg = document.querySelector('.hero-bg');
-    if (heroBg && window.innerWidth > 768) heroBg.style.transform = `translateY(${window.scrollY * 0.08}px)`;
-    const pct = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1) * 100;
-    const bar = document.getElementById('scrollProgress');
-    if (bar) bar.style.width = pct + '%';
-    const btn = document.getElementById('backToTop');
-    if (btn) btn.classList.toggle('show', window.scrollY > 500);
-  });
+  let scrollTicking = false;
+  const onScroll = () => {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      const nav = document.getElementById('nav');
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        heroContent.style.transform = `translateY(${window.scrollY * 0.25}px)`;
+        heroContent.style.opacity = 1 - (window.scrollY / window.innerHeight);
+      }
+      const heroBg = document.querySelector('.hero-bg');
+      if (heroBg && window.innerWidth > 768) heroBg.style.transform = `translateY(${window.scrollY * 0.08}px)`;
+      const pct = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1);
+      const bar = document.getElementById('scrollProgress');
+      if (bar) bar.style.transform = `scaleX(${pct})`;
+      const btn = document.getElementById('backToTop');
+      if (btn) btn.classList.toggle('show', window.scrollY > 500);
+      scrollTicking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
 }
 
 
@@ -3328,7 +3360,7 @@ function renderCheckoutSummary() {
 }
 
 function genTracking() {
-  return '';
+  return 'FLY' + new Date().toISOString().slice(0,10).replace(/-/g,'') + Math.random().toString(36).slice(2,8).toUpperCase();
 }
 
 async function submitOrder() {
@@ -3622,13 +3654,13 @@ function initCursor(){
   document.body.appendChild(c);
   const trails=[];
   for(let i=0;i<8;i++){const t=document.createElement('div');t.className='flyra-trail';document.body.appendChild(t);trails.push(t);}
-  let mx=0,my=0,px=0,py=0,ra=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  let mx=0,my=0,px=0,py=0,ra=0,running=true,idleTimer;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(!running){running=true;c.style.opacity='';anim();}clearTimeout(idleTimer);idleTimer=setTimeout(()=>{running=false;c.style.opacity='0';trails.forEach(t=>t.style.opacity='0');},1500);},{passive:true});
   function anim(){
     px+=(mx-px)*0.15;py+=(my-py)*0.15;
     c.style.transform=`translate(${px-12}px,${py-12}px) rotate(${Math.atan2(my-py,mx-px)*0.3}rad)`;
-    trails.forEach((t,i)=>{const d=1-i/trails.length;const tx=px+Math.sin(Date.now()/1000+i)*d*16;const ty=py+Math.cos(Date.now()/800+i)*d*16;t.style.transform=`translate(${tx-2}px,${ty-2}px)`;t.style.opacity=d*0.4;t.style.width=4-d*3+'px';t.style.height=4-d*3+'px';});
-    ra+=0.02;requestAnimationFrame(anim);
+    trails.forEach((t,i)=>{const d=1-i/trails.length;const tx=px+Math.sin(Date.now()/1000+i)*d*16;const ty=py+Math.cos(Date.now()/800+i)*d*16;t.style.transform=`translate(${tx-2}px,${ty-2}px) scale(${(4-d*3)/4})`;t.style.opacity=d*0.4;});
+    ra+=0.02;if(running)requestAnimationFrame(anim);
   }
   anim();
   const links=document.querySelectorAll('a,button,.product-card,.collection-card');
@@ -3638,7 +3670,8 @@ function initCursor(){
 function initAmbientLight(){
   if('ontouchstart' in navigator)return;
   const el=document.createElement('div');el.className='ambient-light';document.body.appendChild(el);
-  document.addEventListener('mousemove',e=>{const x=e.clientX/window.innerWidth*100,y=e.clientY/window.innerHeight*100;el.style.background=`radial-gradient(600px circle at ${x}% ${y}%,rgba(196,155,61,0.08),transparent 60%)`;});
+  let amTick=false;
+  document.addEventListener('mousemove',e=>{if(amTick)return;amTick=true;requestAnimationFrame(()=>{const x=e.clientX/window.innerWidth*100,y=e.clientY/window.innerHeight*100;el.style.transform=`translate(${x-50}vw,${y-50}vh)`;amTick=false;});},{passive:true});
 }
 
 function initBlobs(){
@@ -3650,7 +3683,9 @@ function initBlobs(){
 function initWatermark(){
   const el=document.createElement('div');el.className='brand-watermark';
   el.innerHTML='<span>FLYRA</span>';el.style.top='0';document.body.prepend(el);
-  let last=0;window.addEventListener('scroll',()=>{const s=window.scrollY;el.style.transform=`translateY(${s*0.15}px) rotate(${s*0.02}deg)`;},{passive:true});
+  let wmPending=false;
+  const wmScroll=()=>{if(wmPending)return;wmPending=true;requestAnimationFrame(()=>{const s=window.scrollY;el.style.transform=`translateY(${s*0.15}px) rotate(${s*0.02}deg)`;wmPending=false;});};
+  window.addEventListener('scroll',wmScroll,{passive:true});
 }
 
 function initRipple(){

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flyra-v1.0';
+const CACHE_NAME = 'flyra-v2.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -39,20 +39,16 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // API caching — stale-while-revalidate
+  // API caching — network first, cache fallback for offline
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
-      caches.open(API_CACHE).then(cache => {
-        return cache.match(event.request).then(cached => {
-          const fetchPromise = fetch(event.request).then(response => {
-            if (response.ok) {
-              cache.put(event.request, response.clone());
-            }
-            return response;
-          }).catch(() => cached);
-          return cached || fetchPromise;
-        });
-      })
+      fetch(event.request).then(response => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(API_CACHE).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(event.request))
     );
     return;
   }
@@ -140,8 +136,9 @@ async function updateProducts() {
   try {
     const res = await fetch('/api/products');
     if (res.ok) {
-      const products = await res.json();
-      localStorage.setItem('flyra_cached_products', JSON.stringify(products));
+      const data = await res.json();
+      const list = Array.isArray(data) ? data : (data && Array.isArray(data.products) ? data.products : []);
+      localStorage.setItem('flyra_cached_products', JSON.stringify(list));
     }
   } catch(e) {
     // offline

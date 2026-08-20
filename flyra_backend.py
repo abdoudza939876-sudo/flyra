@@ -14,7 +14,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5555","http://127.0.0.1:5555","http://localhost:8080","http://127.0.0.1:8080"], "supports_credentials": True}})
 
 BASE = Path(__file__).parent
 UPLOAD_DIR = BASE / 'uploads'
@@ -503,13 +503,17 @@ def api_products():
     data = request.get_json()
     if not data or not data.get('name'):
         return err('Product name is required')
-    _q('INSERT INTO products (name,owner,collection,price,old_price,tag,sizes,stock,status,desc,image,featured) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+    colors = data.get('colors')
+    if isinstance(colors, list):
+        colors = ','.join(str(c) for c in colors)
+    cur = _q('INSERT INTO products (name,owner,collection,price,old_price,tag,sizes,stock,status,desc,image,colors,featured) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
        (data['name'], data.get('owner',''), data.get('collection'), data.get('price'),
         data.get('old_price'), data.get('tag'), data.get('sizes','S,M,L,XL'),
         data.get('stock',0), data.get('status','active'), data.get('desc',''),
-        data.get('image',''), data.get('featured',0)))
-    log_audit('create', 'product', _last_id(), data['name'])
-    return ok({'id': _last_id()})
+        data.get('image',''), colors or '', data.get('featured',0)))
+    pid = cur.lastrowid
+    log_audit('create', 'product', pid, data['name'])
+    return ok({'id': pid})
 
 @app.route('/api/products/<int:pid>', methods=['GET', 'PUT', 'DELETE'])
 def api_product(pid):
@@ -521,6 +525,9 @@ def api_product(pid):
         data = request.get_json()
         if not data: return err('No data')
         allowed = {k: v for k, v in data.items() if k in ALLOWED_PRODUCT_FIELDS}
+        for k, v in allowed.items():
+            if isinstance(v, list):
+                allowed[k] = ','.join(str(x) for x in v)
         if not allowed: return err('No valid fields')
         sets = ', '.join([f'{k}=?' for k in allowed])
         _q(f'UPDATE products SET {sets} WHERE id=?', list(allowed.values()) + [pid])
@@ -560,6 +567,8 @@ def api_orders():
         offset = (page - 1) * per_page
         if not phone and not is_admin():
             return err('Admin auth required', 401)
+        if phone and not is_admin():
+            per_page = min(per_page, 10)
 
         params, where = [], []
         if phone: where.append('phone LIKE ?'); params.append(f'%{phone}%')
@@ -667,12 +676,18 @@ def api_order(oid):
     return jsonify(d)
 
 @app.route('/api/orders/track/<code>', methods=['GET'])
+@rate_limit(20, 60)
 def api_track(code):
     row = _one('SELECT * FROM orders WHERE tracking_code=?', (code.upper(),))
     if not row: return err('Not found', 404)
     d = dict(row)
     try: d['items'] = json.loads(d['items'])
     except: pass
+    if not is_admin():
+        for field in ['phone','email','address']:
+            if field in d and d[field]:
+                v = str(d[field])
+                d[field] = v[:2] + '***' + v[-2:] if len(v) > 4 else '***'
     return jsonify(d)
 
 @app.route('/api/orders/bulk-delete', methods=['POST'])
@@ -925,6 +940,7 @@ def api_stats():
     total_products = _val("SELECT COUNT(*) FROM products")
     total_users = _val("SELECT COUNT(*) FROM users")
     total_coupons = _val("SELECT COUNT(*) FROM coupons")
+    avg_order_value = _val("SELECT COALESCE(ROUND(AVG(total)),0) FROM orders WHERE status!='cancelled'")
 
     status_breakdown = _q("SELECT status, COUNT(*) as count, COALESCE(SUM(total),0) as revenue FROM orders GROUP BY status")
     wilaya_breakdown = _q("SELECT wilaya, COUNT(*) as orders, COALESCE(SUM(total),0) as revenue FROM orders GROUP BY wilaya ORDER BY revenue DESC LIMIT 10")
@@ -943,6 +959,7 @@ def api_stats():
         'total_orders': total_orders, 'total_revenue': total_revenue,
         'total_products': total_products, 'total_users': total_users,
         'total_coupons': total_coupons,
+        'avg_order_value': avg_order_value,
         'today_orders': today_orders, 'today_revenue': today_revenue,
         'status_breakdown': [dict(r) for r in status_breakdown],
         'wilaya_breakdown': [dict(r) for r in wilaya_breakdown],
@@ -1310,22 +1327,30 @@ def serve_upload(filename):
 @app.route('/api/export/orders', methods=['GET'])
 @require_admin
 def api_export_orders():
+    import csv as csvmod
+    from io import StringIO
     rows = _q('SELECT * FROM orders ORDER BY created_at DESC')
-    csv = 'ID,First Name,Last Name,Phone,Email,Wilaya,Address,Items,Subtotal,Shipping,Discount,Total,Payment,Status,Tracking,Created\n'
+    buf = StringIO()
+    w = csvmod.writer(buf)
+    w.writerow(['ID','First Name','Last Name','Phone','Email','Wilaya','Address','Items','Subtotal','Shipping','Discount','Total','Payment','Status','Tracking','Created'])
     for r in rows:
-        items = json.loads(r['items'] or '[]')
-        csv += f"{r['id']},{r['first_name']},{r['last_name']},{r['phone']},{r.get('email','')},{r['wilaya']},{r['address']},\"{items}\",{r['subtotal']},{r['shipping']},{r['discount']},{r['total']},{r['payment_method']},{r['status']},{r['tracking_code']},{r['created_at']}\n"
-    return Response(csv, mimetype='text/csv',
+        items = r['items'] or '[]'
+        w.writerow([r['id'],r['first_name'],r['last_name'],r['phone'],r.get('email',''),r['wilaya'],r['address'],items,r['subtotal'],r['shipping'],r['discount'],r['total'],r['payment_method'],r['status'],r['tracking_code'],r['created_at']])
+    return Response(buf.getvalue(), mimetype='text/csv',
                     headers={'Content-Disposition': 'attachment; filename=flyra_orders.csv'})
 
 @app.route('/api/export/products', methods=['GET'])
 @require_admin
 def api_export_products():
+    import csv as csvmod
+    from io import StringIO
     rows = _q('SELECT * FROM products')
-    csv = 'ID,Name,Collection,Price,Old Price,Tag,Sizes,Stock,Status,Description\n'
+    buf = StringIO()
+    w = csvmod.writer(buf)
+    w.writerow(['ID','Name','Collection','Price','Old Price','Tag','Sizes','Stock','Status','Description'])
     for r in rows:
-        csv += f"{r['id']},{r['name']},{r['collection']},{r['price']},{r['old_price'] or ''},{r['tag'] or ''},{r['sizes']},{r['stock']},{r['status']},{r['desc']}\n"
-    return Response(csv, mimetype='text/csv',
+        w.writerow([r['id'],r['name'],r['collection'],r['price'],r['old_price'] or '',r['tag'] or '',r['sizes'],r['stock'],r['status'],r['desc']])
+    return Response(buf.getvalue(), mimetype='text/csv',
                     headers={'Content-Disposition': 'attachment; filename=flyra_products.csv'})
 
 @app.route('/api/export/backup', methods=['GET'])
@@ -1519,6 +1544,9 @@ with app.app_context():
     ensure_admin_user()
 
 if __name__ == '__main__':
+    try:
+        _q("DELETE FROM admin_sessions WHERE expires < datetime('now')")
+    except: pass
     db_type = 'PostgreSQL' if USE_PG else 'SQLite'
     try: db_size = os.path.getsize(DB_PATH)/1024
     except: db_size = 0

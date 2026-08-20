@@ -6,3 +6,10 @@ __pycache__/
 .vscode/
 uploads/*
 !uploads/.gitkeep
+
+# Local Netlify folder
+.netlify
+*.db-shm
+*.db-wal
+*.bak
+*.vsix

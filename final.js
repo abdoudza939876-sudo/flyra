@@ -132,7 +132,7 @@
   }
 
   function escapeHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
   function formatPrice(price) {
@@ -405,7 +405,7 @@
         renderCart();
       }
     });
-    document.getElementById('win-detail').style.display = 'none';
+    const wd=document.getElementById('win-detail');if(wd)wd.style.display='none';
   }
 
   // ================================================================
@@ -837,7 +837,7 @@
     const display = document.getElementById('ai-provider-display');
     const badge = document.getElementById('ai-mode-badge');
     if (serverUrl) {
-      if (display) display.textContent = 'Server: ' + serverUrl.split('//')[1] || serverUrl;
+      if (display) display.textContent = 'Server: ' + (serverUrl.split('//')[1] || serverUrl);
       if (display) display.style.color = 'var(--green)';
       if (badge) { badge.textContent = '⟨ SERVER MODE'; badge.className = 'ai-status real'; }
     } else if (apiKey) {
@@ -913,7 +913,8 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
       });
       if (!response.ok) return null;
       const data = await response.json();
-      const reply = data.content[0].text;
+      const reply = data?.content?.[0]?.text || data?.choices?.[0]?.message?.content || null;
+      if(!reply) return null;
       aiConversationHistory.push({ role: 'assistant', content: reply });
       return reply;
     } catch(e) { return null; }
@@ -956,7 +957,7 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
     const text = input?.value?.trim();
     if (!text) return;
     addStylistMessage(text, true);
-    input.value = '';
+    if(input)input.value='';
 
     const messages = document.getElementById('stylist-messages');
     const typing = document.createElement('div');
@@ -2098,9 +2099,9 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
 
     document.querySelectorAll('.window').forEach(win => { win.addEventListener('mousedown', () => bringToFront(win)); });
 
-    document.querySelectorAll('.wc-close').forEach(btn => btn.addEventListener('click', e => { e.target.closest('.window').style.display = 'none'; }));
-    document.querySelectorAll('.wc-min').forEach(btn => btn.addEventListener('click', e => { e.target.closest('.window').classList.toggle('minimized'); }));
-    document.querySelectorAll('.wc-max').forEach(btn => btn.addEventListener('click', e => { e.target.closest('.window').classList.toggle('maximized'); }));
+    document.querySelectorAll('.wc-close').forEach(btn => btn.addEventListener('click', e => { const w=e.target.closest('.window');if(w)w.style.display='none'; }));
+    document.querySelectorAll('.wc-min').forEach(btn => btn.addEventListener('click', e => { const w=e.target.closest('.window');if(w)w.classList.toggle('minimized'); }));
+    document.querySelectorAll('.wc-max').forEach(btn => btn.addEventListener('click', e => { const w=e.target.closest('.window');if(w)w.classList.toggle('maximized'); }));
   }
 
   // ================================================================
@@ -2211,8 +2212,9 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
       const res = await fetch(API_BASE + '/products', { signal: AbortSignal.timeout(3000) });
       if (res.ok) {
         const data = await res.json();
-        if (data.length > 0) {
-          products = data.map(p => ({...p, sizes: typeof p.sizes === 'string' ? p.sizes.split('/') : (p.sizes||[])}));
+        const list = Array.isArray(data) ? data : (data && Array.isArray(data.products) ? data.products : null);
+        if (list && list.length > 0) {
+          products = list.map(p => ({...p, sizes: typeof p.sizes === 'string' ? p.sizes.split('/') : (p.sizes||[])}));
           saveProducts(products);
           return true;
         }
@@ -2223,17 +2225,19 @@ For sizing, use standard fit advice. Always consider Algerian context and local 
 
   async function syncWithBackend() {
     try {
-      const [prods, cartRes, ordersRes] = await Promise.all([
+      const [prodsRes, cartRes, ordersRes] = await Promise.all([
         fetch(API_BASE + '/products').then(r => r.ok ? r.json() : null).catch(() => null),
         fetch(API_BASE + '/cart', { headers: {'X-Session': localStorage.getItem('flyra_session')||'web'} }).then(r => r.ok ? r.json() : null).catch(() => null),
         fetch(API_BASE + '/orders').then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
-      if (prods && prods.length > 0) {
-        products = prods.map(p => ({...p, sizes: typeof p.sizes === 'string' ? p.sizes.split('/') : (p.sizes||[])}));
+      const prodsList = prodsRes && (Array.isArray(prodsRes) ? prodsRes : prodsRes.products);
+      if (prodsList && prodsList.length > 0) {
+        products = prodsList.map(p => ({...p, sizes: typeof p.sizes === 'string' ? p.sizes.split('/') : (p.sizes||[])}));
         saveProducts(products);
       }
-      if (ordersRes && ordersRes.length > 0) {
-        orders = ordersRes;
+      const ordersList = ordersRes && (Array.isArray(ordersRes) ? ordersRes : ordersRes.orders);
+      if (ordersList && ordersList.length > 0) {
+        orders = ordersList;
         saveOrders(orders);
       }
     } catch(e) { /* offline mode */ }
