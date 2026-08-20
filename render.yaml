@@ -2,8 +2,13 @@ services:
   - type: web
     name: flyra
     runtime: python
-    buildCommand: ""
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn -w 2 --preload -b 0.0.0.0:$PORT flyra_backend:app
+    healthCheckPath: /api/health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: DATABASE_URL
+        sync: false
+      - key: FLYRA_ADMIN_PASSWORD
+        sync: false
