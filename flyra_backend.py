@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS products (
     price INTEGER, old_price INTEGER,
     owner TEXT, tag TEXT, sizes TEXT,
     stock INTEGER DEFAULT 0, status TEXT DEFAULT 'active',
-    desc TEXT, image TEXT, colors TEXT, icon TEXT,
+    "desc" TEXT, image TEXT, colors TEXT, icon TEXT,
     featured INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -249,7 +249,7 @@ def seed_data_pg(cur):
         ('BROCADE VEST', 'heritage', 35000, 42000, 'FLYRA Atelier', 'LIMITED', 'S/M/L/XL', 4, 'limited', 'Traditional Algerian brocade fabric. Gold-thread patterns.', 0),
     ]
     for p in products:
-        cur.execute('INSERT INTO products (name,collection,price,old_price,owner,tag,sizes,stock,status,desc,featured) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', p)
+        cur.execute('INSERT INTO products (name,collection,price,old_price,owner,tag,sizes,stock,status,"desc",featured) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', p)
     cur.execute("INSERT INTO coupons (code,discount,type) VALUES ('FLY10',10,'percent') ON CONFLICT (code) DO NOTHING")
     cur.execute("INSERT INTO settings (key,value) VALUES ('free_shipping_threshold','25000') ON CONFLICT (key) DO NOTHING")
 
@@ -323,7 +323,7 @@ def seed_data_sqlite(db):
         ('ALGIERS CAP', 'street', 4500, None, 'FLYRA Studio', None, 'M/L', 30, 'active', 'Structured six-panel. Embroidered skyline of Algiers.', 0),
         ('BROCADE VEST', 'heritage', 35000, 42000, 'FLYRA Atelier', 'LIMITED', 'S/M/L/XL', 4, 'limited', 'Traditional Algerian brocade fabric. Gold-thread patterns.', 0),
     ]
-    db.executemany('INSERT INTO products (name,collection,price,old_price,owner,tag,sizes,stock,status,desc,featured) VALUES (?,?,?,?,?,?,?,?,?,?,?)', products)
+    db.executemany('INSERT INTO products (name,collection,price,old_price,owner,tag,sizes,stock,status,"desc",featured) VALUES (?,?,?,?,?,?,?,?,?,?,?)', products)
     orders = [
         ('Ahmed','Bensalah','0555123456','Alger','Bab El Oued','[{"id":1,"name":"HERITAGE GANDOURA","price":28000,"size":"M","qty":1}]',28000,28000,0,'cod','delivered','FLY2025060001'),
         ('Fatima','Zohra','0661234567','Oran','Centre ville','[{"id":2,"name":"PHANTOM STREET HOODIE","price":18000,"size":"L","qty":1},{"id":9,"name":"ALGIERS CAP","price":4500,"size":"M/L","qty":1}]',22500,22500,0,'ccp','shipped','FLY2025060002'),
@@ -509,7 +509,7 @@ def api_products():
         if collection != 'all':
             where.append('collection=?'); params.append(collection)
         if search:
-            where.append('(name LIKE ? OR desc LIKE ?)')
+            where.append('(name LIKE ? OR "desc" LIKE ?)')
             like = f'%{search}%'; params.extend([like, like])
         if status:
             where.append('status=?'); params.append(status)
@@ -531,7 +531,7 @@ def api_products():
     colors = data.get('colors')
     if isinstance(colors, list):
         colors = ','.join(str(c) for c in colors)
-    cur = _q('INSERT INTO products (name,owner,collection,price,old_price,tag,sizes,stock,status,desc,image,colors,featured) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    cur = _q('INSERT INTO products (name,owner,collection,price,old_price,tag,sizes,stock,status,"desc",image,colors,featured) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
        (data['name'], data.get('owner',''), data.get('collection'), data.get('price'),
         data.get('old_price'), data.get('tag'), data.get('sizes','S,M,L,XL'),
         data.get('stock',0), data.get('status','active'), data.get('desc',''),
@@ -1297,7 +1297,7 @@ def detect_lang(text):
 def api_search():
     q = request.args.get('q', '').strip()
     if not q or len(q) < 2: return jsonify([])
-    rows = _q("SELECT * FROM products WHERE name LIKE ? OR collection LIKE ? OR desc LIKE ? OR tag LIKE ? LIMIT 20",
+    rows = _q('SELECT * FROM products WHERE name LIKE ? OR collection LIKE ? OR "desc" LIKE ? OR tag LIKE ? LIMIT 20',
               (f'%{q}%', f'%{q}%', f'%{q}%', f'%{q}%'))
     return jsonify([dict(r) for r in rows])
 
