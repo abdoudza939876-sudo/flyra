@@ -29,16 +29,21 @@ if USE_PG:
     import psycopg2
     import psycopg2.extras
     import psycopg2.pool
-    pg_pool = psycopg2.pool.ThreadedConnectionPool(2, 10, DATABASE_URL, sslmode='require')
+    pg_pool = None
+    def get_pool():
+        global pg_pool
+        if pg_pool is None:
+            pg_pool = psycopg2.pool.ThreadedConnectionPool(2, 10, DATABASE_URL, sslmode='require')
+        return pg_pool
     def get_db():
         if 'db' not in g:
-            g.db = pg_pool.getconn()
+            g.db = get_pool().getconn()
             g.db.autocommit = False
         return g.db
 
     def put_db(db):
         if db and not db.closed:
-            pg_pool.putconn(db)
+            get_pool().putconn(db)
 
     @app.teardown_appcontext
     def close_db(e=None):
@@ -1559,8 +1564,8 @@ def serve_static(filename):
 # ═════════════════════════════════════════════════════════════════
 # INIT
 # ════════════════════════════════════════════════════════════════
-migrate_schema()
 with app.app_context():
+    migrate_schema()
     ensure_admin_user()
 
 if __name__ == '__main__':
