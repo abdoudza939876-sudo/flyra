@@ -267,13 +267,13 @@ def migrate_schema():
             try:
                 cur.execute(f'ALTER TABLE {table} ADD COLUMN {col} {dtype}')
                 db.commit()
-            except:
-                pass
+            except Exception:
+                db.rollback()
         try:
             cur.execute("ALTER TABLE reviews ADD COLUMN status TEXT DEFAULT 'pending'")
             db.commit()
-        except:
-            pass
+        except Exception:
+            db.rollback()
         if _val('SELECT COUNT(*) FROM products') == 0:
             seed_data_pg(cur)
         put_db(db)
