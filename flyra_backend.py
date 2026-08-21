@@ -230,6 +230,24 @@ CREATE TABLE IF NOT EXISTS audit_log (
 );
 """
 
+def seed_data_pg(cur):
+    products = [
+        ('HERITAGE GANDOURA', 'heritage', 28000, 35000, 'FLYRA Atelier', 'HERITAGE', 'S/M/L/XL/XXL', 8, 'active', 'Hand-embroidered traditional Algerian Gandoura. Pure linen from Tlemcen workshops.', 0),
+        ('PHANTOM STREET HOODIE', 'street', 18000, 24000, 'FLYRA Studio', 'NEW', 'S/M/L/XL', 15, 'active', 'Oversized silhouette. Heavy-weight 420gsm French terry.', 1),
+        ('OLD MONEY BLAZER', 'oldmoney', 45000, 55000, 'FLYRA Haute', 'PREMIUM', 'S/M/L/XL', 5, 'active', 'Italian wool blend. Structured shoulders. The Algiers executive look.', 0),
+        ('SKY RUNNER SNEAKERS', 'sport', 22000, 28000, 'FLYRA Sport', 'NEW', '38/40/42/44/46', 20, 'active', 'Algerian-designed upper. Memory foam insole.', 1),
+        ('DJELLABA MODERNE', 'heritage', 24000, 30000, 'FLYRA Atelier', 'HERITAGE', 'S/M/L/XL/XXL', 10, 'active', 'Contemporary cut meets traditional silhouette.', 0),
+        ('SILENT SHORTS', 'sport', 8500, None, 'FLYRA Sport', 'SALE', 'S/M/L/XL', 25, 'active', 'Technical woven fabric. Hidden zip pockets.', 0),
+        ('AMBER TEE', 'street', 6500, None, 'FLYRA Studio', None, 'XS/S/M/L/XL/XXL', 40, 'active', 'Premium 200gsm cotton. Embroidered FLYRA crest.', 1),
+        ('SPORT TECH JOGGERS', 'sport', 12000, 16000, 'FLYRA Sport', 'NEW', 'S/M/L/XL', 18, 'active', 'Track-inspired cut. Tapered leg. Reflective taping.', 0),
+        ('ALGIERS CAP', 'street', 4500, None, 'FLYRA Studio', None, 'M/L', 30, 'active', 'Structured six-panel. Embroidered skyline of Algiers.', 0),
+        ('BROCADE VEST', 'heritage', 35000, 42000, 'FLYRA Atelier', 'LIMITED', 'S/M/L/XL', 4, 'limited', 'Traditional Algerian brocade fabric. Gold-thread patterns.', 0),
+    ]
+    for p in products:
+        cur.execute('INSERT INTO products (name,collection,price,old_price,owner,tag,sizes,stock,status,desc,featured) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', p)
+    cur.execute("INSERT INTO coupons (code,discount,type) VALUES ('FLY10',10,'percent') ON CONFLICT (code) DO NOTHING")
+    cur.execute("INSERT INTO settings (key,value) VALUES ('free_shipping_threshold','25000') ON CONFLICT (key) DO NOTHING")
+
 def migrate_schema():
     if USE_PG:
         db = get_db()
@@ -251,6 +269,8 @@ def migrate_schema():
             db.commit()
         except:
             pass
+        if _val('SELECT COUNT(*) FROM products') == 0:
+            seed_data_pg(cur)
         put_db(db)
     else:
         init_db_sqlite()
